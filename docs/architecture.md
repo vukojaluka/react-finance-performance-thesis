@@ -588,7 +588,105 @@ Database
 
 External Services
 
-### Folder Structure
+### Project Conventions
+
+#### Folder Structure
+
+The project follows a feature-based architecture.
+
+```
+src/
+│
+├── components/
+│   └── ui/
+│
+├── experiments/
+│
+├── features/
+│   ├── analytics/
+│   ├── auth/
+│   ├── budgets/
+│   ├── categories/
+│   ├── dashboard/
+│   ├── settings/
+│   └── transactions/
+│
+├── integrations/
+│
+├── lib/
+│   ├── constants/
+│   ├── hooks/
+│   ├── utils/
+│   └── validation/
+│
+└── routes/
+```
+
+Global components are stored inside `components/ui`.
+
+Business logic is organized by feature.
+
+Each feature owns its own components, queries, server functions, schemas and utilities.
+
+---
+
+#### Naming Conventions
+
+##### Server Functions
+
+Server Functions use verb-based names.
+
+Examples:
+
+- getDashboardSummary
+- getTransactions
+- createTransaction
+- updateTransaction
+- deleteTransaction
+- upsertBudget
+
+---
+
+##### Query Options
+
+TanStack Query uses shared query option factories.
+
+Examples:
+
+- dashboardSummaryQuery()
+- transactionsQuery()
+- categoriesQuery()
+- analyticsQuery()
+
+The same query options object is reused by:
+
+- ensureQueryData()
+- prefetchQuery()
+- useSuspenseQuery()
+
+---
+
+##### File Naming
+
+All files use kebab-case.
+
+Examples
+
+- dashboard-summary.query.ts
+- get-dashboard-summary.ts
+- create-transaction.ts
+- transaction-form.tsx
+
+---
+
+#### Project Principles
+
+- Feature-first architecture
+- Shared UI components only inside `components/ui`
+- Business logic belongs to the corresponding feature
+- Shared utilities are placed inside `lib`
+- No duplicated query logic
+- One responsibility per file
 
 ### Data Flow
 

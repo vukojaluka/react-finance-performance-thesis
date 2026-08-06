@@ -102,6 +102,10 @@ TODO
 
 TODO
 
+## Status
+
+Ready for implementation
+
 ---
 
 # Experiment 002
