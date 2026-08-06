@@ -63,48 +63,181 @@ Was the hypothesis correct?
 
 ## Title
 
-Prefetch Query + Suspense
+TanStack Query Rendering Strategies
 
 ## Goal
 
-Verify whether `queryClient.prefetchQuery()` called inside a route loader without `await` starts the request immediately and allows `useSuspenseQuery()` to reuse the same pending Promise after hydration.
+Evaluate different Route Loader rendering strategies using TanStack Query and React Suspense.
+
+Determine how critical and non-critical queries should be started in order to minimize perceived loading time while avoiding duplicate Server Function execution.
+
+---
 
 ## Background
 
-TanStack Query stores pending queries inside the Query Cache.
+TanStack Query allows Route Loaders to populate the Query Cache before hydration using `ensureQueryData()` or `prefetchQuery()`.
 
-The objective is to determine whether the Suspense component can attach to the existing Promise instead of creating another network request.
+React Suspense can then consume the same query using `useSuspenseQuery()`.
+
+This experiment evaluates four different strategies for combining those APIs.
+
+---
 
 ## Hypothesis
 
-- Loader starts the request immediately.
-- SSR is not blocked.
-- Suspense receives the existing Promise.
-- Only one Server Function request is executed.
+- Critical data should block SSR.
+- Non-critical data should not block SSR.
+- Independent non-critical queries should be started as early as possible.
+- `useSuspenseQuery()` should reuse existing query state instead of executing duplicate Server Functions.
+
+---
 
 ## Implementation
 
-TODO
+Location:
+
+`src/experiments/experiment-001`
+
+Artificial delays:
+
+- Dashboard Summary — 1000ms
+- Expense Chart — 2500ms
+- Recent Transactions — 3500ms
+
+All queries use:
+
+- `staleTime: 1 minute`
+
+to eliminate automatic refetches after hydration.
+
+---
+
+## Rendering Strategies
+
+### Version 1 — Blocking SSR
+
+```ts
+await Promise.all([
+  ensureQueryData(summary),
+  ensureQueryData(chart),
+  ensureQueryData(transactions),
+])
+```
+
+Characteristics:
+
+- blocks SSR
+- all queries execute in parallel
+- no Suspense fallbacks
+
+---
+
+### Version 2 — Suspense Baseline
+
+```ts
+await ensureQueryData(summary)
+```
+
+Chart and Transactions start only when rendered through `useSuspenseQuery()`.
+
+Characteristics:
+
+- dashboard visible earlier
+- progressive rendering
+- non-critical queries begin after loader completion
+
+---
+
+### Version 3 (Discarded) — Late Prefetch
+
+```ts
+await ensureQueryData(summary)
+
+void prefetchQuery(chart)
+void prefetchQuery(transactions)
+```
+
+Characteristics:
+
+- non-blocking prefetch
+- however query execution still begins after the critical query finishes
+
+Measured result:
+
+No meaningful improvement compared to Version 2.
+
+Note:
+
+This intermediate implementation was evaluated during the experiment but was not selected for the final application architecture because it produced no measurable improvement over Version 2.
+
+---
+
+### Version 3 — Early Prefetch
+
+```ts
+void prefetchQuery(chart)
+void prefetchQuery(transactions)
+
+await ensureQueryData(summary)
+```
+
+Characteristics:
+
+- all Server Functions begin immediately
+- only critical query blocks SSR
+- non-critical queries execute in parallel while critical content loads
+
+Measured result:
+
+Approximately one second faster total page completion under identical artificial latency.
+
+---
 
 ## Measurements
 
-- Number of network requests
+Collected:
+
 - Server Function execution count
-- Waterfall timing
-- Suspense reveal timing
-- React Profiler
+- Server Function execution order
+- Loader duration
+- Browser Network waterfall
+- React Suspense reveal order
+- Duplicate Server Function executions
+- User perceived loading
+
+---
 
 ## Results
 
-TODO
+| Strategy | Initial Content | Total Completion | Notes |
+|----------|----------------|-----------------|-------|
+| Version 1 | Slow | ~3.5s | Blocking SSR |
+| Version 2 | Fast | ~4.5s | Progressive rendering |
+| Version 3 | Fast | ~3.5s | Early Prefetch |
+
+An additional Late Prefetch strategy was evaluated during the experiment but was excluded from the final architecture because it behaved identically to Version 2.
+
+---
 
 ## Conclusion
 
-TODO
+Version 1 provides the simplest implementation but blocks SSR until every query finishes.
+
+Version 2 significantly improves perceived performance by rendering critical content first while progressively revealing secondary widgets.
+
+An intermediate Late Prefetch strategy was also evaluated but produced no measurable improvement over Version 2.
+
+The final Early Prefetch strategy produced the best overall result.
+
+Starting independent non-critical queries before awaiting the critical query reduced total loading time by approximately one second while preserving progressive rendering and avoiding duplicate Server Function executions.
+
+This rendering strategy was selected for the final application architecture.
+
+---
 
 ## Status
 
-Ready for implementation
+Completed
 
 ---
 
