@@ -562,19 +562,428 @@ Priority
 
 ## 11. API Design
 
-### Authentication
+### API Architecture
 
-### Dashboard
+The application does not expose a traditional REST API to the client.
 
-### Transactions
+TanStack Start Server Functions are used as the server-side API boundary.
 
-### Categories
+The general data flow is:
 
-### Budgets
+Client Component
+↓
+TanStack Query
+↓
+queryOptions()
+↓
+Server Function
+↓
+Database / Supabase
 
-### Analytics
+For mutations:
+
+Form
+↓
+TanStack Form + Zod
+↓
+TanStack Query Mutation
+↓
+Server Function
+↓
+Database / Supabase
+↓
+Query Invalidation
+
+Client-side feature code does not access Supabase directly.
+
+Server Functions are responsible for communicating with the database and enforcing server-side authentication and authorization requirements.
 
 ---
+
+### Server Functions
+
+Server Functions provide the boundary between the client application and server-side data access.
+
+They are organized by feature rather than as one global API layer.
+
+Example:
+
+```text
+features/
+└── transactions/
+    ├── server/
+    │   ├── get-transactions.ts
+    │   ├── get-transaction.ts
+    │   ├── create-transaction.ts
+    │   ├── update-transaction.ts
+    │   └── delete-transaction.ts
+```
+
+Server Functions return typed domain data rather than exposing raw database responses.
+
+---
+
+### Naming Conventions
+
+Read operations use the `get` prefix:
+
+- `getDashboardSummary()`
+- `getExpenseChart()`
+- `getRecentTransactions()`
+- `getTransactions()`
+- `getTransaction()`
+- `getCategories()`
+- `getBudgets()`
+
+Mutation operations use:
+
+- `create...`
+- `update...`
+- `delete...`
+
+Examples:
+
+- `createTransaction()`
+- `updateTransaction()`
+- `deleteTransaction()`
+- `createCategory()`
+- `updateCategory()`
+- `deleteCategory()`
+- `createBudget()`
+- `updateBudget()`
+- `deleteBudget()`
+
+The `fetch` prefix is not used for Server Function naming.
+
+---
+
+### Query Pattern
+
+Read operations use TanStack Query.
+
+Each feature defines reusable query option factories using `queryOptions()`.
+
+Example:
+
+```ts
+export function transactionsQuery() {
+  return queryOptions({
+    queryKey: ['transactions'],
+    queryFn: () => getTransactions(),
+  })
+}
+```
+
+The same query options are reused by:
+
+- Route Loaders
+- `useQuery()`
+- `useSuspenseQuery()`
+- `prefetchQuery()`
+- `ensureQueryData()`
+
+This provides a shared Query Cache entry and consistent query configuration.
+
+---
+
+### Mutation Pattern
+
+Mutations use TanStack Query together with TanStack Form where a form is involved.
+
+The general flow is:
+
+TanStack Form
+↓
+Zod validation
+↓
+TanStack Query Mutation
+↓
+Server Function
+↓
+Database
+↓
+Query Invalidation
+
+After a successful mutation, only affected queries should be invalidated.
+
+The application should avoid invalidating the entire Query Cache after every mutation.
+
+Example affected queries after creating a transaction may include:
+
+- `transactions`
+- `dashboard-summary`
+- `expense-chart`
+
+The exact invalidation strategy is defined per feature.
+
+---
+
+### Input Validation
+
+User-provided input is validated with Zod.
+
+Client-side validation provides immediate feedback through TanStack Form.
+
+Server Functions must not trust client-side validation and must validate important input at the server boundary as well.
+
+The server is responsible for enforcing:
+
+- Input shape
+- Required fields
+- Allowed values
+- Business rules
+- Authorization requirements
+
+---
+
+### Authentication
+
+Authentication is handled through the application's authentication provider.
+
+Server Functions determine the authenticated user from the server-side session rather than accepting a client-provided `userId` as the source of truth.
+
+Business operations are performed in the context of the authenticated user.
+
+The authentication implementation and session handling are defined separately from individual feature Server Functions.
+
+---
+
+### Authorization
+
+Authorization is enforced at the server and database layers.
+
+The application uses database-level Row Level Security (RLS) to ensure that users can only access records they are authorized to access.
+
+The general security model is:
+
+Server Function
+↓
+Authenticated User
+↓
+Supabase
+↓
+Row Level Security
+↓
+User-owned Data
+
+Client-provided identifiers must never be trusted to determine ownership of protected resources.
+
+The final RLS policies will be defined during Supabase database implementation.
+
+---
+
+### Error Handling
+
+Server Functions return typed data for successful operations.
+
+Expected failures are represented using appropriate application errors, such as:
+
+- Validation errors
+- Authentication errors
+- Authorization errors
+- Not found errors
+- Database errors
+
+TanStack Query is responsible for exposing query and mutation errors to the UI.
+
+The UI provides appropriate loading, empty and error states rather than requiring every Server Function response to use a custom `{ success, error }` wrapper.
+
+---
+
+### Response Design
+
+Server Functions return application-level typed data rather than raw Supabase responses.
+
+Example:
+
+```ts
+return {
+  id,
+  amount,
+  type,
+  description,
+  category,
+  transactionDate,
+}
+```
+
+Database-specific response objects should not unnecessarily leak into the client application.
+
+This keeps the client-side domain model decoupled from the database implementation.
+
+---
+
+### Authentication API
+
+Authentication-related Server Functions may include:
+
+- `getCurrentUser()`
+- `login()`
+- `register()`
+- `logout()`
+
+Authentication functionality is kept separate from business-domain operations.
+
+---
+
+### Dashboard API
+
+Dashboard Server Functions provide aggregated data required by dashboard widgets.
+
+Initial operations include:
+
+- `getDashboardSummary()`
+- `getExpenseChart()`
+- `getRecentTransactions()`
+
+Dashboard queries may use different rendering priorities.
+
+Critical dashboard data may use `ensureQueryData()` in the Route Loader.
+
+Independent non-critical widgets may use non-awaited `prefetchQuery()` and `useSuspenseQuery()`.
+
+---
+
+### Transactions API
+
+Transactions provide full CRUD functionality.
+
+Operations:
+
+- `getTransactions()`
+- `getTransaction()`
+- `createTransaction()`
+- `updateTransaction()`
+- `deleteTransaction()`
+
+Transactions are owned by the authenticated user.
+
+Queries may support:
+
+- Search
+- Filtering
+- Sorting
+- Pagination
+
+Query parameters are represented through TanStack Router URL search parameters where appropriate.
+
+---
+
+### Categories API
+
+Categories provide CRUD functionality for user-defined transaction categories.
+
+Operations:
+
+- `getCategories()`
+- `getCategory()`
+- `createCategory()`
+- `updateCategory()`
+- `deleteCategory()`
+
+Categories are owned by the authenticated user.
+
+Categories may be referenced by transactions and budgets.
+
+---
+
+### Budgets API
+
+Budgets provide CRUD functionality for category-based monthly budgets.
+
+Operations:
+
+- `getBudgets()`
+- `getBudget()`
+- `createBudget()`
+- `updateBudget()`
+- `deleteBudget()`
+
+Budgets are associated with the authenticated user and a transaction category.
+
+---
+
+### Analytics API
+
+Analytics provides read-only aggregated financial data.
+
+Potential operations include:
+
+- `getExpenseBreakdown()`
+- `getIncomeExpenseTrend()`
+- `getCategorySpending()`
+
+The exact analytics operations will be defined together with the Analytics page requirements.
+
+Analytics operations should return aggregated domain data rather than raw transaction records whenever possible.
+
+---
+
+### Query and Mutation Boundaries
+
+The application follows these general rules.
+
+#### Critical Server Data
+
+Use:
+
+```ts
+await queryClient.ensureQueryData(...)
+```
+
+when the data is required for meaningful initial rendering.
+
+#### Non-Critical Server Data
+
+Use:
+
+```ts
+void queryClient.prefetchQuery(...)
+```
+
+when the data is independent and should begin loading without blocking critical SSR.
+
+The corresponding component consumes the query with:
+
+```ts
+useSuspenseQuery(...)
+```
+
+inside an appropriate Suspense boundary.
+
+#### User-Initiated Data
+
+Queries that only make sense after explicit user interaction should not be eagerly prefetched.
+
+Examples include:
+
+- Search
+- Filter changes
+- Pagination
+- On-demand details
+- Export operations
+
+These operations are initiated from the client when required.
+
+---
+
+### API Design Principles
+
+The API layer follows these principles:
+
+1. Server Functions are the server-side boundary.
+2. Supabase is not accessed directly from client components.
+3. Read operations use TanStack Query.
+4. Mutations use TanStack Query mutations.
+5. Query options are reusable across loaders and components.
+6. Server Functions use typed inputs and outputs.
+7. Client-side validation uses Zod.
+8. Important validation is repeated on the server boundary.
+9. Authentication is derived from the server-side session.
+10. Authorization is enforced through server checks and database RLS.
+11. Server Functions return domain-level data rather than raw database responses.
+12. Only affected queries are invalidated after mutations.
+13. Critical and non-critical queries use different loading strategies based on rendering requirements.
 
 ## 12. High-Level Architecture
 
