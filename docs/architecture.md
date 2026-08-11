@@ -1103,17 +1103,296 @@ Examples
 
 ## 13. Rendering Strategy
 
+### Rendering Model
+
+The application uses TanStack Start with server-side rendering and progressive rendering.
+
+Routes and React components can participate in SSR while also executing client-side after hydration.
+
+The application does not use a Next.js-style `"use client"` directive to classify components.
+
+Rendering strategy is determined primarily by:
+
+- Route requirements
+- Data criticality
+- Query loading strategy
+- Suspense boundaries
+- Code splitting requirements
+
+The application prioritizes delivering meaningful content as early as possible while allowing independent content to resolve progressively.
+
+---
+
 ### SSR Pages
+
+Pages that benefit from SEO, fast initial content delivery or server-rendered application state use Server-Side Rendering.
+
+Examples include:
+
+- Landing page
+- Login
+- Register
+- Dashboard
+- Transactions
+- Analytics
+
+Route loaders are used to prepare critical server data before the route renders.
+
+Critical data may be loaded using:
+
+```ts
+await queryClient.ensureQueryData(queryOptions())
+```
+
+The loader blocks only on data required for meaningful initial rendering.
+
+---
 
 ### Client Pages
 
+The application does not treat routes as exclusively server-rendered or exclusively client-rendered.
+
+After SSR and hydration, the same React application continues execution on the client.
+
+Client-side rendering is used for:
+
+- Interactive UI
+- Forms
+- Filters
+- Search
+- Pagination
+- Modals
+- Drawers
+- User interactions
+- Client-side state updates
+
+Data remains managed through TanStack Query rather than manually fetching data inside individual components.
+
+---
+
+### Critical Data Rendering
+
+Critical data is data required for meaningful initial rendering of a page.
+
+Examples:
+
+- Authenticated user/session
+- Dashboard summary
+- Initial transaction list
+- Required page configuration
+
+Critical queries are awaited in the Route Loader:
+
+```ts
+await queryClient.ensureQueryData(criticalQuery())
+```
+
+This ensures that the required query data is available before the route continues rendering.
+
+Critical queries should be limited to the minimum data required for the initial page experience.
+
+The goal is to avoid blocking SSR on secondary widgets or independent data.
+
+---
+
+### Non-Critical Data Rendering
+
+Non-critical data is data that improves the page but is not required for the initial meaningful rendering.
+
+Examples:
+
+- Charts
+- Recent activity
+- Secondary statistics
+- Additional analytics widgets
+
+Independent non-critical queries are started as early as possible in the Route Loader:
+
+```ts
+void queryClient.prefetchQuery(nonCriticalQuery())
+```
+
+The loader does not await these queries.
+
+The corresponding component consumes the same query through:
+
+```ts
+useSuspenseQuery(nonCriticalQuery())
+```
+
+This allows the query to begin before the critical loader work has completed.
+
+Experiment 001 demonstrated that starting independent non-critical queries before awaiting critical data reduced total loading time by approximately one second under identical artificial latency.
+
+---
+
 ### Suspense Boundaries
+
+Independent non-critical widgets use separate React Suspense boundaries.
+
+Example:
+
+```tsx
+<Suspense fallback={<ChartSkeleton />}>
+  <ExpenseChart />
+</Suspense>
+
+<Suspense fallback={<TransactionsSkeleton />}>
+  <RecentTransactions />
+</Suspense>
+```
+
+Each independent boundary allows its content to reveal when its data becomes available.
+
+A single large Suspense boundary should not unnecessarily group unrelated widgets because this would cause faster content to wait for slower content.
+
+Suspense boundaries are therefore placed around logical UI sections rather than around the entire page whenever progressive rendering provides a meaningful UX improvement.
+
+---
+
+### Streaming
+
+The application uses TanStack Start's SSR and streaming capabilities to progressively deliver content that becomes available after critical rendering.
+
+The intended rendering flow for a dashboard-like page is:
+
+```text
+Route Loader
+    │
+    ├── Start non-critical queries
+    │
+    └── Await critical query
+            │
+            ▼
+       Initial Render
+            │
+            ├── Dashboard Summary
+            │
+            ├── Chart Suspense
+            │
+            └── Transactions Suspense
+                    │
+                    ▼
+             Progressive Reveal
+```
+
+The application does not intentionally block the initial page render on independent non-critical queries.
+
+The exact server streaming and hydration behaviour is delegated to TanStack Start and TanStack Query.
+
+---
 
 ### Code Splitting Strategy
 
-### Search Params Strategy
+Routes are code-split according to TanStack Start's route-based architecture.
+
+Feature-specific components should remain colocated with their feature and should not be eagerly imported into unrelated routes.
+
+Heavy or secondary UI should be loaded only when required.
+
+Potential candidates for lazy loading include:
+
+- Large charts
+- Advanced analytics components
+- Rich editors
+- Large modal content
+- Feature-specific secondary components
+
+Code splitting should be introduced where it provides measurable benefit rather than applied indiscriminately.
+
+Bundle size and loading behaviour will be evaluated using the project's performance measurements.
 
 ---
+
+### Search Params Strategy
+
+URL search parameters are used for state that should be:
+
+- Shareable
+- Bookmarkable
+- Navigable through browser history
+- Represented in the URL
+
+Examples:
+
+- Search
+- Sorting
+- Filtering
+- Pagination
+- Selected category
+- Date range
+
+TanStack Router search parameters are the source of truth for these values.
+
+Example:
+
+```text
+/transactions?search=food&category=groceries&sort=date&page=2
+```
+
+Components derive their query state from the route search parameters.
+
+Changes to search parameters should update the URL rather than maintaining a second independent client-side state representation.
+
+This allows navigation, refreshes and direct links to preserve the current page state.
+
+---
+
+### Rendering Decision Rules
+
+The application follows these general rules:
+
+1. SSR is preferred for initial page content where it provides meaningful value.
+2. Critical data is awaited in the Route Loader.
+3. Independent non-critical data is prefetched without awaiting.
+4. Non-critical data is consumed through `useSuspenseQuery()`.
+5. Independent widgets use independent Suspense boundaries.
+6. SSR should not be blocked by secondary widgets unnecessarily.
+7. URL-relevant state is stored in TanStack Router search parameters.
+8. Client UI state remains local unless there is a demonstrated need for shared state.
+9. Code splitting is introduced based on measurable performance impact.
+10. Rendering optimizations should be validated through experiments and measurements rather than assumptions.
+
+---
+
+### Rendering Strategy Example
+
+The preferred pattern for a dashboard with one critical widget and multiple independent secondary widgets is:
+
+```ts
+export const Route = createFileRoute('/dashboard')({
+  loader: async ({ context }) => {
+    void context.queryClient.prefetchQuery(expenseChartQuery())
+    void context.queryClient.prefetchQuery(recentTransactionsQuery())
+
+    await context.queryClient.ensureQueryData(
+      dashboardSummaryQuery(),
+    )
+  },
+
+  component: DashboardPage,
+})
+```
+
+The critical component reads its query normally:
+
+```ts
+const { data } = useSuspenseQuery(dashboardSummaryQuery())
+```
+
+Independent widgets use their own Suspense boundaries:
+
+```tsx
+<Suspense fallback={<ChartSkeleton />}>
+  <ExpenseChart />
+</Suspense>
+
+<Suspense fallback={<TransactionsSkeleton />}>
+  <RecentTransactions />
+</Suspense>
+```
+
+This pattern is the preferred rendering strategy established by Experiment 001 for pages containing independent critical and non-critical data.
 
 ## 14. Data Fetching Strategy
 
