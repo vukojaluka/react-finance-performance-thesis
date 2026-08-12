@@ -1932,15 +1932,318 @@ The application follows these general rules:
 
 ## 15. State Management
 
+### State Management Philosophy
+
+The application avoids introducing a global client-state management library unless a concrete requirement cannot be solved using the existing state-management mechanisms.
+
+Each type of state should have a clearly defined source of truth.
+
+The application follows this model:
+
+```text
+Server State
+    ↓
+TanStack Query
+
+URL State
+    ↓
+TanStack Router Search Params
+
+Form State
+    ↓
+TanStack Form
+
+Form Validation
+    ↓
+Zod
+
+Local UI State
+    ↓
+React State
+```
+
+The application does not initially use a dedicated global client-state library such as Redux or Zustand.
+
+A shared client-state solution may be introduced later only if a real application requirement cannot be appropriately handled by the existing mechanisms.
+
+---
+
 ### Server State
 
-### Client State
+Server state is data that originates from the backend or database and may be shared across multiple components or routes.
+
+TanStack Query is the single source of truth for server state.
+
+Examples include:
+
+- Current user
+- Transactions
+- Categories
+- Budgets
+- Dashboard statistics
+- Analytics data
+
+The application should not duplicate server state into local React state.
+
+Avoid:
+
+```ts
+const { data } = useQuery(transactionsQuery())
+const [transactions, setTransactions] = useState(data)
+```
+
+Instead, components should consume the TanStack Query data directly.
+
+```ts
+const { data: transactions } = useQuery(transactionsQuery())
+```
+
+This avoids synchronization problems between local state and the Query Cache.
+
+---
 
 ### URL State
 
-### Form State
+State that should be:
+
+- Shareable
+- Bookmarkable
+- Preserved by page refresh
+- Navigable through browser history
+- Represented in the URL
+
+is managed through TanStack Router search parameters.
+
+Examples:
+
+- Search terms
+- Filters
+- Sorting
+- Pagination
+- Date ranges
+- Selected categories
+
+Example:
+
+```text
+/transactions?search=food&category=groceries&sort=date&page=2
+```
+
+The URL is the source of truth for these values.
+
+Components should derive their state from the route search parameters rather than maintaining a second independent representation.
+
+When URL state affects server data, the relevant parameters must also be included in the TanStack Query key.
 
 ---
+
+### Form State
+
+Form state is managed through TanStack Form.
+
+Examples include:
+
+- Transaction creation
+- Transaction editing
+- Category creation
+- Budget creation
+- Profile settings
+
+The general flow is:
+
+```text
+TanStack Form
+    ↓
+Zod Validation
+    ↓
+Mutation
+    ↓
+Server Function
+```
+
+Form state should remain separate from server state.
+
+A form should not copy existing Query data into a global store simply to edit it.
+
+Instead, the form initializes its local values from the query data and manages the editing state independently until submission.
+
+After a successful mutation, affected Query Cache entries are invalidated or updated.
+
+---
+
+### Form Validation
+
+Zod is used as the schema and validation layer for forms.
+
+Validation is performed on the client for immediate user feedback.
+
+Important validation rules are also enforced on the server because client-side validation cannot be trusted as a security boundary.
+
+The same domain-oriented validation rules should be reused where practical to avoid inconsistent validation behaviour.
+
+---
+
+### Local UI State
+
+State that belongs only to a specific component or small UI subtree is managed with React state.
+
+Examples:
+
+- Modal open/closed state
+- Drawer state
+- Accordion state
+- Tabs
+- Temporary UI toggles
+- Local interaction state
+- Animation state
+
+Example:
+
+```ts
+const [isOpen, setIsOpen] = useState(false)
+```
+
+Local UI state should remain local when there is no requirement for other parts of the application to access it.
+
+---
+
+### Shared Client State
+
+The application does not initially use a global client-state management library.
+
+Before introducing shared client state, the following alternatives should be considered:
+
+1. TanStack Query for server state
+2. TanStack Router search params for URL state
+3. TanStack Form for form state
+4. React local state for component-specific UI state
+5. Derived state from existing sources of truth
+
+A dedicated shared client-state solution should only be introduced when state genuinely needs to be shared across unrelated parts of the client application and cannot reasonably belong to one of the existing categories.
+
+This decision may be revisited during implementation if a concrete requirement appears.
+
+---
+
+### Derived State
+
+Derived state should be calculated from existing sources of truth rather than stored separately.
+
+For example, the user's balance should not be stored as an independent client-side state value if it can be derived from transaction data.
+
+Avoid:
+
+```ts
+const [balance, setBalance] = useState(0)
+```
+
+when the value can be derived from existing server data.
+
+Prefer:
+
+```ts
+const balance = calculateBalance(transactions)
+```
+
+or obtain the calculated aggregate from the server when doing so is more appropriate for performance or consistency.
+
+Duplicating derived state creates additional synchronization requirements and increases the possibility of stale values.
+
+---
+
+### State Synchronization
+
+The application minimizes manual state synchronization.
+
+The preferred approach is to have one source of truth for each category of state.
+
+Examples:
+
+```text
+Server data
+    ↓
+TanStack Query
+
+Search/filter/pagination
+    ↓
+URL
+
+Form values
+    ↓
+TanStack Form
+
+Modal visibility
+    ↓
+React state
+```
+
+When server data changes because of a mutation, TanStack Query invalidation or cache updates are used rather than manually synchronizing multiple React state variables.
+
+---
+
+### State Persistence
+
+State should only be persisted when there is a clear product requirement.
+
+Persistence mechanisms depend on the type of state.
+
+Examples:
+
+- Server state → database
+- Shareable navigation state → URL
+- Authentication/session state → authentication/session mechanism
+- Temporary UI state → React state
+
+Local storage or other browser persistence mechanisms should not be introduced as a general-purpose state-management solution.
+
+Persistent client state should be added only for specific requirements where persistence genuinely improves the user experience.
+
+---
+
+### State Ownership
+
+Every state value should have an identifiable owner.
+
+The following questions should be considered when introducing new state:
+
+1. Does this data come from the server?
+   - Use TanStack Query.
+
+2. Does it need to be represented in the URL?
+   - Use TanStack Router search params.
+
+3. Is it temporary form input?
+   - Use TanStack Form.
+
+4. Is it purely local UI state?
+   - Use React state.
+
+5. Is it derived from another source of truth?
+   - Calculate it rather than storing it.
+
+6. Does it genuinely need to be shared globally?
+   - First verify that the previous mechanisms cannot solve the requirement.
+
+This prevents unnecessary state duplication and reduces synchronization complexity.
+
+---
+
+### State Management Decision Rules
+
+The application follows these general rules:
+
+1. TanStack Query is the source of truth for server state.
+2. Server state is not duplicated into React state without a specific reason.
+3. TanStack Router search parameters are the source of truth for URL state.
+4. TanStack Form owns form state.
+5. Zod provides form and input validation.
+6. React state manages local UI state.
+7. Derived state should be calculated rather than duplicated.
+8. Mutations update server state through Server Functions and synchronize affected Query Cache entries through invalidation or cache updates.
+9. The application does not initially use a global client-state management library.
+10. A shared client-state solution may be introduced later only when a concrete requirement cannot be solved with the existing mechanisms.
+11. State should have one clearly identifiable source of truth.
+12. State persistence should be introduced only where there is a specific product requirement.
 
 ## 16. Performance Strategy
 
