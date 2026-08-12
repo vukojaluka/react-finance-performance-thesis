@@ -1396,17 +1396,539 @@ This pattern is the preferred rendering strategy established by Experiment 001 f
 
 ## 14. Data Fetching Strategy
 
-### Server Functions
+### Data Fetching Architecture
 
-### TanStack Query
+The application uses TanStack Query as the primary server-state management and data-fetching layer.
 
-### Cache Strategy
+TanStack Start Route Loaders coordinate server-side data fetching, while reusable TanStack Query option factories define how individual queries are executed and cached.
 
-### Prefetching
+The general data flow is:
 
-### Revalidation
+Route Loader / Component
+↓
+Query Options
+↓
+TanStack Query
+↓
+Server Function
+↓
+Database / Supabase
+
+The same query options are reused across Route Loaders and React components to ensure that all parts of the application reference the same Query Cache entry.
 
 ---
+
+### Query Options
+
+Each server-side query is defined through a reusable `queryOptions()` factory.
+
+Example:
+
+```ts
+export function transactionsQuery() {
+  return queryOptions({
+    queryKey: ['transactions'],
+    queryFn: () => getTransactions(),
+  })
+}
+```
+
+Query option factories are the single source of truth for:
+
+- Query keys
+- Query functions
+- Query configuration
+- Query-specific caching behaviour
+
+The same query options may be passed to:
+
+- `ensureQueryData()`
+- `prefetchQuery()`
+- `useQuery()`
+- `useSuspenseQuery()`
+
+Query keys must uniquely identify the data represented by the query.
+
+---
+
+### Route Loader Data Fetching
+
+Route Loaders are responsible for orchestrating data that should begin loading during route navigation.
+
+The loader determines which queries are:
+
+- Critical
+- Non-critical
+- Not required until user interaction
+
+The loader should not manually return server data as component props when the same data is already managed by TanStack Query.
+
+Instead, the loader populates or starts the Query Cache and components consume the query through TanStack Query hooks.
+
+Example:
+
+```ts
+loader: async ({ context }) => {
+  void context.queryClient.prefetchQuery(nonCriticalQuery())
+
+  await context.queryClient.ensureQueryData(criticalQuery())
+}
+```
+
+---
+
+### Critical Queries
+
+Critical queries contain data required for meaningful initial rendering.
+
+Examples:
+
+- Authenticated user/session
+- Dashboard summary
+- Initial transaction list
+- Required page configuration
+
+Critical queries are awaited using:
+
+```ts
+await queryClient.ensureQueryData(criticalQuery())
+```
+
+The loader continues only after the critical query has been resolved or an appropriate error has been produced.
+
+Critical queries should be kept to the minimum necessary for the initial page experience.
+
+The goal is to avoid turning every page dependency into a blocking request.
+
+---
+
+### Non-Critical Queries
+
+Non-critical queries provide additional content that is useful but not required for the initial meaningful render.
+
+Examples:
+
+- Charts
+- Recent transactions
+- Secondary statistics
+- Analytics widgets
+- Recommendations
+
+Independent non-critical queries should be started as early as possible:
+
+```ts
+void queryClient.prefetchQuery(nonCriticalQuery())
+```
+
+The promise is intentionally not awaited or returned from the loader.
+
+This allows the query to start while critical data is still loading.
+
+The corresponding component consumes the same query using:
+
+```ts
+useSuspenseQuery(nonCriticalQuery())
+```
+
+This pattern was validated by Experiment 001.
+
+The Early Prefetch strategy reduced total page completion time by approximately one second compared with the Late Prefetch strategy under identical artificial latency.
+
+---
+
+### Component Data Fetching
+
+Components do not directly call Server Functions for normal server-state fetching.
+
+Instead, components consume data through TanStack Query.
+
+The appropriate hook depends on whether the query should participate in SSR and Suspense.
+
+---
+
+### useSuspenseQuery
+
+`useSuspenseQuery()` is the preferred hook for data that participates in SSR and progressive rendering.
+
+Example:
+
+```ts
+const { data } = useSuspenseQuery(transactionsQuery())
+```
+
+If the query is not already available in the Query Cache, the component suspends until the query resolves.
+
+This allows the component to be placed inside an independent Suspense boundary.
+
+`useSuspenseQuery()` is therefore preferred for:
+
+- SSR-rendered widgets
+- Critical page data consumed by components
+- Non-critical widgets that are prefetched in the Route Loader
+- Components that should progressively reveal their content
+
+TanStack Router's Query integration supports `useSuspenseQuery()` during SSR and streams query results as they resolve.
+
+---
+
+### useQuery
+
+`useQuery()` is used when a query does not need to execute during SSR.
+
+Examples include:
+
+- User-initiated searches
+- Optional client-only data
+- Data that is not required for the initial render
+- Certain interactive UI states
+
+In the TanStack Router Query integration, `useQuery()` does not execute the query on the server and instead fetches on the client after hydration.
+
+Therefore, `useQuery()` should not be used for data that must be available during SSR.
+
+For SSR and streaming use cases, `useSuspenseQuery()` is preferred.
+
+---
+
+### Query Cache
+
+TanStack Query's Query Cache is the shared source of truth for server state within the application.
+
+A query is identified by its `queryKey`.
+
+Example:
+
+```ts
+queryKey: ['transactions']
+```
+
+Queries with different parameters use different query keys.
+
+Example:
+
+```ts
+queryKey: [
+  'transactions',
+  {
+    page,
+    sort,
+    category,
+  },
+]
+```
+
+The Query Cache provides:
+
+- Request deduplication
+- Cached data
+- Query state
+- Staleness tracking
+- Background refetching
+- SSR hydration
+- Query invalidation
+
+The application should avoid creating multiple independent cache representations of the same server data.
+
+---
+
+### staleTime
+
+`staleTime` determines how long cached query data is considered fresh.
+
+The default TanStack Query `staleTime` is `0`, meaning queries are immediately considered stale.
+
+This can cause a query that was fetched during SSR to refetch after hydration.
+
+For SSR applications, the application should configure an appropriate non-zero `staleTime` where immediate refetching is unnecessary.
+
+Experiment 001 used:
+
+```ts
+staleTime: 60 * 1000
+```
+
+as the experimental value.
+
+This prevented immediate background refetches from interfering with the experiment.
+
+The final application default should be chosen according to data freshness requirements rather than applying one value blindly to every query.
+
+Frequently changing data may use a shorter `staleTime`.
+
+Relatively stable data may use a longer `staleTime`.
+
+Queries that must always be refreshed can use a lower value or explicit invalidation/refetching.
+
+---
+
+### gcTime
+
+`gcTime` controls how long inactive queries remain in the Query Cache before garbage collection.
+
+`gcTime` is different from `staleTime`.
+
+`staleTime` answers:
+
+> How long is this data considered fresh?
+
+`gcTime` answers:
+
+> How long should inactive cached data remain available?
+
+The application should not use `gcTime` as a replacement for `staleTime`.
+
+The default server-side garbage-collection behaviour should be preserved unless there is a demonstrated reason to change it.
+
+The application should avoid setting server-side `gcTime` to `0`, as this can interfere with SSR hydration.
+
+---
+
+### SSR Hydration
+
+TanStack Start uses TanStack Router's Query integration to coordinate Query Cache dehydration, hydration and streaming between the server and client.
+
+The application does not manually implement Query Cache dehydration and hydration for normal Route Loader usage.
+
+The intended flow is:
+
+Server
+↓
+Route Loader
+↓
+QueryClient
+↓
+Query Cache
+↓
+SSR
+↓
+Dehydration / Streaming
+↓
+Browser
+↓
+Hydrated Query Cache
+
+The same query options used on the server are used by the client components.
+
+This allows components to consume server-fetched data without creating a second independent data-fetching mechanism.
+
+TanStack Router's Query integration provides automatic SSR dehydration/hydration and streaming of queries that resolve during the initial server render.
+
+---
+
+### Query Invalidation
+
+Mutations invalidate only the queries affected by the changed data.
+
+Example:
+
+Creating a transaction may invalidate:
+
+```ts
+['transactions']
+['dashboard-summary']
+['expense-chart']
+```
+
+The application should avoid globally invalidating all queries after every mutation.
+
+Invalidation should be based on actual data dependencies.
+
+Example:
+
+```ts
+await queryClient.invalidateQueries({
+  queryKey: ['transactions'],
+})
+```
+
+Related aggregate queries should be invalidated when the mutation changes the data they represent.
+
+---
+
+### Dependent Queries
+
+Queries that are truly dependent on another query should not be forced into parallel execution.
+
+Example:
+
+```text
+Get User
+   ↓
+Get User-specific Account
+   ↓
+Get Account-specific Data
+```
+
+If query B requires a value returned by query A, query B cannot start correctly before query A provides that value.
+
+The application should distinguish between:
+
+- True data dependencies
+- Accidental request waterfalls
+
+Independent queries should be parallelized.
+
+Dependent queries should preserve their dependency chain.
+
+The Early Prefetch strategy applies only to independent queries.
+
+---
+
+### URL-Driven Queries
+
+Queries affected by URL state must include the relevant search parameters in their query key.
+
+Example:
+
+```ts
+queryKey: [
+  'transactions',
+  {
+    page,
+    sort,
+    category,
+    search,
+  },
+]
+```
+
+TanStack Router search parameters are the source of truth for:
+
+- Search
+- Filtering
+- Sorting
+- Pagination
+- Date ranges
+- Selected categories
+
+This prevents multiple independent representations of the same URL-driven state.
+
+When search parameters change, TanStack Query receives a new query key and can resolve the corresponding cache entry.
+
+---
+
+### Pagination
+
+Standard pagination is used where a page represents a discrete set of results.
+
+Example:
+
+```ts
+queryKey: [
+  'transactions',
+  {
+    page,
+  },
+]
+```
+
+Each page is represented by its own Query Cache entry.
+
+Pagination state is stored in TanStack Router search parameters when it should be reflected in the URL.
+
+---
+
+### Infinite Queries
+
+Infinite queries should only be used where the UX requires continuous or incremental loading.
+
+Potential examples include:
+
+- Activity feeds
+- Long transaction histories
+- Infinite scrolling lists
+
+The application should not use infinite queries simply because a dataset is large.
+
+For standard table-based transaction management, URL-driven pagination is preferred because it provides:
+
+- Shareable URLs
+- Browser history support
+- Predictable navigation
+- Direct access to a specific page
+
+---
+
+### Error Handling
+
+Query errors are handled through TanStack Query.
+
+The application distinguishes between:
+
+- Loading state
+- Error state
+- Empty state
+- Successful state
+
+Suspense handles pending states for `useSuspenseQuery()`.
+
+Error boundaries or route-level error handling handle query failures where appropriate.
+
+Server Functions remain responsible for producing meaningful typed errors at the server boundary.
+
+---
+
+### Query Prefetching Rules
+
+The application follows these rules for prefetching.
+
+#### Route Loader Prefetch
+
+Use for data known to be required by the upcoming route.
+
+```ts
+void queryClient.prefetchQuery(queryOptions())
+```
+
+#### Critical Route Data
+
+Use:
+
+```ts
+await queryClient.ensureQueryData(queryOptions())
+```
+
+when the route should not render meaningfully without the data.
+
+#### Component-Level Prefetch
+
+May be used when a component knows that a descendant or subsequent interaction will require additional data.
+
+Route-level prefetching is preferred when the dependency is already known at route load time because it can avoid request waterfalls earlier in the lifecycle.
+
+#### Event-Based Prefetch
+
+May be used when user interaction provides a strong signal that data will soon be required.
+
+Examples:
+
+- Hovering a details link
+- Focusing a control
+- Opening a navigation menu
+
+---
+
+### Data Fetching Decision Rules
+
+The application follows these general rules:
+
+1. Define server-state queries using reusable `queryOptions()` factories.
+2. Use Route Loaders to orchestrate server-side query execution.
+3. Use `ensureQueryData()` for critical data required for initial rendering.
+4. Use non-awaited `prefetchQuery()` for independent non-critical data.
+5. Start independent non-critical queries before awaiting critical data when doing so provides earlier parallel execution.
+6. Use `useSuspenseQuery()` for SSR and streaming-compatible component data.
+7. Use `useQuery()` for data that intentionally starts on the client.
+8. Use TanStack Query as the single cache for server state.
+9. Configure `staleTime` according to data freshness requirements.
+10. Treat `gcTime` separately from data freshness.
+11. Rely on TanStack Start / Router Query integration for SSR hydration and streaming.
+12. Invalidate only queries affected by mutations.
+13. Include URL search parameters in query keys when they affect returned data.
+14. Parallelize independent queries.
+15. Preserve ordering for genuinely dependent queries.
+16. Prefer measurable performance improvements over speculative prefetching.
+17. Validate data-fetching optimizations through experiments and performance measurements.
 
 ## 15. State Management
 
