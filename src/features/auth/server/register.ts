@@ -1,0 +1,44 @@
+import { createServerFn } from '@tanstack/react-start'
+
+import { createSupabaseServerClient } from '@/integrations/supabase/server'
+
+import { mapAuthErrorMessage } from '../lib/auth-errors'
+import { toSafeUser } from '../lib/safe-user'
+import { registerSchema } from '../schemas/register.schema'
+import type { SafeUser } from '../lib/safe-user'
+
+export type RegisterResult =
+  | { status: 'authenticated'; user: SafeUser }
+  | { status: 'confirmation_required'; email: string }
+
+export const register = createServerFn({ method: 'POST' })
+  .validator(registerSchema)
+  .handler(async ({ data }): Promise<RegisterResult> => {
+    const supabase = createSupabaseServerClient()
+    const { data: authData, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+    })
+
+    if (error) {
+      throw new Error(mapAuthErrorMessage(error))
+    }
+
+    if (authData.session && authData.user) {
+      const user = toSafeUser(authData.user)
+
+      if (!user) {
+        throw new Error('Nije moguće dohvatiti prijavljenog korisnika.')
+      }
+
+      return {
+        status: 'authenticated',
+        user,
+      }
+    }
+
+    return {
+      status: 'confirmation_required',
+      email: data.email,
+    }
+  })

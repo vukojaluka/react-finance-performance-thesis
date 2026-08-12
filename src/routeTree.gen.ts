@@ -9,13 +9,35 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
+import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ExperimentsExperiment001RouteImport } from './routes/experiments/experiment-001'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ExperimentsExperiment001Route =
   ExperimentsExperiment001RouteImport.update({
@@ -25,39 +47,83 @@ const ExperimentsExperiment001Route =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof ProtectedIndexRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof ProtectedIndexRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_protected': typeof ProtectedRouteRouteWithChildren
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/register': typeof AuthRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
+  '/_protected/': typeof ProtectedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/experiments/experiment-001'
+  fullPaths: '/' | '/login' | '/register' | '/experiments/experiment-001'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/experiments/experiment-001'
-  id: '__root__' | '/' | '/experiments/experiment-001'
+  to: '/' | '/login' | '/register' | '/experiments/experiment-001'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_protected'
+    | '/_auth/login'
+    | '/_auth/register'
+    | '/experiments/experiment-001'
+    | '/_protected/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
   ExperimentsExperiment001Route: typeof ExperimentsExperiment001Route
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/register': {
+      id: '/_auth/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_protected/': {
+      id: '/_protected/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ProtectedIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/experiments/experiment-001': {
       id: '/experiments/experiment-001'
@@ -69,8 +135,35 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
+interface ProtectedRouteRouteChildren {
+  ProtectedIndexRoute: typeof ProtectedIndexRoute
+}
+
+const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedIndexRoute: ProtectedIndexRoute,
+}
+
+const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
+  ProtectedRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
   ExperimentsExperiment001Route: ExperimentsExperiment001Route,
 }
 export const routeTree = rootRouteImport

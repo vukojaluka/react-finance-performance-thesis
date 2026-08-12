@@ -27,7 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Financije',
       },
     ],
     links: [
@@ -38,6 +38,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
   shellComponent: RootDocument,
+  notFoundComponent: () => <div>Stranica nije pronađena.</div>,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
