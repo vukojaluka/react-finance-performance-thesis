@@ -7,7 +7,7 @@ export async function getAuthUser(): Promise<SafeUser | null> {
   const supabase = createSupabaseServerClient()
   const { data, error } = await supabase.auth.getUser()
 
-  if (error || !data.user) {
+  if (error) {
     return null
   }
 

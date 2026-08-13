@@ -388,6 +388,147 @@ Seed data will be used during development, testing and performance measurements.
           └────────────┴──────────┘
 ```
 
+## Authentication Architecture
+
+Authentication is handled by Supabase Auth.
+
+Supabase Auth is the source of truth for the authenticated user and session.
+
+The application does not implement a custom authentication/session system.
+
+### Authentication Flow
+
+The server-side authentication flow is:
+
+```text
+Supabase Auth
+      ↓
+createSupabaseServerClient()
+      ↓
+getCurrentUser() Server Function
+      ↓
+TanStack Router beforeLoad
+      ↓
+_auth / _protected layouts
+```
+
+`getCurrentUser()` uses the Supabase server client and `auth.getUser()` to resolve the authenticated user.
+
+Only safe user information is returned to application code:
+
+```ts
+{
+  id: string
+  email: string
+}
+```
+
+Authentication credentials, access tokens, refresh tokens, passwords, and service-role credentials are never exposed to client components.
+
+### Route Protection
+
+Authentication-based route protection is implemented using TanStack Router pathless layouts.
+
+```text
+_auth/
+├── login
+└── register
+
+_protected/
+└── application routes
+```
+
+The `_protected` layout performs the authentication check in `beforeLoad`.
+
+Unauthenticated users are redirected to `/login`.
+
+Authenticated users can access the protected application routes.
+
+The `_auth` layout redirects already authenticated users away from `/login` and `/register`.
+
+The authentication guard is a routing and user-experience mechanism. It is not considered a database security boundary.
+
+### Authorization and RLS
+
+Database authorization is enforced independently through Supabase Row Level Security.
+
+The security model is:
+
+```text
+Client
+  ↓
+TanStack Query
+  ↓
+Server Function
+  ↓
+Supabase Server Client
+  ↓
+Supabase Auth
+  ↓
+PostgreSQL RLS
+```
+
+Route guards prevent unauthenticated users from entering protected application routes.
+
+RLS prevents authenticated users from accessing or modifying data belonging to other users.
+
+Therefore, application security does not depend on the TanStack Router guard alone.
+
+### Current User
+
+The authenticated user is exposed to the application through the `getCurrentUser()` Server Function.
+
+A TanStack Query `currentUserQuery()` may cache this information for client-side UI.
+
+TanStack Query is not the authentication authority.
+
+Supabase Auth remains the source of truth for authentication state.
+
+The application does not use React Context, Zustand, or another global client-side authentication store.
+
+### Authentication Routes
+
+The current authentication routes are:
+
+```text
+/login
+/register
+```
+
+Authentication actions are implemented through Server Functions:
+
+```text
+login
+register
+logout
+getCurrentUser
+```
+
+Login, registration, and logout use the existing Supabase client/server integration.
+
+### Development Environment
+
+Authentication is currently developed against the local Supabase environment provided by the Supabase CLI and Docker.
+
+Local email confirmation is disabled for development, allowing registration to create an authenticated session directly.
+
+Mailpit is available for local email-related testing.
+
+Production Supabase Auth configuration will be configured separately when the application is deployed.
+
+### Security Principles
+
+The authentication implementation follows these principles:
+
+- Supabase Auth is the authentication authority.
+- Server-side authentication checks use `auth.getUser()`.
+- Route guards are implemented server-side through TanStack Router `beforeLoad`.
+- Database authorization is enforced through PostgreSQL RLS.
+- Client components do not directly access Supabase for privileged operations.
+- Service-role/secret keys are never exposed to browser code.
+- Passwords and authentication tokens are never logged or returned to client code.
+- Authentication state is not duplicated into a custom global client store.
+
 ## 9. Application Pages
 
 ### Landing

@@ -16,10 +16,8 @@ export const login = createServerFn({ method: 'POST' })
       password: data.password,
     })
 
-    if (error || !authData.user) {
-      throw new Error(
-        mapAuthErrorMessage(error ?? { message: 'Invalid login credentials' }),
-      )
+    if (error) {
+      throw new Error(mapAuthErrorMessage(error))
     }
 
     const user = toSafeUser(authData.user)
