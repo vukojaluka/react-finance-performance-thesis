@@ -14,6 +14,7 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
+import { Route as ProtectedTransactionsRouteImport } from './routes/_protected/transactions'
 import { Route as ExperimentsExperiment001RouteImport } from './routes/experiments/experiment-001'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -39,6 +40,11 @@ const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedTransactionsRoute = ProtectedTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const ExperimentsExperiment001Route =
   ExperimentsExperiment001RouteImport.update({
     id: '/experiments/experiment-001',
@@ -50,12 +56,14 @@ export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
+  '/transactions': typeof ProtectedTransactionsRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
 }
 export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
+  '/transactions': typeof ProtectedTransactionsRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
 }
 export interface FileRoutesById {
@@ -64,20 +72,32 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
+  '/_protected/transactions': typeof ProtectedTransactionsRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
   '/_protected/': typeof ProtectedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/experiments/experiment-001'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/transactions'
+    | '/experiments/experiment-001'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/experiments/experiment-001'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/transactions'
+    | '/experiments/experiment-001'
   id:
     | '__root__'
     | '/_auth'
     | '/_protected'
     | '/_auth/login'
     | '/_auth/register'
+    | '/_protected/transactions'
     | '/experiments/experiment-001'
     | '/_protected/'
   fileRoutesById: FileRoutesById
@@ -125,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/transactions': {
+      id: '/_protected/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof ProtectedTransactionsRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/experiments/experiment-001': {
       id: '/experiments/experiment-001'
       path: '/experiments/experiment-001'
@@ -150,10 +177,12 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface ProtectedRouteRouteChildren {
+  ProtectedTransactionsRoute: typeof ProtectedTransactionsRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedTransactionsRoute: ProtectedTransactionsRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
 }
 
