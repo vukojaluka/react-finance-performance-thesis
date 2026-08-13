@@ -16,6 +16,13 @@ import { logout } from '@/features/auth/server/logout'
 
 export const Route = createFileRoute('/_protected/')({
   component: ProtectedHomePage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Nadzorna ploča - MyFinance',
+      },
+    ],
+  }),
 })
 
 function ProtectedHomePage() {

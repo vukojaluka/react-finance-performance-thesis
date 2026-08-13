@@ -12,6 +12,13 @@ export const Route = createFileRoute('/_auth/register')({
     }
   },
   component: RegisterPage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Registriraj se - MyFinance',
+      },
+    ],
+  }),
 })
 
 function RegisterPage() {

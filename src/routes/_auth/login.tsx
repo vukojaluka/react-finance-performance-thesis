@@ -16,6 +16,13 @@ export const Route = createFileRoute('/_auth/login')({
     }
   },
   component: LoginPage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Prijavi se - MyFinance',
+      },
+    ],
+  }),
 })
 
 function LoginPage() {
