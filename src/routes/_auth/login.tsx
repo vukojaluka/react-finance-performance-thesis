@@ -9,9 +9,9 @@ export const Route = createFileRoute('/_auth/login')({
     redirect: sanitizeRedirect(search.redirect),
   }),
   beforeLoad: async ({ search }) => {
-    const user = await getCurrentUser()
+    const { isLoggedIn } = await getCurrentUser()
 
-    if (user) {
+    if (isLoggedIn) {
       throw redirect({ to: search.redirect })
     }
   },

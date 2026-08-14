@@ -8,9 +8,9 @@ import { ProtectedSidebarInsetHeader } from '@/components/layouts/protected/side
 
 export const Route = createFileRoute('/_protected')({
   beforeLoad: async ({ location }) => {
-    const user = await getCurrentUser()
+    const { user, isLoggedIn } = await getCurrentUser()
 
-    if (!user) {
+    if (!isLoggedIn) {
       throw redirect({
         to: '/login',
         search: {

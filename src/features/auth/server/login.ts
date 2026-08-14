@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { mapSupabaseAuthErrors } from '@/integrations/supabase/auth-errors'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
 
-import { mapAuthErrorMessage } from '../lib/auth-errors'
 import { toSafeUser } from '../lib/safe-user'
 import { loginSchema } from '../schemas/login.schema'
 import type { SafeUser } from '../lib/safe-user'
@@ -17,7 +17,7 @@ export const login = createServerFn({ method: 'POST' })
     })
 
     if (error) {
-      throw new Error(mapAuthErrorMessage(error))
+      throw new Error(mapSupabaseAuthErrors(error))
     }
 
     const user = toSafeUser(authData.user)

@@ -29,6 +29,8 @@ export function RegisterForm() {
 
   const form = useForm({
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -63,6 +65,8 @@ export function RegisterForm() {
     },
   })
 
+  console.log(form.state.errors)
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
@@ -80,9 +84,55 @@ export function RegisterForm() {
             void form.handleSubmit()
           }}
         >
+          <form.Field name="firstName">
+            {(field) => (
+              <div className="space-y-0">
+                <Label htmlFor={field.name}>Ime</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type="text"
+                  autoComplete="given-name"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+                {field.state.meta.errors.length > 0 ? (
+                  <p className="text-sm text-destructive mt-1">
+                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  </p>
+                ) : null}
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="lastName">
+            {(field) => (
+              <div className="space-y-0">
+                <Label htmlFor={field.name}>Prezime</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type="text"
+                  autoComplete="family-name"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+                {field.state.meta.errors.length > 0 ? (
+                  <p className="text-sm text-destructive mt-1">
+                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  </p>
+                ) : null}
+              </div>
+            )}
+          </form.Field>
+
           <form.Field name="email">
             {(field) => (
-              <div className="space-y-2">
+              <div className="space-y-0">
                 <Label htmlFor={field.name}>E-mail</Label>
                 <Input
                   id={field.name}
@@ -95,7 +145,7 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-destructive mt-1">
                     {getFieldErrorMessage(field.state.meta.errors[0])}
                   </p>
                 ) : null}
@@ -105,7 +155,7 @@ export function RegisterForm() {
 
           <form.Field name="password">
             {(field) => (
-              <div className="space-y-2">
+              <div className="space-y-0">
                 <Label htmlFor={field.name}>Lozinka</Label>
                 <Input
                   id={field.name}
@@ -118,7 +168,7 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-destructive mt-1">
                     {getFieldErrorMessage(field.state.meta.errors[0])}
                   </p>
                 ) : null}
@@ -128,7 +178,7 @@ export function RegisterForm() {
 
           <form.Field name="confirmPassword">
             {(field) => (
-              <div className="space-y-2">
+              <div className="space-y-0">
                 <Label htmlFor={field.name}>Potvrda lozinke</Label>
                 <Input
                   id={field.name}
@@ -141,7 +191,7 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-destructive mt-1">
                     {getFieldErrorMessage(field.state.meta.errors[0])}
                   </p>
                 ) : null}

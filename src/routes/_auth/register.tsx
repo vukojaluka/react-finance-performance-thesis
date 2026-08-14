@@ -5,9 +5,9 @@ import { getCurrentUser } from '@/features/auth/server/get-current-user'
 
 export const Route = createFileRoute('/_auth/register')({
   beforeLoad: async () => {
-    const user = await getCurrentUser()
+    const { isLoggedIn } = await getCurrentUser()
 
-    if (user) {
+    if (isLoggedIn) {
       throw redirect({ to: '/' })
     }
   },

@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { mapSupabaseAuthErrors } from '@/integrations/supabase/auth-errors'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
 
-import { mapAuthErrorMessage } from '../lib/auth-errors'
 import { toSafeUser } from '../lib/safe-user'
 import { registerSchema } from '../schemas/register.schema'
 import type { SafeUser } from '../lib/safe-user'
@@ -18,10 +18,16 @@ export const register = createServerFn({ method: 'POST' })
     const { data: authData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
+      options: {
+        data: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+        },
+      },
     })
 
     if (error) {
-      throw new Error(mapAuthErrorMessage(error))
+      throw new Error(mapSupabaseAuthErrors(error))
     }
 
     if (authData.session && authData.user) {
