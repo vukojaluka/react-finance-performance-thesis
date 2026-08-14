@@ -1,14 +1,15 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 
-import { getCurrentUser } from '@/features/auth/server/get-current-user'
+import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import type { SafeUser } from '@/features/auth/lib/safe-user'
 import { ProtectedSidebar } from '@/components/layouts/protected/sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { ProtectedSidebarInsetHeader } from '@/components/layouts/protected/sidebar-inset-header'
 
 export const Route = createFileRoute('/_protected')({
-  beforeLoad: async ({ location }) => {
-    const { user, isLoggedIn } = await getCurrentUser()
+  beforeLoad: async ({ location, context }) => {
+    const { isLoggedIn, user } =
+      await context.queryClient.fetchQuery(currentUserQuery())
 
     if (!isLoggedIn) {
       throw redirect({

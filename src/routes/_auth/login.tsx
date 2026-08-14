@@ -1,15 +1,16 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { LoginForm } from '@/features/auth/components/login-form'
-import { sanitizeRedirect } from '@/features/auth/lib/sanitize-redirect'
-import { getCurrentUser } from '@/features/auth/server/get-current-user'
+import { currentUserQuery } from '@/features/auth/queries/current-user.query'
+import { sanitizeRedirect } from '@/lib/utils'
 
 export const Route = createFileRoute('/_auth/login')({
   validateSearch: (search) => ({
     redirect: sanitizeRedirect(search.redirect),
   }),
-  beforeLoad: async ({ search }) => {
-    const { isLoggedIn } = await getCurrentUser()
+  beforeLoad: async ({ search, context }) => {
+    const { isLoggedIn } =
+      await context.queryClient.fetchQuery(currentUserQuery())
 
     if (isLoggedIn) {
       throw redirect({ to: search.redirect })

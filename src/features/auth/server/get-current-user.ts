@@ -6,13 +6,14 @@ import { toSafeUser } from '../lib/safe-user'
 import type { SafeUser } from '../lib/safe-user'
 
 export type CurrentUserResult =
-  | { user: SafeUser; isLoggedIn: true }
-  | { user: null; isLoggedIn: false }
+  { user: SafeUser; isLoggedIn: true } | { user: null; isLoggedIn: false }
 
 export const getCurrentUser = createServerFn({ method: 'GET' }).handler(
   async (): Promise<CurrentUserResult> => {
     const supabase = createSupabaseServerClient()
     const { data, error } = await supabase.auth.getUser()
+
+    console.log('getCurrentUser called')
 
     if (error) {
       return { user: null, isLoggedIn: false }

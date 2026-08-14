@@ -1,11 +1,12 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { RegisterForm } from '@/features/auth/components/register-form'
-import { getCurrentUser } from '@/features/auth/server/get-current-user'
+import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 
 export const Route = createFileRoute('/_auth/register')({
-  beforeLoad: async () => {
-    const { isLoggedIn } = await getCurrentUser()
+  beforeLoad: async ({ context }) => {
+    const { isLoggedIn } =
+      await context.queryClient.fetchQuery(currentUserQuery())
 
     if (isLoggedIn) {
       throw redirect({ to: '/' })

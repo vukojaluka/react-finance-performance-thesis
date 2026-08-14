@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
-import { getFieldErrorMessage } from '@/features/auth/lib/field-error-message'
+import { getFormFieldErrorMessage } from '@/lib/utils'
 import { registerSchema } from '@/features/auth/schemas/register.schema'
 import { register } from '@/features/auth/server/register'
 
@@ -99,8 +99,8 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive mt-1">
-                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  <p className="mt-1 whitespace-pre-line text-sm text-destructive">
+                    {getFormFieldErrorMessage(field.state.meta.errors)}
                   </p>
                 ) : null}
               </div>
@@ -122,8 +122,8 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive mt-1">
-                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  <p className="mt-1 whitespace-pre-line text-sm text-destructive">
+                    {getFormFieldErrorMessage(field.state.meta.errors)}
                   </p>
                 ) : null}
               </div>
@@ -145,8 +145,8 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive mt-1">
-                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  <p className="mt-1 whitespace-pre-line text-sm text-destructive">
+                    {getFormFieldErrorMessage(field.state.meta.errors)}
                   </p>
                 ) : null}
               </div>
@@ -168,8 +168,8 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive mt-1">
-                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  <p className="mt-1 whitespace-pre-line text-sm text-destructive">
+                    {getFormFieldErrorMessage(field.state.meta.errors)}
                   </p>
                 ) : null}
               </div>
@@ -191,8 +191,8 @@ export function RegisterForm() {
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive mt-1">
-                    {getFieldErrorMessage(field.state.meta.errors[0])}
+                  <p className="mt-1 whitespace-pre-line text-sm text-destructive">
+                    {getFormFieldErrorMessage(field.state.meta.errors)}
                   </p>
                 ) : null}
               </div>
