@@ -2,6 +2,8 @@ import { clsx } from 'clsx'
 import type { ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
+import { DEFAULT_POST_AUTH_REDIRECT } from '@/lib/constants'
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -37,11 +39,11 @@ export function getFormFieldErrorMessage(error: unknown): string {
 
 export function sanitizeRedirect(redirect: unknown): string {
   if (typeof redirect !== 'string') {
-    return '/'
+    return DEFAULT_POST_AUTH_REDIRECT
   }
 
   if (!redirect.startsWith('/') || redirect.startsWith('//')) {
-    return '/'
+    return DEFAULT_POST_AUTH_REDIRECT
   }
 
   return redirect

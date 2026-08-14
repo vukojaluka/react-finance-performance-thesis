@@ -13,8 +13,6 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(
     const supabase = createSupabaseServerClient()
     const { data, error } = await supabase.auth.getUser()
 
-    console.log('getCurrentUser called')
-
     if (error) {
       return { user: null, isLoggedIn: false }
     }

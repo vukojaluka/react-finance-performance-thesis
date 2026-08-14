@@ -48,7 +48,7 @@ export function RegisterForm() {
         if (result.status === 'authenticated') {
           queryClient.removeQueries({ queryKey: currentUserQuery().queryKey })
           await router.invalidate()
-          await navigate({ to: '/' })
+          await navigate({ to: '/dashboard' })
           return
         }
 
@@ -219,6 +219,7 @@ export function RegisterForm() {
             Već imate račun?{' '}
             <Link
               to="/login"
+              search={{ redirect: '/dashboard' }}
               className="text-foreground underline underline-offset-4"
             >
               Prijavite se

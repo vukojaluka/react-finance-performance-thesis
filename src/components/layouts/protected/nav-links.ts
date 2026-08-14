@@ -3,14 +3,14 @@ import type { LucideIcon } from 'lucide-react'
 
 export type ProtectedNavLink = {
   name: string
-  path: '/' | '/transactions' | '/categories' | '/budgets'
+  path: '/dashboard' | '/transactions' | '/categories' | '/budgets'
   icon: LucideIcon
 }
 
 export const protectedNavLinks = [
   {
     name: 'Nadzorna ploča',
-    path: '/',
+    path: '/dashboard',
     icon: Home,
   },
   {
@@ -37,17 +37,13 @@ export function getProtectedNavLabel(pathname: string): string {
     return exact.name
   }
 
-  const nested = protectedNavLinks.find(
-    (link) => link.path !== '/' && pathname.startsWith(`${link.path}/`),
+  const nested = protectedNavLinks.find((link) =>
+    pathname.startsWith(`${link.path}/`),
   )
 
   return nested?.name ?? pathname
 }
 
 export function isProtectedNavLinkActive(pathname: string, path: string) {
-  if (path === '/') {
-    return pathname === '/'
-  }
-
   return pathname === path || pathname.startsWith(`${path}/`)
 }

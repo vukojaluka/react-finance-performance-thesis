@@ -4,7 +4,7 @@ import { LoginForm } from '@/features/auth/components/login-form'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { sanitizeRedirect } from '@/lib/utils'
 
-export const Route = createFileRoute('/_auth/login')({
+export const Route = createFileRoute('/_public/login')({
   validateSearch: (search) => ({
     redirect: sanitizeRedirect(search.redirect),
   }),
@@ -29,5 +29,9 @@ export const Route = createFileRoute('/_auth/login')({
 function LoginPage() {
   const { redirect: redirectTo } = Route.useSearch()
 
-  return <LoginForm redirectTo={redirectTo} />
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
+      <LoginForm redirectTo={redirectTo} />
+    </div>
+  )
 }

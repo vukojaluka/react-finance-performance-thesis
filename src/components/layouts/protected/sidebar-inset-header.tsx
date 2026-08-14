@@ -19,7 +19,7 @@ export function ProtectedSidebarInsetHeader() {
     select: (state) => state.location.pathname,
   })
   const currentLabel = getProtectedNavLabel(pathname)
-  const isDashboard = pathname === '/'
+  const isDashboard = pathname === '/dashboard'
   const { data } = useQuery(currentUserQuery())
   const user = data?.user
 
@@ -36,7 +36,7 @@ export function ProtectedSidebarInsetHeader() {
             ) : (
               <>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink render={<Link to="/" />}>
+                  <BreadcrumbLink render={<Link to="/dashboard" />}>
                     Nadzorna ploča
                   </BreadcrumbLink>
                 </BreadcrumbItem>

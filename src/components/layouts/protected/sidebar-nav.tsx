@@ -22,7 +22,9 @@ export function ProtectedSidebarNav() {
             <SidebarMenuButton
               isActive={isProtectedNavLinkActive(pathname, item.path)}
               tooltip={item.name}
-              render={<Link to={item.path as '/'} />}
+              render={
+                <Link to={item.path as '/dashboard' | '/transactions'} />
+              }
             >
               <item.icon />
               <span>{item.name}</span>

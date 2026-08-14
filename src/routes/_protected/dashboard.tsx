@@ -13,9 +13,10 @@ import {
 } from '@/components/ui/card'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { logout } from '@/features/auth/server/logout'
+import { DEFAULT_POST_AUTH_REDIRECT } from '@/lib/constants'
 
-export const Route = createFileRoute('/_protected/')({
-  component: ProtectedHomePage,
+export const Route = createFileRoute('/_protected/dashboard')({
+  component: DashboardPage,
   head: () => ({
     meta: [
       {
@@ -25,7 +26,7 @@ export const Route = createFileRoute('/_protected/')({
   }),
 })
 
-function ProtectedHomePage() {
+function DashboardPage() {
   const { user } = Route.useRouteContext()
   const navigate = useNavigate()
   const router = useRouter()
@@ -42,7 +43,10 @@ function ProtectedHomePage() {
       await logoutFn()
       queryClient.removeQueries({ queryKey: currentUserQuery().queryKey })
       await router.invalidate()
-      await navigate({ to: '/login', search: { redirect: '/' } })
+      await navigate({
+        to: '/login',
+        search: { redirect: DEFAULT_POST_AUTH_REDIRECT },
+      })
     } catch (error) {
       setLogoutError(
         error instanceof Error

@@ -170,13 +170,13 @@ Stores additional user information that is not managed by Supabase Authenticatio
 
 #### Columns
 
-| Column | Type | Nullable | Default | Description |
-|---------|------|----------|---------|-------------|
-| id | UUID | No | - | References auth.users.id |
-| first_name | TEXT | No | - | User first name |
-| last_name | TEXT | No | - | User last name |
-| created_at | TIMESTAMPTZ | No | NOW() | Creation timestamp |
-| updated_at | TIMESTAMPTZ | No | NOW() | Last update timestamp |
+| Column     | Type        | Nullable | Default | Description              |
+| ---------- | ----------- | -------- | ------- | ------------------------ |
+| id         | UUID        | No       | -       | References auth.users.id |
+| first_name | TEXT        | No       | -       | User first name          |
+| last_name  | TEXT        | No       | -       | User last name           |
+| created_at | TIMESTAMPTZ | No       | NOW()   | Creation timestamp       |
+| updated_at | TIMESTAMPTZ | No       | NOW()   | Last update timestamp    |
 
 #### Constraints
 
@@ -204,18 +204,18 @@ Stores all financial records created by users.
 
 #### Columns
 
-| Column | Type | Nullable | Default | Description |
-|---------|------|----------|---------|-------------|
-| id | UUID | No | gen_random_uuid() | Transaction identifier |
-| user_id | UUID | No | - | Profile owner |
-| category_id | UUID | No | - | Transaction category |
-| title | TEXT | No | - | Transaction title |
-| amount | NUMERIC(12,2) | No | - | Transaction amount |
-| type | transaction_type | No | - | Income or expense |
-| transaction_date | DATE | No | CURRENT_DATE | Transaction date |
-| note | TEXT | Yes | NULL | Optional note |
-| created_at | TIMESTAMPTZ | No | NOW() | Creation timestamp |
-| updated_at | TIMESTAMPTZ | No | NOW() | Last update timestamp |
+| Column           | Type             | Nullable | Default           | Description            |
+| ---------------- | ---------------- | -------- | ----------------- | ---------------------- |
+| id               | UUID             | No       | gen_random_uuid() | Transaction identifier |
+| user_id          | UUID             | No       | -                 | Profile owner          |
+| category_id      | UUID             | No       | -                 | Transaction category   |
+| title            | TEXT             | No       | -                 | Transaction title      |
+| amount           | NUMERIC(12,2)    | No       | -                 | Transaction amount     |
+| type             | transaction_type | No       | -                 | Income or expense      |
+| transaction_date | DATE             | No       | CURRENT_DATE      | Transaction date       |
+| note             | TEXT             | Yes      | NULL              | Optional note          |
+| created_at       | TIMESTAMPTZ      | No       | NOW()             | Creation timestamp     |
+| updated_at       | TIMESTAMPTZ      | No       | NOW()             | Last update timestamp  |
 
 #### Constraints
 
@@ -246,14 +246,14 @@ Stores user-defined transaction categories.
 
 #### Columns
 
-| Column | Type | Nullable | Default | Description |
-|---------|------|----------|---------|-------------|
-| id | UUID | No | gen_random_uuid() | Category identifier |
-| user_id | UUID | No | - | Profile owner |
-| name | TEXT | No | - | Category name |
-| color | TEXT | No | - | Color used in charts and dashboard |
-| created_at | TIMESTAMPTZ | No | NOW() | Creation timestamp |
-| updated_at | TIMESTAMPTZ | No | NOW() | Last update timestamp |
+| Column     | Type        | Nullable | Default           | Description                        |
+| ---------- | ----------- | -------- | ----------------- | ---------------------------------- |
+| id         | UUID        | No       | gen_random_uuid() | Category identifier                |
+| user_id    | UUID        | No       | -                 | Profile owner                      |
+| name       | TEXT        | No       | -                 | Category name                      |
+| color      | TEXT        | No       | -                 | Color used in charts and dashboard |
+| created_at | TIMESTAMPTZ | No       | NOW()             | Creation timestamp                 |
+| updated_at | TIMESTAMPTZ | No       | NOW()             | Last update timestamp              |
 
 #### Constraints
 
@@ -281,16 +281,16 @@ Stores monthly spending limits for transaction categories.
 
 #### Columns
 
-| Column | Type | Nullable | Default | Description |
-|---------|------|----------|---------|-------------|
-| id | UUID | No | gen_random_uuid() | Budget identifier |
-| user_id | UUID | No | - | Profile owner |
-| category_id | UUID | No | - | Budget category |
-| amount | NUMERIC(12,2) | No | - | Budget amount |
-| month | SMALLINT | No | - | Month (1-12) |
-| year | SMALLINT | No | - | Year |
-| created_at | TIMESTAMPTZ | No | NOW() | Creation timestamp |
-| updated_at | TIMESTAMPTZ | No | NOW() | Last update timestamp |
+| Column      | Type          | Nullable | Default           | Description           |
+| ----------- | ------------- | -------- | ----------------- | --------------------- |
+| id          | UUID          | No       | gen_random_uuid() | Budget identifier     |
+| user_id     | UUID          | No       | -                 | Profile owner         |
+| category_id | UUID          | No       | -                 | Budget category       |
+| amount      | NUMERIC(12,2) | No       | -                 | Budget amount         |
+| month       | SMALLINT      | No       | -                 | Month (1-12)          |
+| year        | SMALLINT      | No       | -                 | Year                  |
+| created_at  | TIMESTAMPTZ   | No       | NOW()             | Creation timestamp    |
+| updated_at  | TIMESTAMPTZ   | No       | NOW()             | Last update timestamp |
 
 #### Constraints
 
@@ -409,7 +409,7 @@ getCurrentUser() Server Function
       ↓
 TanStack Router beforeLoad
       ↓
-_auth / _protected layouts
+_public / _protected layouts
 ```
 
 `getCurrentUser()` uses the Supabase server client and `auth.getUser()` to resolve the authenticated user.
@@ -430,11 +430,13 @@ Authentication credentials, access tokens, refresh tokens, passwords, and servic
 Authentication-based route protection is implemented using TanStack Router pathless layouts.
 
 ```text
-_auth/
+_public/
+├── index (landing `/`)
 ├── login
 └── register
 
 _protected/
+├── dashboard (`/dashboard`)
 └── application routes
 ```
 
@@ -444,7 +446,7 @@ Unauthenticated users are redirected to `/login`.
 
 Authenticated users can access the protected application routes.
 
-The `_auth` layout redirects already authenticated users away from `/login` and `/register`.
+Login and register redirect already authenticated users away from `/login` and `/register` (typically to `/dashboard`).
 
 The authentication guard is a routing and user-experience mechanism. It is not considered a database security boundary.
 
@@ -491,6 +493,7 @@ The application does not use React Context, Zustand, or another global client-si
 The current authentication routes are:
 
 ```text
+/
 /login
 /register
 ```
@@ -1506,9 +1509,7 @@ export const Route = createFileRoute('/dashboard')({
     void context.queryClient.prefetchQuery(expenseChartQuery())
     void context.queryClient.prefetchQuery(recentTransactionsQuery())
 
-    await context.queryClient.ensureQueryData(
-      dashboardSummaryQuery(),
-    )
+    await context.queryClient.ensureQueryData(dashboardSummaryQuery())
   },
 
   component: DashboardPage,
@@ -1865,9 +1866,7 @@ Example:
 Creating a transaction may invalidate:
 
 ```ts
-['transactions']
-['dashboard-summary']
-['expense-chart']
+;['transactions']['dashboard-summary']['expense-chart']
 ```
 
 The application should avoid globally invalidating all queries after every mutation.

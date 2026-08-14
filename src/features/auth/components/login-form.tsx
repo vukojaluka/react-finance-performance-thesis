@@ -135,7 +135,6 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
             Nemate račun?{' '}
             <Link
               to="/register"
-              search={{ redirect: redirectTo }}
               className="text-foreground underline underline-offset-4"
             >
               Registrirajte se
