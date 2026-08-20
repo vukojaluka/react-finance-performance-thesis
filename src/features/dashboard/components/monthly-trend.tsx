@@ -28,16 +28,16 @@ function MonthlyTrendContent() {
   const { data } = useSuspenseQuery(monthlyTrendQuery())
 
   return (
-    <Card size="sm" className="min-w-0 h-full">
+    <Card size="sm" className="min-w-0 h-full min-h-80 lg:min-h-128">
       <CardHeader>
         <CardTitle className="text-sm tracking-normal normal-case">
           Mjesečni trend prihoda i rashoda
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="h-full">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-64 w-full min-w-0"
+          className="aspect-auto h-full w-full min-w-0"
         >
           <BarChart data={data} accessibilityLayer>
             <CartesianGrid vertical={false} />
@@ -80,12 +80,12 @@ function MonthlyTrendContent() {
 
 export function MonthlyTrendSkeleton() {
   return (
-    <Card size="sm" className="min-w-0 h-full">
+    <Card size="sm" className="min-w-0 h-80 lg:h-128">
       <CardHeader>
         <Skeleton className="h-4 w-56" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-60 lg:h-108 w-full" />
       </CardContent>
     </Card>
   )

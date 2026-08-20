@@ -2,7 +2,6 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
-import { sleep } from '../../../experiments/experiment-001/lib/sleep'
 
 export type MonthlyTrendPoint = {
   month: string
@@ -125,8 +124,6 @@ export const getMonthlyTrend = createServerFn({ method: 'GET' }).handler(
     if (error) {
       throw new Error('Nije moguće učitati mjesečni trend.')
     }
-
-    await sleep(5000)
 
     return aggregateMonthlyTrend(data, monthKeys)
   },

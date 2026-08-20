@@ -15,6 +15,7 @@ import { formatBam } from '@/lib/format-currency'
 
 import { recentTransactionsQuery } from '../queries/recent-transactions.query'
 import type { RecentTransaction } from '../server/get-recent-transactions'
+import { ArrowRightIcon } from 'lucide-react'
 
 const dateFormatter = new Intl.DateTimeFormat('hr-HR', {
   day: 'numeric',
@@ -64,9 +65,9 @@ function RecentTransactionsContent() {
   const { data } = useSuspenseQuery(recentTransactionsQuery())
 
   return (
-    <Card size="sm" className="min-w-0 h-full">
+    <Card size="sm" className="min-w-0 h-full min-h-128">
       <CardHeader>
-        <CardTitle className="text-sm tracking-normal normal-case">
+        <CardTitle className="text-sm tracking-normal normal-case line-clamp-1">
           Nedavne transakcije
         </CardTitle>
         <CardAction>
@@ -77,6 +78,7 @@ function RecentTransactionsContent() {
             render={<Link to="/transactions" />}
           >
             Prikaži sve
+            <ArrowRightIcon className="w-4 h-4" />
           </Button>
         </CardAction>
       </CardHeader>
@@ -102,7 +104,7 @@ function RecentTransactionsContent() {
 
 export function RecentTransactionsSkeleton() {
   return (
-    <Card size="sm" className="min-w-0 h-full">
+    <Card size="sm" className="min-w-0 h-128">
       <CardHeader className="flex flex-row items-center justify-between">
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-7 w-24" />

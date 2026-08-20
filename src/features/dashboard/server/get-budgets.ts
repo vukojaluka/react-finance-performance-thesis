@@ -1,7 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
-import { sleep } from '../../../experiments/experiment-001/lib/sleep'
 
 export type DashboardBudget = {
   id: string
@@ -99,8 +98,6 @@ export const getBudgets = createServerFn({ method: 'GET' }).handler(
     }
 
     const spentByCategory = sumSpentByCategory(expensesResult.data)
-
-    await sleep(8000)
 
     return budgetsResult.data.map((budget) => {
       const amount = Number(budget.amount)

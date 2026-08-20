@@ -2,7 +2,10 @@ import { Suspense } from 'react'
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 
-import { Budgets, BudgetsSkeleton } from '@/features/dashboard/components/budgets-widget'
+import {
+  Budgets,
+  BudgetsSkeleton,
+} from '@/features/dashboard/components/budgets-widget'
 import { DashboardSummaryCards } from '@/features/dashboard/components/dashboard-summary-cards'
 import { DashboardWidgetError } from '@/features/dashboard/components/dashboard-widget-error'
 import {

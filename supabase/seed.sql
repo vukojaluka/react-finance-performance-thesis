@@ -251,3 +251,215 @@ values
     '2026-08-08',
     null
   );
+
+-- ---------------------------------------------------------------------------
+-- User C demo data (Luka)
+-- User C: luka.vukoja1991@gmail.com / password123
+-- NOTE: `pnpm db:reset` recreates this auth user with the fixed UUID below.
+-- If you registered manually with a different UUID, reset replaces that account.
+-- ---------------------------------------------------------------------------
+
+insert into auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  raw_app_meta_data,
+  raw_user_meta_data,
+  created_at,
+  updated_at,
+  confirmation_token,
+  email_change,
+  email_change_token_new,
+  recovery_token
+)
+values
+  (
+    '00000000-0000-0000-0000-000000000000',
+    '33333333-3333-3333-3333-333333333333',
+    'authenticated',
+    'authenticated',
+    'luka.vukoja1991@gmail.com',
+    extensions.crypt('password123', extensions.gen_salt('bf')),
+    now(),
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    '{"first_name":"Luka","last_name":"Vukoja"}'::jsonb,
+    now(),
+    now(),
+    '',
+    '',
+    '',
+    ''
+  );
+
+insert into auth.identities (
+  id,
+  user_id,
+  identity_data,
+  provider,
+  provider_id,
+  last_sign_in_at,
+  created_at,
+  updated_at
+)
+values
+  (
+    gen_random_uuid(),
+    '33333333-3333-3333-3333-333333333333',
+    format(
+      '{"sub":"%s","email":"%s","email_verified":true,"phone_verified":false}',
+      '33333333-3333-3333-3333-333333333333',
+      'luka.vukoja1991@gmail.com'
+    )::jsonb,
+    'email',
+    '33333333-3333-3333-3333-333333333333',
+    now(),
+    now(),
+    now()
+  );
+
+-- Profile is created automatically by private.handle_new_user().
+
+insert into public.categories (id, user_id, name, color)
+values
+  ('33333333-3333-3333-3333-c00000000001', '33333333-3333-3333-3333-333333333333', 'Plaća', '#22c55e'),
+  ('33333333-3333-3333-3333-c00000000002', '33333333-3333-3333-3333-333333333333', 'Freelance', '#14b8a6'),
+  ('33333333-3333-3333-3333-c00000000003', '33333333-3333-3333-3333-333333333333', 'Namirnice', '#ef4444'),
+  ('33333333-3333-3333-3333-c00000000004', '33333333-3333-3333-3333-333333333333', 'Prijevoz', '#3b82f6'),
+  ('33333333-3333-3333-3333-c00000000005', '33333333-3333-3333-3333-333333333333', 'Režije', '#f59e0b'),
+  ('33333333-3333-3333-3333-c00000000006', '33333333-3333-3333-3333-333333333333', 'Zabava', '#a855f7'),
+  ('33333333-3333-3333-3333-c00000000007', '33333333-3333-3333-3333-333333333333', 'Restorani', '#e11d48');
+
+insert into public.budgets (id, user_id, category_id, amount, month, year)
+select
+  format(
+    '33333333-3333-3333-3333-%s',
+    lpad((100000 + month_offset * 5 + category_idx)::text, 12, '0')
+  )::uuid,
+  '33333333-3333-3333-3333-333333333333'::uuid,
+  category_id,
+  budget_amount,
+  extract(month from month_start)::smallint,
+  extract(year from month_start)::smallint
+from (
+  select
+    month_offset,
+    (date '2026-03-01' + (month_offset * interval '1 month'))::date as month_start,
+    category_idx,
+    category_id,
+    case
+      when category_idx = 1 and month_offset = 5 then 80.00
+      when category_idx = 1 then 350.00
+      when category_idx = 2 then 120.00
+      when category_idx = 3 then 180.00
+      when category_idx = 4 then 100.00
+      else 150.00
+    end as budget_amount
+  from generate_series(0, 5) as month_offset
+  cross join (
+    values
+      (1, '33333333-3333-3333-3333-c00000000003'::uuid),
+      (2, '33333333-3333-3333-3333-c00000000004'::uuid),
+      (3, '33333333-3333-3333-3333-c00000000005'::uuid),
+      (4, '33333333-3333-3333-3333-c00000000006'::uuid),
+      (5, '33333333-3333-3333-3333-c00000000007'::uuid)
+  ) as expense_categories(category_idx, category_id)
+) as budget_rows;
+
+insert into public.transactions (
+  id,
+  user_id,
+  category_id,
+  title,
+  amount,
+  type,
+  transaction_date,
+  note
+)
+select
+  format(
+    '33333333-3333-3333-3333-%s',
+    lpad((200000 + month_offset * 20 + income_idx)::text, 12, '0')
+  )::uuid,
+  '33333333-3333-3333-3333-333333333333'::uuid,
+  case
+    when income_idx = 1 then '33333333-3333-3333-3333-c00000000001'::uuid
+    else '33333333-3333-3333-3333-c00000000002'::uuid
+  end,
+  case
+    when income_idx = 1 then 'Plaća ' || to_char(month_start, 'TMMonth YYYY')
+    else 'Freelance projekt #' || income_idx
+  end,
+  case
+    when income_idx = 1 then 3000.00 + (month_offset * 50.00)
+    else 80.00 + (((income_idx * 37) + (month_offset * 10)) % 370)
+  end,
+  'income',
+  month_start + (least(1 + ((income_idx - 1) * 2), last_day) - 1),
+  case when income_idx = 1 then 'Mjesečna plaća' else null end
+from (
+  select
+    month_offset,
+    (date '2026-03-01' + (month_offset * interval '1 month'))::date as month_start,
+    extract(
+      day from (
+        date_trunc('month', date '2026-03-01' + (month_offset * interval '1 month'))
+        + interval '1 month - 1 day'
+      )
+    )::integer as last_day,
+    income_idx
+  from generate_series(0, 5) as month_offset
+  cross join generate_series(1, 10) as income_idx
+) as income_rows;
+
+insert into public.transactions (
+  id,
+  user_id,
+  category_id,
+  title,
+  amount,
+  type,
+  transaction_date,
+  note
+)
+select
+  format(
+    '33333333-3333-3333-3333-%s',
+    lpad((300000 + month_offset * 20 + expense_idx)::text, 12, '0')
+  )::uuid,
+  '33333333-3333-3333-3333-333333333333'::uuid,
+  case (expense_idx - 1) % 5
+    when 0 then '33333333-3333-3333-3333-c00000000003'::uuid
+    when 1 then '33333333-3333-3333-3333-c00000000004'::uuid
+    when 2 then '33333333-3333-3333-3333-c00000000005'::uuid
+    when 3 then '33333333-3333-3333-3333-c00000000006'::uuid
+    else '33333333-3333-3333-3333-c00000000007'::uuid
+  end,
+  case (expense_idx - 1) % 5
+    when 0 then 'Namirnice'
+    when 1 then 'Prijevoz'
+    when 2 then 'Režije'
+    when 3 then 'Zabava'
+    else 'Restorani'
+  end || ' #' || expense_idx,
+  15.00 + (((expense_idx * 23) + (month_offset * 15)) % 205),
+  'expense',
+  month_start + (least(2 + ((expense_idx - 1) * 2), last_day) - 1),
+  null
+from (
+  select
+    month_offset,
+    (date '2026-03-01' + (month_offset * interval '1 month'))::date as month_start,
+    extract(
+      day from (
+        date_trunc('month', date '2026-03-01' + (month_offset * interval '1 month'))
+        + interval '1 month - 1 day'
+      )
+    )::integer as last_day,
+    expense_idx
+  from generate_series(0, 5) as month_offset
+  cross join generate_series(1, 10) as expense_idx
+) as expense_rows;

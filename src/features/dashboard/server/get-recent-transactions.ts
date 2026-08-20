@@ -2,7 +2,6 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
-import { sleep } from '../../../experiments/experiment-001/lib/sleep'
 
 export type RecentTransaction = {
   id: string
@@ -50,8 +49,6 @@ export const getRecentTransactions = createServerFn({ method: 'GET' }).handler(
     if (error) {
       throw new Error('Nije moguće učitati nedavne transakcije.')
     }
-
-    await sleep(3000)
 
     return data.map((row) => ({
       id: row.id,
