@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import debounce from 'debounce'
+import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -22,6 +24,7 @@ import {
   CardTitle,
 } from '../../../components/ui/card'
 import { XIcon } from 'lucide-react'
+import { Input } from '../../../components/ui/input'
 
 const TYPE_ITEMS = {
   all: 'Svi',
@@ -52,14 +55,35 @@ export function TransactionsFilters() {
     ),
   }
 
-  function setFilters(patch: Partial<TransactionFilters>) {
-    void navigate({
-      search: (prev) => ({
-        ...prev,
-        ...patch,
-        page: 1,
-      }),
-    })
+  const setFilters = useCallback(
+    (patch: Partial<TransactionFilters>) => {
+      void navigate({
+        search: (prev) => ({
+          ...prev,
+          ...patch,
+          page: 1,
+        }),
+      })
+    },
+    [navigate],
+  )
+
+  const [searchInput, setSearchInput] = useState(search.search ?? '')
+  const debouncedSetSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        const searchValue = value.trim()
+        setFilters({ search: searchValue || undefined })
+      }, 300),
+    [setFilters],
+  )
+  const hasActiveFilters =
+    hasActiveTransactionFilters(search) || searchInput !== ''
+
+  function clearFilters() {
+    debouncedSetSearch.clear()
+    setSearchInput('')
+    void navigate({ search: { page: 1 } })
   }
 
   return (
@@ -73,16 +97,30 @@ export function TransactionsFilters() {
           type="button"
           variant="outline"
           size="xs"
-          disabled={!hasActiveTransactionFilters(search)}
-          onClick={() => navigate({ search: { page: 1 } })}
+          disabled={!hasActiveFilters}
+          onClick={clearFilters}
           title="Očisti sve filtere"
         >
           Očisti filtere
           <XIcon className="size-4" />
         </Button>
       </CardHeader>
+
       <CardContent>
         <div className="flex min-w-0 flex-wrap items-end gap-3">
+          <FilterField label="Pretraga" id="transactions-search">
+            <Input
+              type="search"
+              placeholder="Pretraga po opisu"
+              value={searchInput}
+              onChange={(e) => {
+                const value = e.target.value
+                setSearchInput(value)
+                debouncedSetSearch(value)
+              }}
+            />
+          </FilterField>
+
           <FilterField label="Kategorija" id="transactions-category">
             <Select
               value={search.category_id ?? 'all'}
