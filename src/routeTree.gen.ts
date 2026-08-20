@@ -17,6 +17,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as ExperimentsExperiment001RouteImport } from './routes/experiments/experiment-001'
+import { Route as ProtectedTransactionsNewRouteImport } from './routes/_protected/transactions.new'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -57,33 +58,42 @@ const ExperimentsExperiment001Route =
     path: '/experiments/experiment-001',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ProtectedTransactionsNewRoute =
+  ProtectedTransactionsNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => ProtectedTransactionsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof ProtectedDashboardRoute
-  '/transactions': typeof ProtectedTransactionsRoute
+  '/transactions': typeof ProtectedTransactionsRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
+  '/transactions/new': typeof ProtectedTransactionsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof ProtectedDashboardRoute
-  '/transactions': typeof ProtectedTransactionsRoute
+  '/transactions': typeof ProtectedTransactionsRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
+  '/transactions/new': typeof ProtectedTransactionsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
-  '/_protected/transactions': typeof ProtectedTransactionsRoute
+  '/_protected/transactions': typeof ProtectedTransactionsRouteWithChildren
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
   '/_public/': typeof PublicIndexRoute
+  '/_protected/transactions/new': typeof ProtectedTransactionsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/experiments/experiment-001'
+    | '/transactions/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -102,6 +113,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/experiments/experiment-001'
+    | '/transactions/new'
   id:
     | '__root__'
     | '/_protected'
@@ -112,6 +124,7 @@ export interface FileRouteTypes {
     | '/_public/register'
     | '/experiments/experiment-001'
     | '/_public/'
+    | '/_protected/transactions/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -178,17 +191,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperimentsExperiment001RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/transactions/new': {
+      id: '/_protected/transactions/new'
+      path: '/new'
+      fullPath: '/transactions/new'
+      preLoaderRoute: typeof ProtectedTransactionsNewRouteImport
+      parentRoute: typeof ProtectedTransactionsRoute
+    }
   }
 }
 
+interface ProtectedTransactionsRouteChildren {
+  ProtectedTransactionsNewRoute: typeof ProtectedTransactionsNewRoute
+}
+
+const ProtectedTransactionsRouteChildren: ProtectedTransactionsRouteChildren = {
+  ProtectedTransactionsNewRoute: ProtectedTransactionsNewRoute,
+}
+
+const ProtectedTransactionsRouteWithChildren =
+  ProtectedTransactionsRoute._addFileChildren(
+    ProtectedTransactionsRouteChildren,
+  )
+
 interface ProtectedRouteRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
-  ProtectedTransactionsRoute: typeof ProtectedTransactionsRoute
+  ProtectedTransactionsRoute: typeof ProtectedTransactionsRouteWithChildren
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
-  ProtectedTransactionsRoute: ProtectedTransactionsRoute,
+  ProtectedTransactionsRoute: ProtectedTransactionsRouteWithChildren,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
