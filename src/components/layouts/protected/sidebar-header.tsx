@@ -3,6 +3,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { Link } from '@tanstack/react-router'
+import { PlusIcon } from 'lucide-react'
+import { Button } from '../../ui/button'
 
 export function ProtectedSidebarHeader() {
   return (
@@ -17,6 +20,20 @@ export function ProtectedSidebarHeader() {
           </div>
           <span className="truncate font-bold">MyFinance</span>
         </SidebarMenuButton>
+      </SidebarMenuItem>
+      <SidebarMenuItem className="mt-2">
+        <Button
+          nativeButton={false}
+          size="sm"
+          variant="default"
+          className="w-full group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:p-0"
+          render={<Link to="/transactions/new" />}
+        >
+          <span className="group-data-[collapsible=icon]:hidden">
+            Nova transakcija
+          </span>
+          <PlusIcon className="size-4" />
+        </Button>
       </SidebarMenuItem>
     </SidebarMenu>
   )
