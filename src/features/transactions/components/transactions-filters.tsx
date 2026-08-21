@@ -23,8 +23,16 @@ import {
   CardHeader,
   CardTitle,
 } from '../../../components/ui/card'
-import { XIcon } from 'lucide-react'
+import { FilterIcon, XIcon } from 'lucide-react'
 import { Input } from '../../../components/ui/input'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '../../../components/ui/sheet'
 
 const TYPE_ITEMS = {
   all: 'Svi',
@@ -93,21 +101,170 @@ export function TransactionsFilters() {
           FILTERI
         </CardTitle>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="xs"
-          disabled={!hasActiveFilters}
-          onClick={clearFilters}
-          title="Očisti sve filtere"
-        >
-          Očisti filtere
-          <XIcon className="size-4" />
-        </Button>
+        {/* MOBILE FILTERS */}
+        <div className="flex items-center gap-2">
+          <Sheet>
+            <SheetTrigger
+              render={(props) => (
+                <Button
+                  {...props}
+                  type="button"
+                  variant="default"
+                  size="xs"
+                  title="Otvori filtere"
+                  aria-label="Otvori filtere"
+                  className="lg:hidden"
+                >
+                  <span className="hidden lg:block">Otvori filtere</span>
+                  <FilterIcon className="size-4" />
+                </Button>
+              )}
+            />
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>FILTERI</SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col gap-4 px-4">
+                <FilterField label="Pretraga" id="transactions-search">
+                  <Input
+                    type="search"
+                    placeholder="Pretraga po opisu"
+                    value={searchInput}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      setSearchInput(value)
+                      debouncedSetSearch(value)
+                    }}
+                  />
+                </FilterField>
+
+                <FilterField label="Kategorija" id="transactions-category">
+                  <Select
+                    value={search.category_id ?? 'all'}
+                    items={categoryItems}
+                    onValueChange={(value) =>
+                      setFilters({
+                        category_id:
+                          value && value !== 'all' ? value : undefined,
+                      })
+                    }
+                  >
+                    <SelectTrigger
+                      id="transactions-category"
+                      className="w-full"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Sve</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="block size-2 shrink-0 rounded-full"
+                              style={{ backgroundColor: category.color }}
+                            />
+                            <span className="block">{category.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+
+                <FilterField label="Tip" id="transactions-type">
+                  <Select
+                    value={search.type ?? 'all'}
+                    items={TYPE_ITEMS}
+                    onValueChange={(value) =>
+                      setFilters({
+                        type:
+                          value === 'income' || value === 'expense'
+                            ? value
+                            : undefined,
+                      })
+                    }
+                  >
+                    <SelectTrigger id="transactions-type" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Svi</SelectItem>
+                      <SelectItem value="income">Prihod</SelectItem>
+                      <SelectItem value="expense">Rashod</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+
+                <FilterField label="Sortiraj" id="transactions-sort">
+                  <Select
+                    value={search.sort}
+                    items={SORT_ITEMS}
+                    onValueChange={(value) => {
+                      if (
+                        value === 'date' ||
+                        value === 'amount' ||
+                        value === 'description'
+                      ) {
+                        setFilters({ sort: value })
+                      }
+                    }}
+                  >
+                    <SelectTrigger id="transactions-sort" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="date">Datum</SelectItem>
+                      <SelectItem value="amount">Iznos</SelectItem>
+                      <SelectItem value="description">Opis</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+
+                <FilterField label="Smjer" id="transactions-sort-direction">
+                  <Select
+                    value={search.sortDirection}
+                    items={SORT_DIRECTION_ITEMS}
+                    onValueChange={(value) => {
+                      if (value === 'asc' || value === 'desc') {
+                        setFilters({ sortDirection: value })
+                      }
+                    }}
+                  >
+                    <SelectTrigger
+                      id="transactions-sort-direction"
+                      className="w-full"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="asc">Uzlazno</SelectItem>
+                      <SelectItem value="desc">Silazno</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="xs"
+            disabled={!hasActiveFilters}
+            onClick={clearFilters}
+            title="Očisti sve filtere"
+            aria-label="Očisti sve filtere"
+          >
+            <span className="hidden lg:block">Očisti filtere</span>
+            <XIcon className="size-4" />
+          </Button>
+        </div>
       </CardHeader>
 
-      <CardContent>
-        <div className="flex min-w-0 flex-wrap items-end gap-3">
+      {/* DESKTOP FILTERS */}
+      <CardContent className="hidden lg:block">
+        <div className="flex min-w-0 flex-wrap gap-3">
           <FilterField label="Pretraga" id="transactions-search">
             <Input
               type="search"
@@ -238,7 +395,7 @@ function FilterField({
   children: ReactNode
 }) {
   return (
-    <div className="min-w-40">
+    <div className="lg:min-w-40 grow shrink">
       <Label htmlFor={id}>{label}</Label>
       {children}
     </div>
