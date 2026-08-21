@@ -4,13 +4,13 @@ import { PlusIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { transactionsQuery } from '../queries/transactions.query'
+import { transactionsQuery } from '@/features/transactions/queries/transactions.query'
 import { TransactionsErrorState } from './transactions-error'
 import { TransactionsPagination } from './transactions-pagination'
 import { TransactionsTable } from './transactions-table'
 
 export function TransactionsList() {
-  const search = useSearch({ from: '/_protected/transactions' })
+  const search = useSearch({ from: '/_protected/transactions/' })
   const { data, isError, error, refetch } = useQuery(transactionsQuery(search))
 
   if (isError) {
@@ -45,7 +45,7 @@ export function TransactionsList() {
           <Button
             nativeButton={false}
             size="sm"
-            render={<Link to="/transactions/new" />}
+            render={<Link to="/transactions/new" search={{}} />}
           >
             Nova transakcija
             <PlusIcon className="size-4" />

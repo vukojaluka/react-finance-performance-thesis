@@ -1,14 +1,14 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
-import type { PaginatedTransactions } from '../server/get-transactions'
+import type { PaginatedTransactions } from '@/features/transactions/server/get-transactions'
 
 type TransactionsPaginationProps = {
   data: PaginatedTransactions
 }
 
 export function TransactionsPagination({ data }: TransactionsPaginationProps) {
-  const search = useSearch({ from: '/_protected/transactions' })
+  const search = useSearch({ from: '/_protected/transactions/' })
   const navigate = useNavigate({ from: '/transactions' })
 
   if (data.totalPages <= 1) {

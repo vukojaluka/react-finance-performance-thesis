@@ -5,17 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-* {
-  box-sizing: border-box;
-  interpolate-size: allow-keywords;
-}
-
-html,
-body,
-#app {
-  min-height: 100svh;
-}
-
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Inter Variable', sans-serif;
@@ -131,6 +120,7 @@ body,
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    interpolate-size: allow-keywords;
   }
   body {
     @apply m-0 bg-background text-foreground scroll-smooth;
@@ -140,6 +130,11 @@ body,
     cursor: pointer;
   }
   html {
-    @apply font-sans;
+    @apply font-sans scrollbar-gutter-stable bg-primary scrollbar-track-primary scrollbar-thumb-neutral-500;
+  }
+  html,
+  body,
+  #app {
+    min-height: 100svh;
   }
 }

@@ -9,7 +9,7 @@ import {
   transactionFiltersSchema,
 } from '@/features/transactions/schemas/transaction-search.schema'
 
-export const Route = createFileRoute('/_protected/transactions')({
+export const Route = createFileRoute('/_protected/transactions/')({
   validateSearch: transactionFiltersSchema,
   search: {
     middlewares: [
@@ -26,7 +26,7 @@ export const Route = createFileRoute('/_protected/transactions')({
       context.queryClient.ensureQueryData(categoriesQuery()),
     ])
   },
-  component: TransactionsPage,
+  component: TransactionsIndexPage,
   head: () => ({
     meta: [
       {
@@ -36,7 +36,7 @@ export const Route = createFileRoute('/_protected/transactions')({
   }),
 })
 
-function TransactionsPage() {
+function TransactionsIndexPage() {
   return (
     <div className="flex h-full min-w-0 flex-col gap-2 lg:gap-4">
       <TransactionsFilters />

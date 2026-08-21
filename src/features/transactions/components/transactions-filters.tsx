@@ -46,7 +46,7 @@ const SORT_DIRECTION_ITEMS = {
 } as const
 
 export function TransactionsFilters() {
-  const search = useSearch({ from: '/_protected/transactions' })
+  const search = useSearch({ from: '/_protected/transactions/' })
   const navigate = useNavigate({ from: '/transactions' })
   const { data: categories = [] } = useQuery(categoriesQuery())
 

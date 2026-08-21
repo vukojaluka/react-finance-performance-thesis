@@ -23,7 +23,7 @@ type TransactionsTableProps = {
 }
 
 export function TransactionsTable({ data }: TransactionsTableProps) {
-  const search = useSearch({ from: '/_protected/transactions' })
+  const search = useSearch({ from: '/_protected/transactions/' })
   const navigate = useNavigate({ from: '/transactions' })
   const hasFilters = hasActiveTransactionFilters(search)
 
