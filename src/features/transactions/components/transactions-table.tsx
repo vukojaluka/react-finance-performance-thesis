@@ -9,15 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
-import { formatBam } from '@/lib/format-currency'
-
 import {
   formatTransactionDate,
   getTransactionTypeLabel,
-} from '../lib/format-transaction'
-import { hasActiveTransactionFilters } from '../schemas/transaction-search.schema'
-import type { PaginatedTransactions } from '../server/get-transactions'
+} from '@/features/transactions/lib/format-transaction'
+import { hasActiveTransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
+import type { PaginatedTransactions } from '@/features/transactions/server/get-transactions'
+import { formatBam } from '@/lib/format-currency'
+import { cn } from '@/lib/utils'
 
 type TransactionsTableProps = {
   data: PaginatedTransactions

@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { LoginForm } from '@/features/auth/components/login-form'
+import { sanitizeRedirect } from '@/features/auth/lib/redirect'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
-import { sanitizeRedirect } from '@/lib/utils'
 
 export const Route = createFileRoute('/_public/login')({
   validateSearch: (search) => ({

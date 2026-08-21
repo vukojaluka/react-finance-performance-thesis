@@ -15,9 +15,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
-import { getFormFieldErrorMessage } from '@/lib/utils'
 import { registerSchema } from '@/features/auth/schemas/register.schema'
 import { register } from '@/features/auth/server/register'
+import { getFormFieldErrorMessage } from '@/lib/form-errors'
 
 export function RegisterForm() {
   const navigate = useNavigate()

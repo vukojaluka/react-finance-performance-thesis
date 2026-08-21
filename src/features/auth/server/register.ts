@@ -2,10 +2,9 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { mapSupabaseAuthErrors } from '@/integrations/supabase/auth-errors'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
-
-import { toSafeUser } from '../lib/safe-user'
-import { registerSchema } from '../schemas/register.schema'
-import type { SafeUser } from '../lib/safe-user'
+import { toSafeUser } from '@/features/auth/lib/safe-user'
+import { registerSchema } from '@/features/auth/schemas/register.schema'
+import type { SafeUser } from '@/features/auth/lib/safe-user'
 
 export type RegisterResult =
   | { status: 'authenticated'; user: SafeUser }

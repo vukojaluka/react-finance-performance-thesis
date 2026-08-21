@@ -15,9 +15,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
-import { getFormFieldErrorMessage } from '@/lib/utils'
 import { loginSchema } from '@/features/auth/schemas/login.schema'
 import { login } from '@/features/auth/server/login'
+import { getFormFieldErrorMessage } from '@/lib/form-errors'
 
 type LoginFormProps = {
   redirectTo: string

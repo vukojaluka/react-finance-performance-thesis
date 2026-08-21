@@ -2,10 +2,9 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { mapSupabaseAuthErrors } from '@/integrations/supabase/auth-errors'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
-
-import { toSafeUser } from '../lib/safe-user'
-import { loginSchema } from '../schemas/login.schema'
-import type { SafeUser } from '../lib/safe-user'
+import { toSafeUser } from '@/features/auth/lib/safe-user'
+import { loginSchema } from '@/features/auth/schemas/login.schema'
+import type { SafeUser } from '@/features/auth/lib/safe-user'
 
 export const login = createServerFn({ method: 'POST' })
   .validator(loginSchema)

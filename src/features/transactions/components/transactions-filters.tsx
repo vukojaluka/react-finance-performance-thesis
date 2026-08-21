@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import debounce from 'debounce'
+import { FilterIcon, XIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
   Select,
@@ -13,26 +16,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
-
-import { hasActiveTransactionFilters } from '../schemas/transaction-search.schema'
-import type { TransactionFilters } from '../schemas/transaction-search.schema'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '../../../components/ui/card'
-import { FilterIcon, XIcon } from 'lucide-react'
-import { Input } from '../../../components/ui/input'
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../../../components/ui/sheet'
+} from '@/components/ui/sheet'
+import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { hasActiveTransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
+import type { TransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
+import { cn } from '@/lib/utils'
 
 const TYPE_ITEMS = {
   all: 'Svi',
@@ -264,11 +258,15 @@ export function TransactionsFilters() {
 
       {/* DESKTOP FILTERS */}
       <CardContent className="hidden lg:block">
-        <div className="flex min-w-0 flex-wrap gap-3">
-          <FilterField label="Pretraga" id="transactions-search">
+        <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[minmax(18rem,2fr)_repeat(4,minmax(10rem,1fr))]">
+          <FilterField
+            label="Pretraga"
+            id="transactions-search"
+            className="lg:col-span-2 xl:col-span-1"
+          >
             <Input
               type="search"
-              placeholder="Pretraga po opisu"
+              placeholder="Pretražite po opisu"
               value={searchInput}
               onChange={(e) => {
                 const value = e.target.value
@@ -389,13 +387,15 @@ function FilterField({
   id,
   label,
   children,
+  className,
 }: {
   id: string
   label: string
   children: ReactNode
+  className?: string
 }) {
   return (
-    <div className="lg:min-w-40 grow shrink">
+    <div className={cn('min-w-0', className)}>
       <Label htmlFor={id}>{label}</Label>
       {children}
     </div>

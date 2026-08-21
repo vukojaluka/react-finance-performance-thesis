@@ -1,9 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { toSafeUser } from '@/features/auth/lib/safe-user'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
-
-import { toSafeUser } from '../lib/safe-user'
-import type { SafeUser } from '../lib/safe-user'
+import type { SafeUser } from '@/features/auth/lib/safe-user'
 
 export type CurrentUserResult =
   { user: SafeUser; isLoggedIn: true } | { user: null; isLoggedIn: false }

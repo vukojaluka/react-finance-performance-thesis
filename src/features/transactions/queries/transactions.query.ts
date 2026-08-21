@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import type { TransactionFilters } from '../schemas/transaction-search.schema'
-import { getTransactions } from '../server/get-transactions'
+import { getTransactions } from '@/features/transactions/server/get-transactions'
+import type { TransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
 
 export function transactionsQuery(filters: TransactionFilters) {
   return queryOptions({

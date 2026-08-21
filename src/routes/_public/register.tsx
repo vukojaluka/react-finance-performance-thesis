@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { RegisterForm } from '@/features/auth/components/register-form'
+import { DEFAULT_POST_AUTH_REDIRECT } from '@/features/auth/lib/redirect'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
-import { DEFAULT_POST_AUTH_REDIRECT } from '@/lib/constants'
 
 export const Route = createFileRoute('/_public/register')({
   beforeLoad: async ({ context }) => {
