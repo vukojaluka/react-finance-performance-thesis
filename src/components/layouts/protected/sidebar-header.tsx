@@ -2,12 +2,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { Link } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
-import { Button } from '../../ui/button'
+import { Button } from '@/components/ui/button'
 
 export function ProtectedSidebarHeader() {
+  const { setOpenMobile } = useSidebar()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -28,6 +30,7 @@ export function ProtectedSidebarHeader() {
           variant="default"
           className="w-full group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:p-0"
           render={<Link to="/transactions/new" />}
+          onClick={() => setOpenMobile(false)}
         >
           <span className="group-data-[collapsible=icon]:hidden">
             Nova transakcija

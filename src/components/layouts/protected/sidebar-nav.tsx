@@ -6,6 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import {
   isProtectedNavLinkActive,
@@ -16,6 +17,7 @@ export function ProtectedSidebarNav() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
+  const { setOpenMobile } = useSidebar()
 
   return (
     <SidebarGroup>
@@ -29,6 +31,7 @@ export function ProtectedSidebarNav() {
               isActive={isProtectedNavLinkActive(pathname, item.path)}
               tooltip={item.name}
               render={<Link to={item.path as '/dashboard' | '/transactions'} />}
+              onClick={() => setOpenMobile(false)}
             >
               <item.icon />
               <span>{item.name}</span>
