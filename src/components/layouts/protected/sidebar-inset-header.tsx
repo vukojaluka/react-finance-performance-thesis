@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { getProtectedNavLabel } from '@/components/layouts/protected/nav-links'
+import { getProtectedBreadcrumbTrail } from '@/components/layouts/protected/nav-links'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 
@@ -18,8 +18,7 @@ export function ProtectedSidebarInsetHeader() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
-  const currentLabel = getProtectedNavLabel(pathname)
-  const isDashboard = pathname === '/dashboard'
+  const breadcrumbTrail = getProtectedBreadcrumbTrail(pathname)
   const { data } = useQuery(currentUserQuery())
   const user = data?.user
 
@@ -29,23 +28,33 @@ export function ProtectedSidebarInsetHeader() {
         <SidebarTrigger className="-ml-2" />
         <Breadcrumb>
           <BreadcrumbList>
-            {isDashboard ? (
-              <BreadcrumbItem>
-                <BreadcrumbPage>{currentLabel}</BreadcrumbPage>
-              </BreadcrumbItem>
-            ) : (
-              <>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink render={<Link to="/dashboard" />}>
-                    Nadzorna ploča
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{currentLabel}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </>
-            )}
+            {breadcrumbTrail.map((item, index) => {
+              const isLast = index === breadcrumbTrail.length - 1
+              const isIntermediate = !isLast
+
+              return (
+                <span key={`${item.label}-${index}`} className="contents">
+                  {index > 0 ? (
+                    <BreadcrumbSeparator
+                      className={isIntermediate ? 'hidden md:block' : undefined}
+                    />
+                  ) : null}
+                  <BreadcrumbItem
+                    className={isIntermediate ? 'hidden md:block' : undefined}
+                  >
+                    {isLast ? (
+                      <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                    ) : item.to ? (
+                      <BreadcrumbLink render={<Link to={item.to} />}>
+                        {item.label}
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                    )}
+                  </BreadcrumbItem>
+                </span>
+              )
+            })}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
