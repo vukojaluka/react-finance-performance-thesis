@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { FormFieldError } from '@/components/ui/form-field-error'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -38,7 +39,7 @@ import {
 import { transactionSchema } from '@/features/transactions/schemas/transaction-form.schema'
 import type { TransactionInput } from '@/features/transactions/schemas/transaction-form.schema'
 import { createTransaction } from '@/features/transactions/server/create-transaction'
-import { getFormFieldErrorMessage } from '@/lib/form-errors'
+import { fieldErrorId } from '@/lib/form-errors'
 import { cn } from '@/lib/utils'
 
 const TYPE_ITEMS = {
@@ -143,140 +144,162 @@ export function TransactionForm() {
       >
         <CardContent className="space-y-4">
           <form.Field name="type">
-            {(field) => (
-              <FormField id={field.name} label="Tip">
-                <Select
-                  value={field.state.value}
-                  items={TYPE_ITEMS}
-                  onValueChange={(value) => {
-                    if (value === 'income' || value === 'expense') {
-                      field.handleChange(value)
-                    }
-                  }}
-                >
-                  <SelectTrigger
-                    id={field.name}
-                    className="w-full"
-                    aria-invalid={field.state.meta.errors.length > 0}
+            {(field) => {
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
+
+              return (
+                <FormField id={field.name} label="Tip">
+                  <Select
+                    value={field.state.value}
+                    items={TYPE_ITEMS}
+                    onValueChange={(value) => {
+                      if (value === 'income' || value === 'expense') {
+                        field.handleChange(value)
+                      }
+                    }}
                   >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="income">Prihod</SelectItem>
-                    <SelectItem value="expense">Rashod</SelectItem>
-                  </SelectContent>
-                </Select>
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="whitespace-pre-line text-sm text-destructive">
-                    {getFormFieldErrorMessage(field.state.meta.errors)}
-                  </p>
-                ) : null}
-              </FormField>
-            )}
+                    <SelectTrigger
+                      id={field.name}
+                      className="w-full"
+                      aria-invalid={hasError}
+                      aria-describedby={hasError ? errorId : undefined}
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="income">Prihod</SelectItem>
+                      <SelectItem value="expense">Rashod</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
+                  />
+                </FormField>
+              )
+            }}
           </form.Field>
 
           <form.Field name="amount">
-            {(field) => (
-              <FormField id={field.name} label="Iznos">
-                <div className="relative">
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    inputMode="decimal"
-                    placeholder="0,00"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={field.state.meta.errors.length > 0}
-                    className="pr-14"
+            {(field) => {
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
+
+              return (
+                <FormField id={field.name} label="Iznos">
+                  <div className="relative">
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      inputMode="decimal"
+                      placeholder="0,00"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(event) => field.handleChange(event.target.value)}
+                      aria-invalid={hasError}
+                      aria-describedby={hasError ? errorId : undefined}
+                      className="pr-14"
+                    />
+                    <span className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 text-sm text-muted-foreground">
+                      BAM
+                    </span>
+                  </div>
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
                   />
-                  <span className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 text-sm text-muted-foreground">
-                    BAM
-                  </span>
-                </div>
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="whitespace-pre-line text-sm text-destructive">
-                    {getFormFieldErrorMessage(field.state.meta.errors)}
-                  </p>
-                ) : null}
-              </FormField>
-            )}
+                </FormField>
+              )
+            }}
           </form.Field>
 
           <form.Field name="title">
-            {(field) => (
-              <FormField id={field.name} label="Opis">
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type="text"
-                  placeholder="Unesite opis transakcije"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => field.handleChange(event.target.value)}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                />
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="whitespace-pre-line text-sm text-destructive">
-                    {getFormFieldErrorMessage(field.state.meta.errors)}
-                  </p>
-                ) : null}
-              </FormField>
-            )}
+            {(field) => {
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
+
+              return (
+                <FormField id={field.name} label="Opis">
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="text"
+                    placeholder="Unesite opis transakcije"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={hasError}
+                    aria-describedby={hasError ? errorId : undefined}
+                  />
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
+                  />
+                </FormField>
+              )
+            }}
           </form.Field>
 
           <form.Field name="category_id">
-            {(field) => (
-              <FormField id={field.name} label="Kategorija">
-                <Select
-                  value={field.state.value || null}
-                  items={categoryItems}
-                  disabled={!hasCategories}
-                  onValueChange={(value) => {
-                    if (value) {
-                      field.handleChange(value)
-                    }
-                  }}
-                >
-                  <SelectTrigger
-                    id={field.name}
-                    className="w-full"
-                    aria-invalid={field.state.meta.errors.length > 0}
-                  >
-                    <SelectValue
-                      placeholder={
-                        hasCategories
-                          ? 'Odaberite kategoriju'
-                          : 'Nemate kategorija.'
+            {(field) => {
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
+
+              return (
+                <FormField id={field.name} label="Kategorija">
+                  <Select
+                    value={field.state.value || null}
+                    items={categoryItems}
+                    disabled={!hasCategories}
+                    onValueChange={(value) => {
+                      if (value) {
+                        field.handleChange(value)
                       }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="block size-2 shrink-0 rounded-full"
-                            style={{ backgroundColor: category.color }}
-                          />
-                          <span className="block">{category.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="whitespace-pre-line text-sm text-destructive">
-                    {getFormFieldErrorMessage(field.state.meta.errors)}
-                  </p>
-                ) : null}
-              </FormField>
-            )}
+                    }}
+                  >
+                    <SelectTrigger
+                      id={field.name}
+                      className="w-full"
+                      aria-invalid={hasError}
+                      aria-describedby={hasError ? errorId : undefined}
+                    >
+                      <SelectValue
+                        placeholder={
+                          hasCategories
+                            ? 'Odaberite kategoriju'
+                            : 'Nemate kategorija.'
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="block size-2 shrink-0 rounded-full"
+                              style={{ backgroundColor: category.color }}
+                            />
+                            <span className="block">{category.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
+                  />
+                </FormField>
+              )
+            }}
           </form.Field>
 
           <form.Field name="transaction_date">
             {(field) => {
               const selectedDate = parseISODate(field.state.value)
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
 
               return (
                 <FormField id={field.name} label="Datum">
@@ -288,15 +311,12 @@ export function TransactionForm() {
                       <PopoverTrigger
                         render={
                           <Button
+                            id={field.name}
                             type="button"
                             variant="outline"
-                            className="w-full px-0 justify-start 
-                            font-normal text-sm normal-case tracking-normal 
-                            border-t-0 border-x-0
-                            focus-ring-0 focus-ring-offset-0
-                            focus-visible:ring-0 focus-visible:ring-offset-0
-                            focus-within:ring-0 focus-within:ring-offset-0"
-                            aria-invalid={field.state.meta.errors.length > 0}
+                            className="w-full px-0 justify-start font-normal text-sm normal-case tracking-normal border-t-0 border-x-0 focus-ring-0 focus-ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-within:ring-0 focus-within:ring-offset-0"
+                            aria-invalid={hasError}
+                            aria-describedby={hasError ? errorId : undefined}
                           />
                         }
                       >
@@ -314,18 +334,23 @@ export function TransactionForm() {
                       </PopoverContent>
                     </Popover>
                   </div>
-                  {field.state.meta.errors.length > 0 ? (
-                    <p className="whitespace-pre-line text-sm text-destructive">
-                      {getFormFieldErrorMessage(field.state.meta.errors)}
-                    </p>
-                  ) : null}
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
+                  />
                 </FormField>
               )
             }}
           </form.Field>
 
           {formError ? (
-            <p className="text-sm text-destructive">{formError}</p>
+            <p
+              role="alert"
+              aria-atomic="true"
+              className="text-sm text-destructive motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-150"
+            >
+              {formError}
+            </p>
           ) : null}
         </CardContent>
 

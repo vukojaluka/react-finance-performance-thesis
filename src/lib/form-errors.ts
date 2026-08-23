@@ -1,3 +1,7 @@
+export function fieldErrorId(name: string) {
+  return `${name}-error`
+}
+
 export function getFormFieldErrorMessage(error: unknown): string {
   if (typeof error === 'string') {
     return error
