@@ -59,8 +59,10 @@ function FormField({
   className?: string
 }) {
   return (
-    <div className={cn('min-w-0 space-y-2', className)}>
-      <Label htmlFor={id}>{label}</Label>
+    <div className={cn('min-w-0', className)}>
+      <Label htmlFor={id} className="mb-2">
+        {label}
+      </Label>
       {children}
     </div>
   )

@@ -8,21 +8,26 @@ type FormFieldErrorProps = {
 }
 
 export function FormFieldError({ id, errors, className }: FormFieldErrorProps) {
-  if (errors.length === 0) {
-    return null
-  }
+  const hasErrors = errors.length > 0
+  const message = hasErrors ? getFormFieldErrorMessage(errors) : ''
 
   return (
-    <p
-      id={id}
-      role="alert"
-      aria-atomic="true"
+    <div
+      data-visible={hasErrors}
       className={cn(
-        'whitespace-pre-line text-sm text-destructive motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-150',
+        'mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity,margin-top] duration-150 ease-out data-[visible=true]:mt-2 data-[visible=true]:grid-rows-[1fr] data-[visible=true]:opacity-100',
         className,
       )}
     >
-      {getFormFieldErrorMessage(errors)}
-    </p>
+      <p
+        id={id}
+        role={hasErrors ? 'alert' : undefined}
+        aria-atomic="true"
+        aria-hidden={!hasErrors}
+        className="min-h-0 overflow-hidden whitespace-pre-line text-xs text-destructive"
+      >
+        {message}
+      </p>
+    </div>
   )
 }

@@ -27,7 +27,7 @@ begin
 end;
 $$;
 
-select plan(24);
+select plan(25);
 
 -- ---------------------------------------------------------------------------
 -- User A positive cases
@@ -256,6 +256,32 @@ select throws_ok(
   '42501',
   'new row violates row-level security policy for table "transactions"',
   'User A cannot attach User B category to User A transaction'
+);
+
+select throws_ok(
+  $$
+    insert into public.transactions (
+      id,
+      user_id,
+      category_id,
+      title,
+      amount,
+      type,
+      transaction_date
+    )
+    values (
+      'cccccccc-cccc-cccc-cccc-cccccccccc98',
+      '22222222-2222-2222-2222-222222222222',
+      'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa2',
+      'Forged user_id attempt',
+      1.00,
+      'expense',
+      current_date
+    )
+  $$,
+  '42501',
+  'new row violates row-level security policy for table "transactions"',
+  'User A cannot create transaction with forged user_id even with own category'
 );
 
 select throws_ok(
