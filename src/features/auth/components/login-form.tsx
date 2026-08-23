@@ -12,12 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { FormFieldError } from '@/components/ui/form-field-error'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { loginSchema } from '@/features/auth/schemas/login.schema'
 import { login } from '@/features/auth/server/login'
-import { getFormFieldErrorMessage } from '@/lib/form-errors'
+import { fieldErrorId } from '@/lib/form-errors'
 
 type LoginFormProps = {
   redirectTo: string
@@ -74,53 +75,69 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
           }}
         >
           <form.Field name="email">
-            {(field) => (
-              <div className="space-y-2">
-                <Label htmlFor={field.name}>E-mail</Label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type="email"
-                  autoComplete="email"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => field.handleChange(event.target.value)}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                />
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="whitespace-pre-line text-sm text-destructive">
-                    {getFormFieldErrorMessage(field.state.meta.errors)}
-                  </p>
-                ) : null}
-              </div>
-            )}
+            {(field) => {
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
+
+              return (
+                <div>
+                  <Label htmlFor={field.name} className="mb-2">
+                    E-mail
+                  </Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="email"
+                    autoComplete="email"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={hasError}
+                    aria-describedby={hasError ? errorId : undefined}
+                  />
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
+                  />
+                </div>
+              )
+            }}
           </form.Field>
 
           <form.Field name="password">
-            {(field) => (
-              <div className="space-y-2">
-                <Label htmlFor={field.name}>Lozinka</Label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type="password"
-                  autoComplete="current-password"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => field.handleChange(event.target.value)}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                />
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="whitespace-pre-line text-sm text-destructive">
-                    {getFormFieldErrorMessage(field.state.meta.errors)}
-                  </p>
-                ) : null}
-              </div>
-            )}
+            {(field) => {
+              const hasError = field.state.meta.errors.length > 0
+              const errorId = fieldErrorId(field.name)
+
+              return (
+                <div>
+                  <Label htmlFor={field.name} className="mb-2">
+                    Lozinka
+                  </Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="password"
+                    autoComplete="current-password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={hasError}
+                    aria-describedby={hasError ? errorId : undefined}
+                  />
+                  <FormFieldError
+                    id={errorId}
+                    errors={field.state.meta.errors}
+                  />
+                </div>
+              )
+            }}
           </form.Field>
 
           {formError ? (
-            <p className="text-sm text-destructive">{formError}</p>
+            <p role="alert" aria-atomic="true" className="text-sm text-destructive">
+              {formError}
+            </p>
           ) : null}
 
           <form.Subscribe selector={(state) => state.isSubmitting}>
