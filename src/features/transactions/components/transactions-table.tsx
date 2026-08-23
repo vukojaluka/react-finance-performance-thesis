@@ -1,4 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { MoreHorizontalIcon, PencilIcon, TrashIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -9,6 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   formatTransactionDate,
   getTransactionTypeLabel,
@@ -65,6 +72,7 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
           <TableHead>Kategorija</TableHead>
           <TableHead className="hidden sm:table-cell">Tip</TableHead>
           <TableHead className="text-right">Iznos</TableHead>
+          <TableHead className="text-right">Akcije</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -102,6 +110,34 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
               >
                 {isIncome ? '+' : '-'}
                 {formatBam(transaction.amount)}
+              </TableCell>
+              <TableCell className="text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    render={<Button variant="ghost" size="icon" />}
+                  >
+                    <MoreHorizontalIcon className="size-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        navigate({
+                          to: '/transactions/$id',
+                          params: { id: transaction.id },
+                        })
+                      }}
+                    >
+                      <PencilIcon className="size-4" />
+                      Uredi
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => alert('Izbriši transakciju')}
+                    >
+                      <TrashIcon className="size-4" />
+                      Izbriši
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           )
