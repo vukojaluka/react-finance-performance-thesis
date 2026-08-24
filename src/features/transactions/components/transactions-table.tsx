@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { MoreHorizontalIcon, PencilIcon, TrashIcon } from 'lucide-react'
 
@@ -20,6 +21,7 @@ import {
   formatTransactionDate,
   getTransactionTypeLabel,
 } from '@/features/transactions/lib/format-transaction'
+import { TransactionDeleteDialog } from '@/features/transactions/components/transaction-delete-dialog'
 import { hasActiveTransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
 import type { PaginatedTransactions } from '@/features/transactions/server/get-transactions'
 import { formatBam } from '@/lib/format-currency'
@@ -33,6 +35,10 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
   const search = useSearch({ from: '/_protected/transactions/' })
   const navigate = useNavigate({ from: '/transactions' })
   const hasFilters = hasActiveTransactionFilters(search)
+  const [deleteTransactionId, setDeleteTransactionId] = useState<string | null>(
+    null,
+  )
+  const isDeleteDialogOpen = deleteTransactionId !== null
 
   function handleClearFilters() {
     void navigate({
@@ -64,85 +70,98 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Datum</TableHead>
-          <TableHead>Opis</TableHead>
-          <TableHead>Kategorija</TableHead>
-          <TableHead className="hidden sm:table-cell">Tip</TableHead>
-          <TableHead className="text-right">Iznos</TableHead>
-          <TableHead className="text-right">Akcije</TableHead>
-        </TableRow>
-      </TableHeader>
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Datum</TableHead>
+            <TableHead>Opis</TableHead>
+            <TableHead>Kategorija</TableHead>
+            <TableHead className="hidden sm:table-cell">Tip</TableHead>
+            <TableHead className="text-right">Iznos</TableHead>
+            <TableHead className="text-right">Akcije</TableHead>
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>
-        {data.data.map((transaction) => {
-          const isIncome = transaction.type === 'income'
+        <TableBody>
+          {data.data.map((transaction) => {
+            const isIncome = transaction.type === 'income'
 
-          return (
-            <TableRow key={transaction.id}>
-              <TableCell className="whitespace-nowrap">
-                {formatTransactionDate(transaction.date)}
-              </TableCell>
-              <TableCell className="max-w-48 truncate font-medium">
-                {transaction.title}
-              </TableCell>
-              <TableCell>
-                <span className="inline-flex min-w-0 items-center gap-2">
-                  <span
-                    className="inline-block size-2 shrink-0 rounded-full"
-                    style={{ backgroundColor: transaction.categoryColor }}
-                  />
-                  <span className="truncate">{transaction.category}</span>
-                </span>
-              </TableCell>
-              <TableCell className="hidden sm:table-cell">
-                {getTransactionTypeLabel(transaction.type)}
-              </TableCell>
-              <TableCell
-                className={cn(
-                  'text-right font-semibold tabular-nums',
-                  isIncome
-                    ? 'text-emerald-600 dark:text-emerald-400'
-                    : 'text-red-600 dark:text-red-400',
-                )}
-              >
-                {isIncome ? '+' : '-'}
-                {formatBam(transaction.amount)}
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={<Button variant="ghost" size="icon" />}
-                  >
-                    <MoreHorizontalIcon className="size-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      render={
-                        <Link
-                          to="/transactions/$transactionId/edit"
-                          params={{ transactionId: transaction.id }}
-                        />
-                      }
+            return (
+              <TableRow key={transaction.id}>
+                <TableCell className="whitespace-nowrap">
+                  {formatTransactionDate(transaction.date)}
+                </TableCell>
+                <TableCell className="max-w-48 truncate font-medium">
+                  {transaction.title}
+                </TableCell>
+                <TableCell>
+                  <span className="inline-flex min-w-0 items-center gap-2">
+                    <span
+                      className="inline-block size-2 shrink-0 rounded-full"
+                      style={{ backgroundColor: transaction.categoryColor }}
+                    />
+                    <span className="truncate">{transaction.category}</span>
+                  </span>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  {getTransactionTypeLabel(transaction.type)}
+                </TableCell>
+                <TableCell
+                  className={cn(
+                    'text-right font-semibold tabular-nums',
+                    isIncome
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-red-600 dark:text-red-400',
+                  )}
+                >
+                  {isIncome ? '+' : '-'}
+                  {formatBam(transaction.amount)}
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      render={<Button variant="ghost" size="icon" />}
                     >
-                      <PencilIcon className="size-4" />
-                      Uredi
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => alert('Izbriši transakciju')}
-                    >
-                      <TrashIcon className="size-4" />
-                      Izbriši
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          )
-        })}
-      </TableBody>
-    </Table>
+                      <MoreHorizontalIcon className="size-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        render={
+                          <Link
+                            to="/transactions/$transactionId/edit"
+                            params={{ transactionId: transaction.id }}
+                          />
+                        }
+                      >
+                        <PencilIcon className="size-4" />
+                        Uredi
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => setDeleteTransactionId(transaction.id)}
+                      >
+                        <TrashIcon className="size-4" />
+                        Obriši
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+      {/* Delete transaction dialog */}
+      <TransactionDeleteDialog
+        transactionId={deleteTransactionId}
+        open={isDeleteDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeleteTransactionId(null)
+          }
+        }}
+      />
+    </>
   )
 }

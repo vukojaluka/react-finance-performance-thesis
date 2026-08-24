@@ -27,7 +27,7 @@ begin
 end;
 $$;
 
-select plan(27);
+select plan(29);
 
 -- ---------------------------------------------------------------------------
 -- User A positive cases
@@ -254,6 +254,15 @@ select is_empty(
   'User A cannot delete User B budgets'
 );
 
+select is_empty(
+  $$
+    delete from public.transactions
+    where id = 'ffffffff-ffff-ffff-ffff-fffffffffff1'
+    returning id
+  $$,
+  'User A cannot delete User B transactions'
+);
+
 select throws_ok(
   $$
     insert into public.transactions (
@@ -378,6 +387,19 @@ select throws_ok(
   '42501',
   'new row violates row-level security policy for table "transactions"',
   'User B cannot attach User A category to User B transaction'
+);
+
+reset role;
+
+select throws_ok(
+  $$
+    set local role anon;
+    delete from public.transactions
+    where id = 'cccccccc-cccc-cccc-cccc-ccccccccccc2'
+  $$,
+  '42501',
+  null,
+  'Anonymous users cannot delete transactions'
 );
 
 reset role;

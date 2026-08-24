@@ -3,6 +3,7 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useServerFn } from '@tanstack/react-start'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
 import {
@@ -17,6 +18,7 @@ import { transactionSchema } from '@/features/transactions/schemas/transaction-f
 import type { TransactionInput } from '@/features/transactions/schemas/transaction-form.schema'
 import { createTransaction } from '@/features/transactions/server/create-transaction'
 import { updateTransaction } from '@/features/transactions/server/update-transaction'
+import { getRouteError } from '@/lib/route-errors'
 
 type UseTransactionFormConfig = {
   mode: TransactionFormMode
@@ -60,11 +62,20 @@ export function useTransactionForm({
       return createTransactionFn({ data: input })
     },
     onSuccess: async () => {
+      const successMessage =
+        mode === 'create'
+          ? 'Transakcija je uspješno kreirana.'
+          : 'Transakcija je uspješno ažurirana.'
+      toast.success(successMessage)
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['transactions'] }),
         queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
       ])
       await navigate({ to: '/transactions', search: { page: 1 } })
+    },
+    onError: (error) => {
+      const routeError = getRouteError({ error })
+      toast.error(routeError.message)
     },
   })
 

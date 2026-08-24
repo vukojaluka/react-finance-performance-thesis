@@ -1,6 +1,7 @@
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 import { z } from 'zod'
+import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,7 +10,6 @@ import { TransactionForm } from '@/features/transactions/components/transaction-
 import { TransactionFormSkeleton } from '@/features/transactions/components/transaction-form-skeleton'
 import { transactionQuery } from '@/features/transactions/queries/transactions.query'
 import { getRouteError } from '@/lib/route-errors'
-import { ArrowLeftIcon } from 'lucide-react'
 
 export const Route = createFileRoute(
   '/_protected/transactions/$transactionId/edit',
