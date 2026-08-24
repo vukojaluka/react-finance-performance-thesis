@@ -19,6 +19,7 @@ import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as ExperimentsExperiment001RouteImport } from './routes/experiments/experiment-001'
 import { Route as ProtectedTransactionsIndexRouteImport } from './routes/_protected/transactions/index'
 import { Route as ProtectedTransactionsNewRouteImport } from './routes/_protected/transactions/new'
+import { Route as ProtectedTransactionsTransactionIdEditRouteImport } from './routes/_protected/transactions/$transactionId/edit'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -72,6 +73,12 @@ const ProtectedTransactionsNewRoute =
     path: '/new',
     getParentRoute: () => ProtectedTransactionsRouteRoute,
   } as any)
+const ProtectedTransactionsTransactionIdEditRoute =
+  ProtectedTransactionsTransactionIdEditRouteImport.update({
+    id: '/$transactionId/edit',
+    path: '/$transactionId/edit',
+    getParentRoute: () => ProtectedTransactionsRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
   '/transactions/new': typeof ProtectedTransactionsNewRoute
   '/transactions/': typeof ProtectedTransactionsIndexRoute
+  '/transactions/$transactionId/edit': typeof ProtectedTransactionsTransactionIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
   '/transactions/new': typeof ProtectedTransactionsNewRoute
   '/transactions': typeof ProtectedTransactionsIndexRoute
+  '/transactions/$transactionId/edit': typeof ProtectedTransactionsTransactionIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,6 +113,7 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_protected/transactions/new': typeof ProtectedTransactionsNewRoute
   '/_protected/transactions/': typeof ProtectedTransactionsIndexRoute
+  '/_protected/transactions/$transactionId/edit': typeof ProtectedTransactionsTransactionIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/experiments/experiment-001'
     | '/transactions/new'
     | '/transactions/'
+    | '/transactions/$transactionId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '/experiments/experiment-001'
     | '/transactions/new'
     | '/transactions'
+    | '/transactions/$transactionId/edit'
   id:
     | '__root__'
     | '/_protected'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_protected/transactions/new'
     | '/_protected/transactions/'
+    | '/_protected/transactions/$transactionId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,18 +230,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedTransactionsNewRouteImport
       parentRoute: typeof ProtectedTransactionsRouteRoute
     }
+    '/_protected/transactions/$transactionId/edit': {
+      id: '/_protected/transactions/$transactionId/edit'
+      path: '/$transactionId/edit'
+      fullPath: '/transactions/$transactionId/edit'
+      preLoaderRoute: typeof ProtectedTransactionsTransactionIdEditRouteImport
+      parentRoute: typeof ProtectedTransactionsRouteRoute
+    }
   }
 }
 
 interface ProtectedTransactionsRouteRouteChildren {
   ProtectedTransactionsNewRoute: typeof ProtectedTransactionsNewRoute
   ProtectedTransactionsIndexRoute: typeof ProtectedTransactionsIndexRoute
+  ProtectedTransactionsTransactionIdEditRoute: typeof ProtectedTransactionsTransactionIdEditRoute
 }
 
 const ProtectedTransactionsRouteRouteChildren: ProtectedTransactionsRouteRouteChildren =
   {
     ProtectedTransactionsNewRoute: ProtectedTransactionsNewRoute,
     ProtectedTransactionsIndexRoute: ProtectedTransactionsIndexRoute,
+    ProtectedTransactionsTransactionIdEditRoute:
+      ProtectedTransactionsTransactionIdEditRoute,
   }
 
 const ProtectedTransactionsRouteRouteWithChildren =

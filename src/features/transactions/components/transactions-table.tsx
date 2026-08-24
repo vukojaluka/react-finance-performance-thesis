@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { MoreHorizontalIcon, PencilIcon, TrashIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -120,12 +120,12 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem
-                      onClick={() => {
-                        navigate({
-                          to: '/transactions/$id',
-                          params: { id: transaction.id },
-                        })
-                      }}
+                      render={
+                        <Link
+                          to="/transactions/$transactionId/edit"
+                          params={{ transactionId: transaction.id }}
+                        />
+                      }
                     >
                       <PencilIcon className="size-4" />
                       Uredi

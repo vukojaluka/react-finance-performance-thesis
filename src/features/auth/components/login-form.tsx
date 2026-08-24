@@ -12,13 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { FormFieldError } from '@/components/ui/form-field-error'
+import { FormField, getFormFieldAriaProps } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { loginSchema } from '@/features/auth/schemas/login.schema'
 import { login } from '@/features/auth/server/login'
-import { fieldErrorId } from '@/lib/form-errors'
 
 type LoginFormProps = {
   redirectTo: string
@@ -76,14 +74,17 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         >
           <form.Field name="email">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    E-mail
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="E-mail"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -92,28 +93,27 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>
 
           <form.Field name="password">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    Lozinka
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="Lozinka"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -122,14 +122,10 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>

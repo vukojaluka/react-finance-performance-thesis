@@ -12,13 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { FormFieldError } from '@/components/ui/form-field-error'
+import { FormField, getFormFieldAriaProps } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { registerSchema } from '@/features/auth/schemas/register.schema'
 import { register } from '@/features/auth/server/register'
-import { fieldErrorId } from '@/lib/form-errors'
 
 export function RegisterForm() {
   const navigate = useNavigate()
@@ -85,14 +83,17 @@ export function RegisterForm() {
         >
           <form.Field name="firstName">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    Ime
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="Ime"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -101,28 +102,27 @@ export function RegisterForm() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>
 
           <form.Field name="lastName">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    Prezime
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="Prezime"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -131,28 +131,27 @@ export function RegisterForm() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>
 
           <form.Field name="email">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    E-mail
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="E-mail"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -161,28 +160,27 @@ export function RegisterForm() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>
 
           <form.Field name="password">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    Lozinka
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="Lozinka"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -191,28 +189,27 @@ export function RegisterForm() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>
 
           <form.Field name="confirmPassword">
             {(field) => {
-              const hasError = field.state.meta.errors.length > 0
-              const errorId = fieldErrorId(field.name)
+              const aria = getFormFieldAriaProps(
+                field.name,
+                field.state.meta.errors,
+              )
 
               return (
-                <div>
-                  <Label htmlFor={field.name} className="mb-2">
-                    Potvrda lozinke
-                  </Label>
+                <FormField
+                  id={field.name}
+                  label="Potvrda lozinke"
+                  errors={field.state.meta.errors}
+                >
                   <Input
                     id={field.name}
                     name={field.name}
@@ -221,14 +218,10 @@ export function RegisterForm() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={hasError}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
-                  <FormFieldError
-                    id={errorId}
-                    errors={field.state.meta.errors}
-                  />
-                </div>
+                </FormField>
               )
             }}
           </form.Field>

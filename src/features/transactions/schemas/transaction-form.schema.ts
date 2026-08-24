@@ -2,6 +2,10 @@ import { z } from 'zod'
 
 import { isRealCalendarDate } from '@/features/transactions/lib/format-transaction'
 
+export const transactionIdSchema = z.object({
+  transactionId: z.guid('Neispravan identifikator transakcije.'),
+})
+
 export const transactionSchema = z
   .object({
     type: z.enum(['income', 'expense']),
@@ -49,3 +53,12 @@ export const transactionSchema = z
   .strict()
 
 export type TransactionInput = z.output<typeof transactionSchema>
+
+export const updateTransactionSchema = z
+  .object({
+    transactionId: z.guid('Neispravan identifikator transakcije.'),
+    data: transactionSchema,
+  })
+  .strict()
+
+export type UpdateTransactionInput = z.output<typeof updateTransactionSchema>

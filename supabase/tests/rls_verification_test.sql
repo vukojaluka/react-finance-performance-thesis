@@ -27,7 +27,7 @@ begin
 end;
 $$;
 
-select plan(25);
+select plan(27);
 
 -- ---------------------------------------------------------------------------
 -- User A positive cases
@@ -112,6 +112,28 @@ select lives_ok(
     where id = 'cccccccc-cccc-cccc-cccc-cccccccccc10'
   $$,
   'User A can update own transaction'
+);
+
+select throws_ok(
+  $$
+    update public.transactions
+    set category_id = 'dddddddd-dddd-dddd-dddd-ddddddddddd2'
+    where id = 'cccccccc-cccc-cccc-cccc-ccccccccccc2'
+  $$,
+  '42501',
+  'new row violates row-level security policy for table "transactions"',
+  'User A cannot update own transaction to User B category'
+);
+
+select throws_ok(
+  $$
+    update public.transactions
+    set user_id = '22222222-2222-2222-2222-222222222222'
+    where id = 'cccccccc-cccc-cccc-cccc-ccccccccccc2'
+  $$,
+  '42501',
+  'new row violates row-level security policy for table "transactions"',
+  'User A cannot reassign own transaction to another user'
 );
 
 select lives_ok(

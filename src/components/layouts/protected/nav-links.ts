@@ -26,6 +26,21 @@ const nestedPageLabels: Record<string, string> = {
   '/transactions/new': 'Nova transakcija',
 }
 
+const TRANSACTION_EDIT_PATH =
+  /^\/transactions\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/edit$/i
+
+function getNestedPageLabel(pathname: string): string | undefined {
+  if (nestedPageLabels[pathname]) {
+    return nestedPageLabels[pathname]
+  }
+
+  if (TRANSACTION_EDIT_PATH.test(pathname)) {
+    return 'Uredi transakciju'
+  }
+
+  return undefined
+}
+
 export const protectedNavLinks = [
   {
     name: 'Nadzorna ploča',
@@ -56,7 +71,7 @@ export function getProtectedNavLabel(pathname: string): string {
     return exact.name
   }
 
-  const nestedLabel = nestedPageLabels[pathname]
+  const nestedLabel = getNestedPageLabel(pathname)
 
   if (nestedLabel) {
     return nestedLabel
@@ -76,7 +91,7 @@ export function getProtectedBreadcrumbTrail(
     return [{ label: 'Nadzorna ploča' }]
   }
 
-  const nestedLabel = nestedPageLabels[pathname]
+  const nestedLabel = getNestedPageLabel(pathname)
 
   if (nestedLabel) {
     const parent = protectedNavLinks.find((link) =>
