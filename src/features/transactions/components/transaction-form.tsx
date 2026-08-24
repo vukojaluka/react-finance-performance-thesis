@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -29,15 +30,8 @@ export function TransactionForm(props: TransactionFormProps = {}) {
 }
 
 function CreateTransactionForm() {
-  const {
-    form,
-    copy,
-    categories,
-    categoryItems,
-    hasCategories,
-    formError,
-    isPending,
-  } = useTransactionForm({ mode: 'create' })
+  const { form, copy, categories, categoryItems, hasCategories, isPending } =
+    useTransactionForm({ mode: 'create' })
 
   return (
     <Card size="sm" className="max-w-xl min-w-0">
@@ -62,16 +56,6 @@ function CreateTransactionForm() {
             categoryItems={categoryItems}
             hasCategories={hasCategories}
           />
-
-          {formError ? (
-            <p
-              role="alert"
-              aria-atomic="true"
-              className="text-sm text-destructive motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-150"
-            >
-              {formError}
-            </p>
-          ) : null}
         </CardContent>
 
         <form.Subscribe selector={(state) => state.isSubmitting}>
@@ -83,7 +67,12 @@ function CreateTransactionForm() {
                 variant="outline"
                 className="w-full sm:w-auto"
                 disabled={isSubmitting || isPending}
-                render={<Link to="/transactions" search={{ page: 1 }} />}
+                render={
+                  <Link
+                    to="/transactions"
+                    search={(prev) => ({ ...prev, page: 1 })}
+                  />
+                }
               >
                 Odustani
               </Button>
@@ -110,21 +99,25 @@ function EditTransactionForm({ transactionId }: { transactionId: string }) {
     refetch,
   } = useQuery(transactionQuery(transactionId))
 
-  const {
-    form,
-    copy,
-    categories,
-    categoryItems,
-    hasCategories,
-    formError,
-    isPending,
-  } = useTransactionForm({
-    mode: 'edit',
-    transactionId,
-    initialValues: transaction
-      ? mapTransactionToFormValues(transaction)
-      : undefined,
-  })
+  const initialValues = useMemo(
+    () =>
+      transaction ? mapTransactionToFormValues(transaction) : undefined,
+    [
+      transaction?.id,
+      transaction?.type,
+      transaction?.amount,
+      transaction?.title,
+      transaction?.category_id,
+      transaction?.transaction_date,
+    ],
+  )
+
+  const { form, copy, categories, categoryItems, hasCategories, isPending } =
+    useTransactionForm({
+      mode: 'edit',
+      transactionId,
+      initialValues,
+    })
 
   if (isError) {
     return (
@@ -168,16 +161,6 @@ function EditTransactionForm({ transactionId }: { transactionId: string }) {
             categoryItems={categoryItems}
             hasCategories={hasCategories}
           />
-
-          {formError ? (
-            <p
-              role="alert"
-              aria-atomic="true"
-              className="text-sm text-destructive motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-150"
-            >
-              {formError}
-            </p>
-          ) : null}
         </CardContent>
 
         <form.Subscribe selector={(state) => state.isSubmitting}>
@@ -189,7 +172,12 @@ function EditTransactionForm({ transactionId }: { transactionId: string }) {
                 variant="outline"
                 className="w-full sm:w-auto"
                 disabled={isSubmitting || isPending}
-                render={<Link to="/transactions" search={{ page: 1 }} />}
+                render={
+                  <Link
+                    to="/transactions"
+                    search={(prev) => ({ ...prev, page: 1 })}
+                  />
+                }
               >
                 Odustani
               </Button>

@@ -1,6 +1,12 @@
-import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  stripSearchParams,
+  useRouter,
+} from '@tanstack/react-router'
+import type { ErrorComponentProps } from '@tanstack/react-router'
 
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { TransactionsErrorState } from '@/features/transactions/components/transactions-error'
 import { TransactionsFilters } from '@/features/transactions/components/transactions-filters'
 import { TransactionsList } from '@/features/transactions/components/transactions-list'
 import { transactionsQuery } from '@/features/transactions/queries/transactions.query'
@@ -8,6 +14,7 @@ import {
   TRANSACTION_SEARCH_DEFAULTS,
   transactionFiltersSchema,
 } from '@/features/transactions/schemas/transaction-search.schema'
+import { getRouteError } from '@/lib/route-errors'
 
 export const Route = createFileRoute('/_protected/transactions/')({
   validateSearch: transactionFiltersSchema,
@@ -27,6 +34,7 @@ export const Route = createFileRoute('/_protected/transactions/')({
     ])
   },
   component: TransactionsIndexPage,
+  errorComponent: TransactionsIndexError,
   head: () => ({
     meta: [
       {
@@ -42,5 +50,19 @@ function TransactionsIndexPage() {
       <TransactionsFilters />
       <TransactionsList />
     </div>
+  )
+}
+
+function TransactionsIndexError(props: ErrorComponentProps) {
+  const router = useRouter()
+  const routeError = getRouteError(props)
+
+  return (
+    <TransactionsErrorState
+      message={routeError.message}
+      onRetry={() => {
+        void router.invalidate()
+      }}
+    />
   )
 }

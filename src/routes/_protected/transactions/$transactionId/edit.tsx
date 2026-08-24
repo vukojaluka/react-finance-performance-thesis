@@ -93,7 +93,12 @@ function EditTransactionError(props: ErrorComponentProps) {
             type="button"
             variant="outline"
             size="sm"
-            render={<Link to="/transactions" search={{ page: 1 }} />}
+            render={
+              <Link
+                to="/transactions"
+                search={(prev) => ({ ...prev, page: 1 })}
+              />
+            }
           >
             <ArrowLeftIcon className="w-4 h-4" />
             Natrag na transakcije
@@ -122,7 +127,12 @@ function EditTransactionNotFound() {
           type="button"
           variant="outline"
           size="sm"
-          render={<Link to="/transactions" search={{ page: 1 }} />}
+          render={
+            <Link
+              to="/transactions"
+              search={(prev) => ({ ...prev, page: 1 })}
+            />
+          }
         >
           Natrag na transakcije
         </Button>

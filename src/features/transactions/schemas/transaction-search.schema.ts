@@ -28,7 +28,7 @@ export const transactionFiltersSchema = z.object({
   ),
   type: z.preprocess(
     emptyToUndefined,
-    z.enum(['income', 'expense']).optional(),
+    z.enum(['income', 'expense']).optional().catch(undefined),
   ),
   search: z.preprocess(emptyToUndefined, z.string().optional()),
   sort: z.enum(['date', 'amount', 'description']).catch('date').default('date'),

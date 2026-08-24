@@ -2,8 +2,10 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { TRANSACTIONS_PAGE_SIZE } from '@/features/transactions/lib/constants'
 import { transactionFiltersSchema } from '@/features/transactions/schemas/transaction-search.schema'
+import type { TransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export type TransactionListItem = {
   id: string
@@ -47,6 +49,69 @@ function readJoinedCategory(
   return category
 }
 
+async function fetchTransactionsPage(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  filters: TransactionFilters,
+  page: number,
+): Promise<{ rows: PaginatedTransactions['data']; total: number }> {
+  const from = (page - 1) * TRANSACTIONS_PAGE_SIZE
+  const to = from + TRANSACTIONS_PAGE_SIZE - 1
+
+  let query = supabase
+    .from('transactions')
+    .select(
+      'id, title, amount, type, transaction_date, categories(name, color)',
+      { count: 'exact' },
+    )
+    .eq('user_id', userId)
+    .order(SORT_COLUMNS[filters.sort], {
+      ascending: filters.sortDirection === 'asc',
+    })
+    .order('created_at', { ascending: false })
+    .range(from, to)
+
+  if (filters.category_id) {
+    query = query.eq('category_id', filters.category_id)
+  }
+
+  if (filters.type) {
+    query = query.eq('type', filters.type)
+  }
+
+  if (filters.search) {
+    query = query.ilike(
+      'title',
+      `%${filters.search.replace(/[%_,()]/g, '')}%`,
+    )
+  }
+
+  const { data: rows, error, count } = await query
+
+  if (error) {
+    throw new Error('Nije moguće učitati transakcije.')
+  }
+
+  const total = count ?? 0
+
+  return {
+    total,
+    rows: rows.map((row) => {
+      const category = readJoinedCategory(row.categories)
+
+      return {
+        id: row.id,
+        date: row.transaction_date,
+        title: row.title,
+        category: category.name,
+        categoryColor: category.color,
+        amount: Number(row.amount),
+        type: row.type,
+      }
+    }),
+  }
+}
+
 export const getTransactions = createServerFn({ method: 'GET' })
   .validator(transactionFiltersSchema)
   .handler(async ({ data: filters }): Promise<PaginatedTransactions> => {
@@ -60,62 +125,40 @@ export const getTransactions = createServerFn({ method: 'GET' })
       throw new Error('Morate biti prijavljeni da biste vidjeli transakcije.')
     }
 
-    const from = (filters.page - 1) * TRANSACTIONS_PAGE_SIZE
-    const to = from + TRANSACTIONS_PAGE_SIZE - 1
+    const firstPage = await fetchTransactionsPage(
+      supabase,
+      user.id,
+      filters,
+      filters.page,
+    )
+    const totalPages =
+      firstPage.total === 0
+        ? 0
+        : Math.ceil(firstPage.total / TRANSACTIONS_PAGE_SIZE)
 
-    let query = supabase
-      .from('transactions')
-      .select(
-        'id, title, amount, type, transaction_date, categories(name, color)',
-        { count: 'exact' },
+    if (totalPages > 0 && filters.page > totalPages) {
+      const clampedPage = totalPages
+      const clamped = await fetchTransactionsPage(
+        supabase,
+        user.id,
+        filters,
+        clampedPage,
       )
-      .eq('user_id', user.id)
-      .order(SORT_COLUMNS[filters.sort], {
-        ascending: filters.sortDirection === 'asc',
-      })
-      .order('created_at', { ascending: false })
-      .range(from, to)
 
-    if (filters.category_id) {
-      query = query.eq('category_id', filters.category_id)
+      return {
+        data: clamped.rows,
+        page: clampedPage,
+        pageSize: TRANSACTIONS_PAGE_SIZE,
+        total: clamped.total,
+        totalPages,
+      }
     }
-
-    if (filters.type) {
-      query = query.eq('type', filters.type)
-    }
-
-    if (filters.search) {
-      query = query.ilike(
-        'title',
-        `%${filters.search.replace(/[%_,()]/g, '')}%`,
-      )
-    }
-
-    const { data: rows, error, count } = await query
-
-    if (error) {
-      throw new Error('Nije moguće učitati transakcije.')
-    }
-
-    const total = count ?? 0
 
     return {
-      data: rows.map((row) => {
-        const category = readJoinedCategory(row.categories)
-
-        return {
-          id: row.id,
-          date: row.transaction_date,
-          title: row.title,
-          category: category.name,
-          categoryColor: category.color,
-          amount: Number(row.amount),
-          type: row.type,
-        }
-      }),
+      data: firstPage.rows,
       page: filters.page,
       pageSize: TRANSACTIONS_PAGE_SIZE,
-      total,
-      totalPages: total === 0 ? 0 : Math.ceil(total / TRANSACTIONS_PAGE_SIZE),
+      total: firstPage.total,
+      totalPages,
     }
   })

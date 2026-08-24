@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import debounce from 'debounce'
 import { FilterIcon, XIcon } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -82,6 +82,11 @@ export function TransactionsFilters() {
   const hasActiveFilters =
     hasActiveTransactionFilters(search) || searchInput !== ''
 
+  useEffect(() => {
+    setSearchInput(search.search ?? '')
+    debouncedSetSearch.clear()
+  }, [search.search, debouncedSetSearch])
+
   function clearFilters() {
     debouncedSetSearch.clear()
     setSearchInput('')
@@ -119,8 +124,9 @@ export function TransactionsFilters() {
                 <SheetTitle>FILTERI</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-4 px-4">
-                <FilterField label="Pretraga" id="transactions-search">
+                <FilterField label="Pretraga" id="transactions-search-mobile">
                   <Input
+                    id="transactions-search-mobile"
                     type="search"
                     placeholder="Pretraga po opisu"
                     value={searchInput}
@@ -132,7 +138,7 @@ export function TransactionsFilters() {
                   />
                 </FilterField>
 
-                <FilterField label="Kategorija" id="transactions-category">
+                <FilterField label="Kategorija" id="transactions-category-mobile">
                   <Select
                     value={search.category_id ?? 'all'}
                     items={categoryItems}
@@ -144,7 +150,7 @@ export function TransactionsFilters() {
                     }
                   >
                     <SelectTrigger
-                      id="transactions-category"
+                      id="transactions-category-mobile"
                       className="w-full"
                     >
                       <SelectValue />
@@ -166,7 +172,7 @@ export function TransactionsFilters() {
                   </Select>
                 </FilterField>
 
-                <FilterField label="Tip" id="transactions-type">
+                <FilterField label="Tip" id="transactions-type-mobile">
                   <Select
                     value={search.type ?? 'all'}
                     items={TYPE_ITEMS}
@@ -179,7 +185,7 @@ export function TransactionsFilters() {
                       })
                     }
                   >
-                    <SelectTrigger id="transactions-type" className="w-full">
+                    <SelectTrigger id="transactions-type-mobile" className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -190,7 +196,7 @@ export function TransactionsFilters() {
                   </Select>
                 </FilterField>
 
-                <FilterField label="Sortiraj" id="transactions-sort">
+                <FilterField label="Sortiraj" id="transactions-sort-mobile">
                   <Select
                     value={search.sort}
                     items={SORT_ITEMS}
@@ -204,7 +210,7 @@ export function TransactionsFilters() {
                       }
                     }}
                   >
-                    <SelectTrigger id="transactions-sort" className="w-full">
+                    <SelectTrigger id="transactions-sort-mobile" className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -215,7 +221,7 @@ export function TransactionsFilters() {
                   </Select>
                 </FilterField>
 
-                <FilterField label="Smjer" id="transactions-sort-direction">
+                <FilterField label="Smjer" id="transactions-sort-direction-mobile">
                   <Select
                     value={search.sortDirection}
                     items={SORT_DIRECTION_ITEMS}
@@ -226,7 +232,7 @@ export function TransactionsFilters() {
                     }}
                   >
                     <SelectTrigger
-                      id="transactions-sort-direction"
+                      id="transactions-sort-direction-mobile"
                       className="w-full"
                     >
                       <SelectValue />
@@ -261,10 +267,11 @@ export function TransactionsFilters() {
         <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[minmax(18rem,2fr)_repeat(4,minmax(10rem,1fr))]">
           <FilterField
             label="Pretraga"
-            id="transactions-search"
+            id="transactions-search-desktop"
             className="lg:col-span-2 xl:col-span-1"
           >
             <Input
+              id="transactions-search-desktop"
               type="search"
               placeholder="Pretražite po opisu"
               value={searchInput}
@@ -276,7 +283,7 @@ export function TransactionsFilters() {
             />
           </FilterField>
 
-          <FilterField label="Kategorija" id="transactions-category">
+          <FilterField label="Kategorija" id="transactions-category-desktop">
             <Select
               value={search.category_id ?? 'all'}
               items={categoryItems}
@@ -286,7 +293,7 @@ export function TransactionsFilters() {
                 })
               }
             >
-              <SelectTrigger id="transactions-category" className="w-full">
+              <SelectTrigger id="transactions-category-desktop" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -306,7 +313,7 @@ export function TransactionsFilters() {
             </Select>
           </FilterField>
 
-          <FilterField label="Tip" id="transactions-type">
+          <FilterField label="Tip" id="transactions-type-desktop">
             <Select
               value={search.type ?? 'all'}
               items={TYPE_ITEMS}
@@ -319,7 +326,7 @@ export function TransactionsFilters() {
                 })
               }
             >
-              <SelectTrigger id="transactions-type" className="w-full">
+              <SelectTrigger id="transactions-type-desktop" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -330,7 +337,7 @@ export function TransactionsFilters() {
             </Select>
           </FilterField>
 
-          <FilterField label="Sortiraj" id="transactions-sort">
+          <FilterField label="Sortiraj" id="transactions-sort-desktop">
             <Select
               value={search.sort}
               items={SORT_ITEMS}
@@ -344,7 +351,7 @@ export function TransactionsFilters() {
                 }
               }}
             >
-              <SelectTrigger id="transactions-sort" className="w-full">
+              <SelectTrigger id="transactions-sort-desktop" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -355,7 +362,7 @@ export function TransactionsFilters() {
             </Select>
           </FilterField>
 
-          <FilterField label="Smjer" id="transactions-sort-direction">
+          <FilterField label="Smjer" id="transactions-sort-direction-desktop">
             <Select
               value={search.sortDirection}
               items={SORT_DIRECTION_ITEMS}
@@ -366,7 +373,7 @@ export function TransactionsFilters() {
               }}
             >
               <SelectTrigger
-                id="transactions-sort-direction"
+                id="transactions-sort-direction-desktop"
                 className="w-full"
               >
                 <SelectValue />
