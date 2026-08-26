@@ -4,7 +4,7 @@ import { emptyStringToUndefined } from '@/lib/search-params'
 import type { CategoryListItem } from '@/features/categories/server/get-categories'
 
 export const categorySearchSchema = z.object({
-  search: z.preprocess(emptyStringToUndefined, z.string().optional()),
+  search: z.preprocess(emptyStringToUndefined(), z.string().optional()),
 })
 
 export type CategorySearch = z.infer<typeof categorySearchSchema>

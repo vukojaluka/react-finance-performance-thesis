@@ -8,8 +8,7 @@ export const TRANSACTION_SEARCH_DEFAULTS = {
   sortDirection: 'desc',
 } as const
 
-const emptyFilterValue = (value: unknown) =>
-  emptyStringToUndefined(value, ['all'])
+const emptyFilterValue = emptyStringToUndefined(['all'])
 
 export const transactionFiltersSchema = z.object({
   page: z.coerce.number().int().positive().catch(1).default(1),
@@ -21,7 +20,7 @@ export const transactionFiltersSchema = z.object({
     emptyFilterValue,
     z.enum(['income', 'expense']).optional().catch(undefined),
   ),
-  search: z.preprocess(emptyStringToUndefined, z.string().optional()),
+  search: z.preprocess(emptyStringToUndefined(), z.string().optional()),
   sort: z.enum(['date', 'amount', 'description']).catch('date').default('date'),
   sortDirection: z.enum(['asc', 'desc']).catch('desc').default('desc'),
 })
