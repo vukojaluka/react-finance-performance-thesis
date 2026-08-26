@@ -1,20 +1,13 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import { updateTransactionSchema } from '@/features/transactions/schemas/transaction-form.schema'
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
 
 export const updateTransaction = createServerFn({ method: 'POST' })
+  .middleware([requireAuthMiddleware])
   .validator(updateTransactionSchema)
-  .handler(async ({ data }): Promise<{ id: string }> => {
-    const supabase = createSupabaseServerClient()
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser()
-
-    if (userError || !user) {
-      throw new Error('Morate biti prijavljeni da biste ažurirali transakciju.')
-    }
+  .handler(async ({ context, data }): Promise<{ id: string }> => {
+    const { user, supabase } = context
 
     const { data: existingTransaction, error: existingError } = await supabase
       .from('transactions')

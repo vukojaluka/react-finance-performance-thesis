@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
 
@@ -72,14 +73,10 @@ async function fetchTransactionSummaryRows(
   return data
 }
 
-export const getDashboardSummary = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<DashboardSummary> => {
-    const supabase = createSupabaseServerClient()
-    const { error: userError } = await supabase.auth.getUser()
-
-    if (userError) {
-      throw new Error('Morate biti prijavljeni da biste vidjeli sažetak.')
-    }
+export const getDashboardSummary = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
+  .handler(async ({ context }): Promise<DashboardSummary> => {
+    const { supabase } = context
 
     const rows = await fetchTransactionSummaryRows(supabase)
     const currentMonthRange = getCurrentMonthDateRange()

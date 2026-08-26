@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import type { Database } from '@/integrations/supabase/database.types'
 
 export type RecentTransaction = {
@@ -28,16 +28,10 @@ function readJoinedCategoryName(
   return category.name
 }
 
-export const getRecentTransactions = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<RecentTransaction[]> => {
-    const supabase = createSupabaseServerClient()
-    const { error: userError } = await supabase.auth.getUser()
-
-    if (userError) {
-      throw new Error(
-        'Morate biti prijavljeni da biste vidjeli nedavne transakcije.',
-      )
-    }
+export const getRecentTransactions = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
+  .handler(async ({ context }): Promise<RecentTransaction[]> => {
+    const { supabase } = context
 
     const { data, error } = await supabase
       .from('transactions')
@@ -58,5 +52,4 @@ export const getRecentTransactions = createServerFn({ method: 'GET' }).handler(
       amount: Number(row.amount),
       type: row.type,
     }))
-  },
-)
+  })

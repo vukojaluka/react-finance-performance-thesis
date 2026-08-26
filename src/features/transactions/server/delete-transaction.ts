@@ -1,20 +1,13 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import { transactionIdSchema } from '@/features/transactions/schemas/transaction-form.schema'
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
 
 export const deleteTransaction = createServerFn({ method: 'POST' })
+  .middleware([requireAuthMiddleware])
   .validator(transactionIdSchema)
-  .handler(async ({ data }): Promise<{ id: string }> => {
-    const supabase = createSupabaseServerClient()
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser()
-
-    if (userError || !user) {
-      throw new Error('Morate biti prijavljeni da biste obrisali transakciju.')
-    }
+  .handler(async ({ context, data }): Promise<{ id: string }> => {
+    const { user, supabase } = context
 
     const { data: deleted, error } = await supabase
       .from('transactions')

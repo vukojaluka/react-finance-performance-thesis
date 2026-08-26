@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 
 export type CategoryListItem = {
   id: string
@@ -8,17 +8,10 @@ export type CategoryListItem = {
   color: string
 }
 
-export const getCategories = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<CategoryListItem[]> => {
-    const supabase = createSupabaseServerClient()
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser()
-
-    if (userError || !user) {
-      throw new Error('Morate biti prijavljeni da biste vidjeli kategorije.')
-    }
+export const getCategories = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
+  .handler(async ({ context }): Promise<CategoryListItem[]> => {
+    const { user, supabase } = context
 
     const { data, error } = await supabase
       .from('categories')
@@ -31,5 +24,4 @@ export const getCategories = createServerFn({ method: 'GET' }).handler(
     }
 
     return data
-  },
-)
+  })

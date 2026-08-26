@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import type { Database } from '@/integrations/supabase/database.types'
 
 export type MonthlyTrendPoint = {
@@ -101,16 +101,10 @@ function aggregateMonthlyTrend(
   })
 }
 
-export const getMonthlyTrend = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<MonthlyTrendPoint[]> => {
-    const supabase = createSupabaseServerClient()
-    const { error: userError } = await supabase.auth.getUser()
-
-    if (userError) {
-      throw new Error(
-        'Morate biti prijavljeni da biste vidjeli mjesečni trend.',
-      )
-    }
+export const getMonthlyTrend = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
+  .handler(async ({ context }): Promise<MonthlyTrendPoint[]> => {
+    const { supabase } = context
 
     const dateRange = getLastSixMonthsRange()
     const monthKeys = buildMonthKeys()

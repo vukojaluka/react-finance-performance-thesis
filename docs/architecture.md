@@ -524,7 +524,7 @@ Production Supabase Auth configuration will be configured separately when the ap
 The authentication implementation follows these principles:
 
 - Supabase Auth is the authentication authority.
-- Server-side authentication checks use `auth.getUser()`.
+- Protected Server Functions authenticate through `requireAuthMiddleware`, which calls `auth.getUser()` once and provides `user` and `supabase` via handler `context`.
 - Route guards are implemented server-side through TanStack Router `beforeLoad`.
 - Database authorization is enforced through PostgreSQL RLS.
 - Client components do not directly access Supabase for privileged operations.
@@ -754,6 +754,9 @@ Example:
 
 ```text
 features/
+├── auth/
+│   └── middleware/
+│       └── require-auth.middleware.ts
 └── transactions/
     ├── server/
     │   ├── get-transactions.ts
@@ -762,6 +765,8 @@ features/
     │   ├── update-transaction.ts
     │   └── delete-transaction.ts
 ```
+
+Protected Server Functions attach `requireAuthMiddleware` before their handler. Public auth endpoints (`login`, `register`, `logout`, `getCurrentUser`) do not use it.
 
 Server Functions return typed domain data rather than exposing raw database responses.
 
@@ -810,13 +815,15 @@ Each feature defines reusable query option factories using `queryOptions()`.
 Example:
 
 ```ts
-export function transactionsQuery() {
+export function transactionsQuery(filters: TransactionFilters) {
   return queryOptions({
-    queryKey: ['transactions'],
-    queryFn: () => getTransactions(),
+    queryKey: ['transactions', filters] as const,
+    queryFn: () => getTransactions({ data: filters }),
   })
 }
 ```
+
+List queries include URL-derived `filters` in the query key. Detail queries use `['transactions', 'detail', transactionId]`.
 
 The same query options are reused by:
 
@@ -854,9 +861,17 @@ The application should avoid invalidating the entire Query Cache after every mut
 
 Example affected queries after creating a transaction may include:
 
-- `transactions`
-- `dashboard-summary`
-- `expense-chart`
+- `transactions` (list and detail queries)
+- `dashboard` (summary, recent transactions, monthly trend, budgets)
+
+Example invalidation:
+
+```ts
+await Promise.all([
+  queryClient.invalidateQueries({ queryKey: ['transactions'] }),
+  queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+])
+```
 
 The exact invalidation strategy is defined per feature.
 
@@ -882,13 +897,30 @@ The server is responsible for enforcing:
 
 ### Authentication
 
-Authentication is handled through the application's authentication provider.
+Authentication is handled through Supabase Auth.
 
 Server Functions determine the authenticated user from the server-side session rather than accepting a client-provided `userId` as the source of truth.
 
-Business operations are performed in the context of the authenticated user.
+Protected Server Functions use TanStack Start function middleware (`requireAuthMiddleware` in `features/auth/middleware/require-auth.middleware.ts`):
 
-The authentication implementation and session handling are defined separately from individual feature Server Functions.
+```text
+createSupabaseServerClient()
+↓
+auth.getUser()
+↓
+throw if missing or invalid session
+↓
+next({ context: { user, supabase } })
+```
+
+Handlers read `user` and `supabase` from `context` instead of repeating the auth check.
+
+Public auth Server Functions do not use this middleware:
+
+- `login`, `register`, `logout`
+- `getCurrentUser` (returns `{ isLoggedIn: false }` instead of throwing)
+
+Business operations are performed in the context of the authenticated user, with RLS as the database authorization boundary.
 
 ---
 
@@ -1158,6 +1190,8 @@ src/
 ├── features/
 │   ├── analytics/
 │   ├── auth/
+│   │   └── middleware/
+│   │       └── require-auth.middleware.ts
 │   ├── budgets/
 │   ├── categories/
 │   ├── dashboard/
@@ -1567,13 +1601,15 @@ Each server-side query is defined through a reusable `queryOptions()` factory.
 Example:
 
 ```ts
-export function transactionsQuery() {
+export function transactionsQuery(filters: TransactionFilters) {
   return queryOptions({
-    queryKey: ['transactions'],
-    queryFn: () => getTransactions(),
+    queryKey: ['transactions', filters] as const,
+    queryFn: () => getTransactions({ data: filters }),
   })
 }
 ```
+
+List queries include URL-derived `filters` in the query key. Detail queries use `['transactions', 'detail', transactionId]`.
 
 Query option factories are the single source of truth for:
 
@@ -1695,7 +1731,8 @@ The appropriate hook depends on whether the query should participate in SSR and 
 Example:
 
 ```ts
-const { data } = useSuspenseQuery(transactionsQuery())
+const search = useSearch({ from: '/_protected/transactions/' })
+const { data } = useSuspenseQuery(transactionsQuery(search))
 ```
 
 If the query is not already available in the Query Cache, the component suspends until the query resolves.
@@ -1741,20 +1778,23 @@ A query is identified by its `queryKey`.
 Example:
 
 ```ts
-queryKey: ['transactions']
+queryKey: ['transactions', filters]
 ```
 
 Queries with different parameters use different query keys.
 
-Example:
+Example (transactions list — filters mirror URL search params):
 
 ```ts
 queryKey: [
   'transactions',
   {
     page,
+    category_id,
+    type,
+    search,
     sort,
-    category,
+    sortDirection,
   },
 ]
 ```
@@ -1865,9 +1905,12 @@ Example:
 
 Creating a transaction may invalidate:
 
-```ts
-;['transactions']['dashboard-summary']['expense-chart']
+```text
+transactions
+dashboard
 ```
+
+Prefix invalidation covers list/detail transaction queries and all dashboard widgets (`summary`, `recent-transactions`, `monthly-trend`, `budgets`).
 
 The application should avoid globally invalidating all queries after every mutation.
 
@@ -1876,9 +1919,10 @@ Invalidation should be based on actual data dependencies.
 Example:
 
 ```ts
-await queryClient.invalidateQueries({
-  queryKey: ['transactions'],
-})
+await Promise.all([
+  queryClient.invalidateQueries({ queryKey: ['transactions'] }),
+  queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+])
 ```
 
 Related aggregate queries should be invalidated when the mutation changes the data they represent.
@@ -1925,9 +1969,11 @@ queryKey: [
   'transactions',
   {
     page,
-    sort,
-    category,
+    category_id,
+    type,
     search,
+    sort,
+    sortDirection,
   },
 ]
 ```
@@ -2128,14 +2174,16 @@ The application should not duplicate server state into local React state.
 Avoid:
 
 ```ts
-const { data } = useQuery(transactionsQuery())
+const search = useSearch({ from: '/_protected/transactions/' })
+const { data } = useQuery(transactionsQuery(search))
 const [transactions, setTransactions] = useState(data)
 ```
 
 Instead, components should consume the TanStack Query data directly.
 
 ```ts
-const { data: transactions } = useQuery(transactionsQuery())
+const search = useSearch({ from: '/_protected/transactions/' })
+const { data: transactions } = useQuery(transactionsQuery(search))
 ```
 
 This avoids synchronization problems between local state and the Query Cache.

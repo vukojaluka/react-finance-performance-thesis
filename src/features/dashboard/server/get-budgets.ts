@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 
 export type DashboardBudget = {
   id: string
@@ -62,14 +62,10 @@ function sumSpentByCategory(rows: ExpenseRow[]): Map<string, number> {
   return spentByCategory
 }
 
-export const getBudgets = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<DashboardBudget[]> => {
-    const supabase = createSupabaseServerClient()
-    const { error: userError } = await supabase.auth.getUser()
-
-    if (userError) {
-      throw new Error('Morate biti prijavljeni da biste vidjeli budžete.')
-    }
+export const getBudgets = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
+  .handler(async ({ context }): Promise<DashboardBudget[]> => {
+    const { supabase } = context
 
     const { month, year } = getCurrentMonthYear()
     const currentMonthRange = getCurrentMonthDateRange()

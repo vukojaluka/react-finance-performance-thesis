@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import { notFound } from '@tanstack/react-router'
 
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import { transactionIdSchema } from '@/features/transactions/schemas/transaction-form.schema'
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
 
 export type TransactionDetail = {
@@ -15,17 +15,10 @@ export type TransactionDetail = {
 }
 
 export const getTransaction = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
   .validator(transactionIdSchema)
-  .handler(async ({ data }): Promise<TransactionDetail> => {
-    const supabase = createSupabaseServerClient()
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser()
-
-    if (userError || !user) {
-      throw new Error('Morate biti prijavljeni da biste vidjeli transakciju.')
-    }
+  .handler(async ({ context, data }): Promise<TransactionDetail> => {
+    const { user, supabase } = context
 
     const { data: transaction, error } = await supabase
       .from('transactions')

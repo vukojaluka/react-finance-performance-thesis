@@ -1,9 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
 import { TRANSACTIONS_PAGE_SIZE } from '@/features/transactions/lib/constants'
 import { transactionFiltersSchema } from '@/features/transactions/schemas/transaction-search.schema'
 import type { TransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
@@ -113,17 +113,10 @@ async function fetchTransactionsPage(
 }
 
 export const getTransactions = createServerFn({ method: 'GET' })
+  .middleware([requireAuthMiddleware])
   .validator(transactionFiltersSchema)
-  .handler(async ({ data: filters }): Promise<PaginatedTransactions> => {
-    const supabase = createSupabaseServerClient()
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser()
-
-    if (userError || !user) {
-      throw new Error('Morate biti prijavljeni da biste vidjeli transakcije.')
-    }
+  .handler(async ({ context, data: filters }): Promise<PaginatedTransactions> => {
+    const { user, supabase } = context
 
     const firstPage = await fetchTransactionsPage(
       supabase,
