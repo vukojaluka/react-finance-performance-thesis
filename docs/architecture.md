@@ -640,7 +640,34 @@ Not implemented. No route or feature module exists yet.
 
 ### Categories
 
-Not implemented as a standalone page. Categories are read through `getCategories()` for transaction forms and filters. Navigation includes a `/categories` link, but the route is not implemented yet.
+Purpose
+
+Full CRUD management of user-defined transaction categories.
+
+Main Features
+
+- List with optional URL-driven name search (client-side filter over full list)
+- Create and edit forms with Zod validation
+- Delete with confirmation dialog
+- Toast feedback and targeted query invalidation
+
+Routes:
+
+```text
+/categories
+/categories/new
+/categories/$categoryId/edit
+```
+
+Rendering Strategy
+
+- List loader awaits `categoriesQuery()`
+- Edit loader awaits `categoryQuery(categoryId)`
+- Search is optional via URL search param `search` (no pagination; category counts stay small)
+
+Performance Notes
+
+The full category list is reused by transaction forms and filters. Server-side pagination is intentionally omitted.
 
 ---
 
@@ -742,19 +769,19 @@ Not started.
 
 Description
 
-Category CRUD is not implemented. `getCategories()` provides read-only category lists for transactions and dashboard-related features.
+Complete CRUD feature: list with optional URL-driven name search, create, edit, delete, form validation, and cache invalidation. `getCategories()` remains the shared read path for transaction forms and filters.
 
 Business Value
 
-Categories organize transactions; management UI is planned.
+Categories organize transactions and budgets; users can manage their own classification labels and colors.
 
 Thesis Value
 
-TBD when CRUD is implemented.
+Demonstrates a simpler CRUD variant than Transactions (no pagination/sort filters) while reusing the same Server Function, form, and invalidation patterns.
 
 Priority
 
-Read-only API only.
+Implemented.
 
 ---
 
@@ -858,7 +885,11 @@ features/
 │       └── logout.ts             # public
 ├── categories/
 │   └── server/
-│       └── get-categories.ts     # protected
+│       ├── get-categories.ts     # protected
+│       ├── get-category.ts       # protected
+│       ├── create-category.ts    # protected
+│       ├── update-category.ts    # protected
+│       └── delete-category.ts    # protected
 ├── dashboard/
 │   └── server/
 │       ├── get-dashboard-summary.ts
@@ -904,10 +935,12 @@ Implemented mutation examples:
 - `createTransaction()`
 - `updateTransaction()`
 - `deleteTransaction()`
+- `createCategory()`
+- `updateCategory()`
+- `deleteCategory()`
 
 Planned mutation naming (not implemented):
 
-- `createCategory()`, `updateCategory()`, `deleteCategory()`
 - `createBudget()`, `updateBudget()`, `deleteBudget()`
 
 The `fetch` prefix is not used for Server Function naming.
@@ -1088,7 +1121,7 @@ The application uses layered error handling:
 
 - Transaction list handles query errors inline when using `useQuery()` (in addition to route-level handling)
 
-Not every route uses identical error boundary coverage. Standalone `/categories`, `/budgets`, `/analytics`, and `/settings` routes are not implemented yet.
+Not every route uses identical error boundary coverage. Standalone `/budgets`, `/analytics`, and `/settings` routes are not implemented yet. Categories list, create, and edit routes define route-level `errorComponent`s; edit also defines `notFoundComponent` and `pendingComponent`.
 
 ---
 
@@ -1191,15 +1224,32 @@ Mutations invalidate `['transactions']` and `['dashboard']` to keep list/detail 
 
 ### Categories API
 
-Categories are read-only in the current implementation.
+Categories provide full CRUD functionality.
 
-Implemented operation:
+Operations:
 
-- `getCategories()` — ordered list for transaction forms and filters
+- `getCategories()` — ordered list for management UI, transaction forms, and filters
+- `getCategory()` — single record for edit
+- `createCategory()`
+- `updateCategory()`
+- `deleteCategory()`
 
-Query key: `['categories']`
+All category Server Functions use `requireAuthMiddleware`. Inputs are validated with Zod at the server boundary.
 
-Category CRUD Server Functions are not implemented. Navigation references a future `/categories` page.
+List search is URL-driven via TanStack Router search params validated by `categorySearchSchema`:
+
+- `search` (optional name filter; client-side over the full list)
+
+Query keys:
+
+```text
+['categories']                      # list (shared with transaction forms)
+['categories', 'detail', id]        # detail
+```
+
+Duplicate names map to a safe domain error (`UNIQUE(user_id, name)`). Delete is blocked when transactions or budgets still reference the category (FK `ON DELETE NO ACTION`).
+
+Mutations invalidate `['categories']`. Successful updates also invalidate `['transactions']` and `['dashboard']` so joined category name/color data stays consistent.
 
 ---
 
@@ -1321,7 +1371,7 @@ src/
 │   ├── auth/
 │   │   └── middleware/
 │   │       └── require-auth.middleware.ts
-│   ├── categories/      # read-only getCategories
+│   ├── categories/      # full CRUD
 │   ├── dashboard/
 │   └── transactions/    # full CRUD
 │
@@ -1331,7 +1381,7 @@ src/
 │
 └── routes/
     ├── _public/         # /, /login, /register
-    └── _protected/      # /dashboard, /transactions/*
+    └── _protected/      # /dashboard, /transactions/*, /categories/*
 ```
 
 Imports use the `@/` path alias (maps to `src/`).

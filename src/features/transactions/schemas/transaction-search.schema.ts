@@ -1,36 +1,27 @@
 import { z } from 'zod'
 
+import { emptyStringToUndefined } from '@/lib/search-params'
+
 export const TRANSACTION_SEARCH_DEFAULTS = {
   page: 1,
   sort: 'date',
   sortDirection: 'desc',
 } as const
 
-function emptyToUndefined(value: unknown) {
-  if (typeof value !== 'string') {
-    return value
-  }
-
-  const trimmed = value.trim()
-
-  if (trimmed === '' || trimmed === 'all') {
-    return undefined
-  }
-
-  return trimmed
-}
+const emptyFilterValue = (value: unknown) =>
+  emptyStringToUndefined(value, ['all'])
 
 export const transactionFiltersSchema = z.object({
   page: z.coerce.number().int().positive().catch(1).default(1),
   category_id: z.preprocess(
-    emptyToUndefined,
+    emptyFilterValue,
     z.guid().optional().catch(undefined),
   ),
   type: z.preprocess(
-    emptyToUndefined,
+    emptyFilterValue,
     z.enum(['income', 'expense']).optional().catch(undefined),
   ),
-  search: z.preprocess(emptyToUndefined, z.string().optional()),
+  search: z.preprocess(emptyStringToUndefined, z.string().optional()),
   sort: z.enum(['date', 'amount', 'description']).catch('date').default('date'),
   sortDirection: z.enum(['asc', 'desc']).catch('desc').default('desc'),
 })

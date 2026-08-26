@@ -9,13 +9,17 @@ export type ProtectedNavLink = {
 
 export type ProtectedBreadcrumbItem = {
   label: string
-  to?: '/dashboard' | '/transactions'
+  to?: '/dashboard' | '/transactions' | '/categories'
 }
 
 function toBreadcrumbRoute(
   path: ProtectedNavLink['path'],
 ): ProtectedBreadcrumbItem['to'] {
-  if (path === '/dashboard' || path === '/transactions') {
+  if (
+    path === '/dashboard' ||
+    path === '/transactions' ||
+    path === '/categories'
+  ) {
     return path
   }
 
@@ -24,10 +28,14 @@ function toBreadcrumbRoute(
 
 const nestedPageLabels: Record<string, string> = {
   '/transactions/new': 'Nova transakcija',
+  '/categories/new': 'Nova kategorija',
 }
 
 const TRANSACTION_EDIT_PATH =
   /^\/transactions\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/edit$/i
+
+const CATEGORY_EDIT_PATH =
+  /^\/categories\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/edit$/i
 
 function getNestedPageLabel(pathname: string): string | undefined {
   if (nestedPageLabels[pathname]) {
@@ -36,6 +44,10 @@ function getNestedPageLabel(pathname: string): string | undefined {
 
   if (TRANSACTION_EDIT_PATH.test(pathname)) {
     return 'Uredi transakciju'
+  }
+
+  if (CATEGORY_EDIT_PATH.test(pathname)) {
+    return 'Uredi kategoriju'
   }
 
   return undefined

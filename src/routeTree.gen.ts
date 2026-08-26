@@ -11,14 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as ProtectedCategoriesRouteRouteImport } from './routes/_protected/categories/route'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as ProtectedTransactionsRouteRouteImport } from './routes/_protected/transactions/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as ExperimentsExperiment001RouteImport } from './routes/experiments/experiment-001'
+import { Route as ProtectedCategoriesIndexRouteImport } from './routes/_protected/categories/index'
+import { Route as ProtectedCategoriesNewRouteImport } from './routes/_protected/categories/new'
 import { Route as ProtectedTransactionsIndexRouteImport } from './routes/_protected/transactions/index'
 import { Route as ProtectedTransactionsNewRouteImport } from './routes/_protected/transactions/new'
+import { Route as ProtectedCategoriesCategoryIdEditRouteImport } from './routes/_protected/categories/$categoryId/edit'
 import { Route as ProtectedTransactionsTransactionIdEditRouteImport } from './routes/_protected/transactions/$transactionId/edit'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
@@ -29,6 +33,12 @@ const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedCategoriesRouteRoute =
+  ProtectedCategoriesRouteRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -61,6 +71,17 @@ const ExperimentsExperiment001Route =
     path: '/experiments/experiment-001',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ProtectedCategoriesIndexRoute =
+  ProtectedCategoriesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ProtectedCategoriesRouteRoute,
+  } as any)
+const ProtectedCategoriesNewRoute = ProtectedCategoriesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => ProtectedCategoriesRouteRoute,
+} as any)
 const ProtectedTransactionsIndexRoute =
   ProtectedTransactionsIndexRouteImport.update({
     id: '/',
@@ -73,6 +94,12 @@ const ProtectedTransactionsNewRoute =
     path: '/new',
     getParentRoute: () => ProtectedTransactionsRouteRoute,
   } as any)
+const ProtectedCategoriesCategoryIdEditRoute =
+  ProtectedCategoriesCategoryIdEditRouteImport.update({
+    id: '/$categoryId/edit',
+    path: '/$categoryId/edit',
+    getParentRoute: () => ProtectedCategoriesRouteRoute,
+  } as any)
 const ProtectedTransactionsTransactionIdEditRoute =
   ProtectedTransactionsTransactionIdEditRouteImport.update({
     id: '/$transactionId/edit',
@@ -82,13 +109,17 @@ const ProtectedTransactionsTransactionIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
+  '/categories': typeof ProtectedCategoriesRouteRouteWithChildren
   '/transactions': typeof ProtectedTransactionsRouteRouteWithChildren
   '/dashboard': typeof ProtectedDashboardRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
+  '/categories/new': typeof ProtectedCategoriesNewRoute
   '/transactions/new': typeof ProtectedTransactionsNewRoute
+  '/categories/': typeof ProtectedCategoriesIndexRoute
   '/transactions/': typeof ProtectedTransactionsIndexRoute
+  '/categories/$categoryId/edit': typeof ProtectedCategoriesCategoryIdEditRoute
   '/transactions/$transactionId/edit': typeof ProtectedTransactionsTransactionIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -97,35 +128,46 @@ export interface FileRoutesByTo {
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
+  '/categories/new': typeof ProtectedCategoriesNewRoute
   '/transactions/new': typeof ProtectedTransactionsNewRoute
+  '/categories': typeof ProtectedCategoriesIndexRoute
   '/transactions': typeof ProtectedTransactionsIndexRoute
+  '/categories/$categoryId/edit': typeof ProtectedCategoriesCategoryIdEditRoute
   '/transactions/$transactionId/edit': typeof ProtectedTransactionsTransactionIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
+  '/_protected/categories': typeof ProtectedCategoriesRouteRouteWithChildren
   '/_protected/transactions': typeof ProtectedTransactionsRouteRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
   '/experiments/experiment-001': typeof ExperimentsExperiment001Route
   '/_public/': typeof PublicIndexRoute
+  '/_protected/categories/new': typeof ProtectedCategoriesNewRoute
   '/_protected/transactions/new': typeof ProtectedTransactionsNewRoute
+  '/_protected/categories/': typeof ProtectedCategoriesIndexRoute
   '/_protected/transactions/': typeof ProtectedTransactionsIndexRoute
+  '/_protected/categories/$categoryId/edit': typeof ProtectedCategoriesCategoryIdEditRoute
   '/_protected/transactions/$transactionId/edit': typeof ProtectedTransactionsTransactionIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/categories'
     | '/transactions'
     | '/dashboard'
     | '/login'
     | '/register'
     | '/experiments/experiment-001'
+    | '/categories/new'
     | '/transactions/new'
+    | '/categories/'
     | '/transactions/'
+    | '/categories/$categoryId/edit'
     | '/transactions/$transactionId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -134,21 +176,28 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/experiments/experiment-001'
+    | '/categories/new'
     | '/transactions/new'
+    | '/categories'
     | '/transactions'
+    | '/categories/$categoryId/edit'
     | '/transactions/$transactionId/edit'
   id:
     | '__root__'
     | '/_protected'
     | '/_public'
+    | '/_protected/categories'
     | '/_protected/transactions'
     | '/_protected/dashboard'
     | '/_public/login'
     | '/_public/register'
     | '/experiments/experiment-001'
     | '/_public/'
+    | '/_protected/categories/new'
     | '/_protected/transactions/new'
+    | '/_protected/categories/'
     | '/_protected/transactions/'
+    | '/_protected/categories/$categoryId/edit'
     | '/_protected/transactions/$transactionId/edit'
   fileRoutesById: FileRoutesById
 }
@@ -173,6 +222,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_protected/categories': {
+      id: '/_protected/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof ProtectedCategoriesRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/dashboard': {
       id: '/_protected/dashboard'
@@ -216,6 +272,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperimentsExperiment001RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/categories/': {
+      id: '/_protected/categories/'
+      path: '/'
+      fullPath: '/categories/'
+      preLoaderRoute: typeof ProtectedCategoriesIndexRouteImport
+      parentRoute: typeof ProtectedCategoriesRouteRoute
+    }
+    '/_protected/categories/new': {
+      id: '/_protected/categories/new'
+      path: '/new'
+      fullPath: '/categories/new'
+      preLoaderRoute: typeof ProtectedCategoriesNewRouteImport
+      parentRoute: typeof ProtectedCategoriesRouteRoute
+    }
     '/_protected/transactions/': {
       id: '/_protected/transactions/'
       path: '/'
@@ -230,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedTransactionsNewRouteImport
       parentRoute: typeof ProtectedTransactionsRouteRoute
     }
+    '/_protected/categories/$categoryId/edit': {
+      id: '/_protected/categories/$categoryId/edit'
+      path: '/$categoryId/edit'
+      fullPath: '/categories/$categoryId/edit'
+      preLoaderRoute: typeof ProtectedCategoriesCategoryIdEditRouteImport
+      parentRoute: typeof ProtectedCategoriesRouteRoute
+    }
     '/_protected/transactions/$transactionId/edit': {
       id: '/_protected/transactions/$transactionId/edit'
       path: '/$transactionId/edit'
@@ -239,6 +316,25 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface ProtectedCategoriesRouteRouteChildren {
+  ProtectedCategoriesNewRoute: typeof ProtectedCategoriesNewRoute
+  ProtectedCategoriesIndexRoute: typeof ProtectedCategoriesIndexRoute
+  ProtectedCategoriesCategoryIdEditRoute: typeof ProtectedCategoriesCategoryIdEditRoute
+}
+
+const ProtectedCategoriesRouteRouteChildren: ProtectedCategoriesRouteRouteChildren =
+  {
+    ProtectedCategoriesNewRoute: ProtectedCategoriesNewRoute,
+    ProtectedCategoriesIndexRoute: ProtectedCategoriesIndexRoute,
+    ProtectedCategoriesCategoryIdEditRoute:
+      ProtectedCategoriesCategoryIdEditRoute,
+  }
+
+const ProtectedCategoriesRouteRouteWithChildren =
+  ProtectedCategoriesRouteRoute._addFileChildren(
+    ProtectedCategoriesRouteRouteChildren,
+  )
 
 interface ProtectedTransactionsRouteRouteChildren {
   ProtectedTransactionsNewRoute: typeof ProtectedTransactionsNewRoute
@@ -260,11 +356,13 @@ const ProtectedTransactionsRouteRouteWithChildren =
   )
 
 interface ProtectedRouteRouteChildren {
+  ProtectedCategoriesRouteRoute: typeof ProtectedCategoriesRouteRouteWithChildren
   ProtectedTransactionsRouteRoute: typeof ProtectedTransactionsRouteRouteWithChildren
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedCategoriesRouteRoute: ProtectedCategoriesRouteRouteWithChildren,
   ProtectedTransactionsRouteRoute: ProtectedTransactionsRouteRouteWithChildren,
   ProtectedDashboardRoute: ProtectedDashboardRoute,
 }
