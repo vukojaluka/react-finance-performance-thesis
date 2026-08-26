@@ -342,32 +342,35 @@ All tables include `created_at` and `updated_at` columns.
 
 - `created_at` uses `DEFAULT NOW()`
 - `updated_at` uses `DEFAULT NOW()`
-- `updated_at` will be automatically maintained using a PostgreSQL trigger
+- `updated_at` is automatically maintained by a PostgreSQL trigger (`private.set_updated_at()`)
 
 ---
 
 ### Row Level Security (RLS)
 
-All application tables use PostgreSQL Row Level Security.
+RLS is implemented on all application tables (`profiles`, `categories`, `transactions`, `budgets`) in the initial Supabase migration.
 
-Policies ensure that authenticated users can only:
+Policies enforce ownership at the database level:
 
-- Read their own data
-- Create their own data
-- Update their own data
-- Delete their own data
+- Authenticated users can read, create, update, and delete only rows where `user_id` (or `id` for `profiles`) matches `auth.uid()`.
+- Transaction and budget writes additionally require that the referenced `category_id` belongs to the same authenticated user.
+
+The application uses the Supabase publishable key for normal client and server client access. The service-role key is not exposed to browser code and is not used by application Server Functions for routine data access.
+
+Route guards and Server Function authentication are separate from RLS. Even if application code misroutes a request, PostgreSQL policies remain the database authorization boundary.
 
 ---
 
 ### Seed Data
 
-Development seed scripts will generate:
+Local development seed scripts (`supabase/seed.sql`) provide:
 
+- Deterministic demo auth users
 - Default transaction categories
 - Demo budgets
 - Demo transactions
 
-Seed data will be used during development, testing and performance measurements.
+Seed data is used for local development, manual testing, dashboard verification, reproducible transaction data, and later performance measurements. It is not a production dataset.
 
 ---
 
@@ -437,16 +440,18 @@ _public/
 
 _protected/
 ├── dashboard (`/dashboard`)
-└── application routes
+├── transactions (`/transactions`)
+├── transactions/new (`/transactions/new`)
+└── transactions/$transactionId/edit (`/transactions/$transactionId/edit`)
 ```
 
-The `_protected` layout performs the authentication check in `beforeLoad`.
+The `_protected` layout performs the authentication check in `beforeLoad` using `currentUserQuery()` / `getCurrentUser()`.
 
 Unauthenticated users are redirected to `/login`.
 
 Authenticated users can access the protected application routes.
 
-Login and register redirect already authenticated users away from `/login` and `/register` (typically to `/dashboard`).
+Login and register redirect already-authenticated users away from `/login` and `/register`. Register redirects to `/dashboard`; login redirects to the sanitized `redirect` search param or `/dashboard`.
 
 The authentication guard is a routing and user-experience mechanism. It is not considered a database security boundary.
 
@@ -478,9 +483,7 @@ Therefore, application security does not depend on the TanStack Router guard alo
 
 ### Current User
 
-The authenticated user is exposed to the application through the `getCurrentUser()` Server Function.
-
-A TanStack Query `currentUserQuery()` may cache this information for client-side UI.
+The authenticated user is exposed through `getCurrentUser()` and cached client-side via `currentUserQuery()` (`['auth', 'current-user']`).
 
 TanStack Query is not the authentication authority.
 
@@ -574,11 +577,24 @@ Performance Notes
 
 Purpose
 
+Authenticated home page showing financial overview widgets.
+
 Main Features
+
+- Summary cards (income, expense, balance)
+- Monthly income/expense trend chart
+- Recent transactions list
+- Current-month budget progress
 
 Rendering Strategy
 
+- Critical: `dashboardSummaryQuery()` via `ensureQueryData()` in the route loader
+- Non-critical: `monthlyTrendQuery()`, `recentTransactionsQuery()`, `budgetsQuery()` prefetched without awaiting
+- Non-critical widgets render behind independent Suspense boundaries with skeleton fallbacks
+
 Performance Notes
+
+Follows the critical/non-critical loader pattern validated by Experiment 001.
 
 ---
 
@@ -586,35 +602,57 @@ Performance Notes
 
 Purpose
 
+Full CRUD management of user financial records.
+
 Main Features
+
+- List with server-side search, filters, sorting, and pagination
+- Create and edit forms with Zod validation
+- Delete with confirmation dialog
+- URL-driven list state (TanStack Router search params)
+- Toast feedback and query invalidation for list/dashboard sync
+
+Routes:
+
+```text
+/transactions
+/transactions/new
+/transactions/$transactionId/edit
+```
 
 Rendering Strategy
 
+- List loader awaits `transactionsQuery(search)` and `categoriesQuery()`
+- List data is consumed with `useQuery()` and `keepPreviousData` for filter transitions
+- Create/edit loaders await `categoriesQuery()`; edit also awaits `transactionQuery(transactionId)`
+
 Performance Notes
+
+Filter, search, sort, and type changes reset `page` to 1. Page-only navigation preserves active filters.
 
 ---
 
 ### Analytics
 
-Purpose
+Not implemented. No route or feature module exists yet.
 
-Main Features
+---
 
-Rendering Strategy
+### Categories
 
-Performance Notes
+Not implemented as a standalone page. Categories are read through `getCategories()` for transaction forms and filters. Navigation includes a `/categories` link, but the route is not implemented yet.
+
+---
+
+### Budgets
+
+Not implemented as a standalone page. Budget data is read through `getBudgets()` for the dashboard widget. Navigation includes a `/budgets` link, but the route is not implemented yet.
 
 ---
 
 ### Settings
 
-Purpose
-
-Main Features
-
-Rendering Strategy
-
-Performance Notes
+Not implemented. No route or feature module exists yet.
 
 ---
 
@@ -624,11 +662,19 @@ Performance Notes
 
 Description
 
+Supabase Auth with `_public` and `_protected` pathless layouts, `currentUserQuery()` / `getCurrentUser()`, and `requireAuthMiddleware` on protected Server Functions.
+
 Business Value
+
+Secure access to personal financial data without a custom session system.
 
 Thesis Value
 
+Demonstrates server-side auth integration with TanStack Start Server Functions and TanStack Router route guards.
+
 Priority
+
+Implemented.
 
 ---
 
@@ -636,11 +682,19 @@ Priority
 
 Description
 
+Read-only dashboard aggregating summary metrics, monthly trend, recent transactions, and budget progress.
+
 Business Value
+
+At-a-glance financial overview after login.
 
 Thesis Value
 
+Demonstrates critical vs non-critical data loading, Suspense boundaries, and progressive widget rendering.
+
 Priority
+
+Implemented.
 
 ---
 
@@ -648,11 +702,19 @@ Priority
 
 Description
 
+Complete CRUD feature: list with URL-driven filters/pagination/sorting/search, create, edit, delete, form validation, and cache invalidation.
+
 Business Value
+
+Core personal finance record management.
 
 Thesis Value
 
+Demonstrates URL-as-state, server-side list queries, TanStack Form mutations, and targeted query invalidation.
+
 Priority
+
+Implemented.
 
 ---
 
@@ -660,11 +722,19 @@ Priority
 
 Description
 
+Planned read-only analytics views. Not implemented.
+
 Business Value
+
+TBD when implemented.
 
 Thesis Value
 
+TBD when implemented.
+
 Priority
+
+Not started.
 
 ---
 
@@ -672,11 +742,19 @@ Priority
 
 Description
 
+Category CRUD is not implemented. `getCategories()` provides read-only category lists for transactions and dashboard-related features.
+
 Business Value
+
+Categories organize transactions; management UI is planned.
 
 Thesis Value
 
+TBD when CRUD is implemented.
+
 Priority
+
+Read-only API only.
 
 ---
 
@@ -684,11 +762,19 @@ Priority
 
 Description
 
+Budget CRUD is not implemented. `getBudgets()` provides read-only current-month budget progress for the dashboard widget.
+
 Business Value
+
+Budget tracking on dashboard; management UI is planned.
 
 Thesis Value
 
+TBD when CRUD is implemented.
+
 Priority
+
+Read-only dashboard widget only.
 
 ---
 
@@ -696,11 +782,19 @@ Priority
 
 Description
 
+Planned profile/settings management. Not implemented.
+
 Business Value
+
+TBD when implemented.
 
 Thesis Value
 
+TBD when implemented.
+
 Priority
+
+Not started.
 
 ---
 
@@ -755,15 +849,29 @@ Example:
 ```text
 features/
 ├── auth/
-│   └── middleware/
-│       └── require-auth.middleware.ts
+│   ├── middleware/
+│   │   └── require-auth.middleware.ts
+│   └── server/
+│       ├── get-current-user.ts   # public
+│       ├── login.ts              # public
+│       ├── register.ts           # public
+│       └── logout.ts             # public
+├── categories/
+│   └── server/
+│       └── get-categories.ts     # protected
+├── dashboard/
+│   └── server/
+│       ├── get-dashboard-summary.ts
+│       ├── get-monthly-trend.ts
+│       ├── get-recent-transactions.ts
+│       └── get-budgets.ts
 └── transactions/
-    ├── server/
-    │   ├── get-transactions.ts
-    │   ├── get-transaction.ts
-    │   ├── create-transaction.ts
-    │   ├── update-transaction.ts
-    │   └── delete-transaction.ts
+    └── server/
+        ├── get-transactions.ts
+        ├── get-transaction.ts
+        ├── create-transaction.ts
+        ├── update-transaction.ts
+        └── delete-transaction.ts
 ```
 
 Protected Server Functions attach `requireAuthMiddleware` before their handler. Public auth endpoints (`login`, `register`, `logout`, `getCurrentUser`) do not use it.
@@ -777,12 +885,13 @@ Server Functions return typed domain data rather than exposing raw database resp
 Read operations use the `get` prefix:
 
 - `getDashboardSummary()`
-- `getExpenseChart()`
+- `getMonthlyTrend()`
 - `getRecentTransactions()`
+- `getBudgets()`
 - `getTransactions()`
 - `getTransaction()`
 - `getCategories()`
-- `getBudgets()`
+- `getCurrentUser()`
 
 Mutation operations use:
 
@@ -790,17 +899,16 @@ Mutation operations use:
 - `update...`
 - `delete...`
 
-Examples:
+Implemented mutation examples:
 
 - `createTransaction()`
 - `updateTransaction()`
 - `deleteTransaction()`
-- `createCategory()`
-- `updateCategory()`
-- `deleteCategory()`
-- `createBudget()`
-- `updateBudget()`
-- `deleteBudget()`
+
+Planned mutation naming (not implemented):
+
+- `createCategory()`, `updateCategory()`, `deleteCategory()`
+- `createBudget()`, `updateBudget()`, `deleteBudget()`
 
 The `fetch` prefix is not used for Server Function naming.
 
@@ -859,10 +967,12 @@ After a successful mutation, only affected queries should be invalidated.
 
 The application should avoid invalidating the entire Query Cache after every mutation.
 
-Example affected queries after creating a transaction may include:
+Example affected queries after a transaction mutation:
 
-- `transactions` (list and detail queries)
-- `dashboard` (summary, recent transactions, monthly trend, budgets)
+```text
+['transactions']   # list + detail (prefix invalidation)
+['dashboard']      # summary, monthly-trend, recent-transactions, budgets
+```
 
 Example invalidation:
 
@@ -928,41 +1038,57 @@ Business operations are performed in the context of the authenticated user, with
 
 Authorization is enforced at the server and database layers.
 
-The application uses database-level Row Level Security (RLS) to ensure that users can only access records they are authorized to access.
+The application uses PostgreSQL Row Level Security (RLS) on all user-owned tables. Policies are defined in the Supabase migration and enforce row ownership using `auth.uid()`. Transaction and budget write policies also verify category ownership.
 
 The general security model is:
 
 Server Function
 ↓
-Authenticated User
+requireAuthMiddleware (protected operations)
 ↓
-Supabase
+Authenticated User + Supabase Server Client
 ↓
 Row Level Security
 ↓
 User-owned Data
 
-Client-provided identifiers must never be trusted to determine ownership of protected resources.
+Client-provided identifiers must never be trusted to determine ownership of protected resources. Server Functions derive `user_id` from the authenticated session; RLS provides defense in depth at the database layer.
 
-The final RLS policies will be defined during Supabase database implementation.
+Route guards (`beforeLoad` on `_protected`) prevent unauthenticated navigation. They are not a substitute for RLS.
 
 ---
 
 ### Error Handling
 
-Server Functions return typed data for successful operations.
+The application uses layered error handling:
 
-Expected failures are represented using appropriate application errors, such as:
+**Zod / form validation**
 
-- Validation errors
-- Authentication errors
-- Authorization errors
-- Not found errors
-- Database errors
+- Route search params validated with Zod (e.g. transaction list filters)
+- TanStack Form + Zod schemas for create/edit forms
+- Field-level errors via shared form helpers (`FormField`, `getFormFieldErrorMessage`)
 
-TanStack Query is responsible for exposing query and mutation errors to the UI.
+**Server / domain errors**
 
-The UI provides appropriate loading, empty and error states rather than requiring every Server Function response to use a custom `{ success, error }` wrapper.
+- Server Functions throw typed application errors (e.g. not found, database failure, unauthenticated)
+- Mutations surface server errors through TanStack Query `onError` handlers
+
+**Route error boundaries**
+
+- Shared `getRouteError()` helper normalizes validation vs global errors
+- Transaction list, create, and edit routes define route-level `errorComponent`s
+- Edit route also defines `notFoundComponent` and `pendingComponent`
+- Dashboard non-critical widgets use `CatchBoundary` + `QueryErrorResetBoundary` per widget
+
+**Global toast feedback**
+
+- Sonner toaster in the root document for mutation success/failure
+
+**Component-level query errors**
+
+- Transaction list handles query errors inline when using `useQuery()` (in addition to route-level handling)
+
+Not every route uses identical error boundary coverage. Standalone `/categories`, `/budgets`, `/analytics`, and `/settings` routes are not implemented yet.
 
 ---
 
@@ -975,11 +1101,12 @@ Example:
 ```ts
 return {
   id,
+  title,
   amount,
   type,
-  description,
+  date,
   category,
-  transactionDate,
+  categoryColor,
 }
 ```
 
@@ -991,12 +1118,12 @@ This keeps the client-side domain model decoupled from the database implementati
 
 ### Authentication API
 
-Authentication-related Server Functions may include:
+Authentication-related Server Functions:
 
-- `getCurrentUser()`
-- `login()`
-- `register()`
-- `logout()`
+- `getCurrentUser()` — public; returns `{ isLoggedIn: false }` when unauthenticated
+- `login()` — public
+- `register()` — public
+- `logout()` — public
 
 Authentication functionality is kept separate from business-domain operations.
 
@@ -1004,19 +1131,27 @@ Authentication functionality is kept separate from business-domain operations.
 
 ### Dashboard API
 
-Dashboard Server Functions provide aggregated data required by dashboard widgets.
+Dashboard Server Functions provide aggregated data for dashboard widgets.
 
-Initial operations include:
+Implemented operations:
 
-- `getDashboardSummary()`
-- `getExpenseChart()`
-- `getRecentTransactions()`
+- `getDashboardSummary()` — critical summary metrics
+- `getMonthlyTrend()` — monthly income/expense trend
+- `getRecentTransactions()` — recent activity list
+- `getBudgets()` — current-month budget progress
 
-Dashboard queries may use different rendering priorities.
+Query keys:
 
-Critical dashboard data may use `ensureQueryData()` in the Route Loader.
+```text
+['dashboard', 'summary']
+['dashboard', 'monthly-trend']
+['dashboard', 'recent-transactions']
+['dashboard', 'budgets']
+```
 
-Independent non-critical widgets may use non-awaited `prefetchQuery()` and `useSuspenseQuery()`.
+Critical dashboard data uses `ensureQueryData(dashboardSummaryQuery())` in the route loader.
+
+Independent non-critical widgets use non-awaited `prefetchQuery()` and `useSuspenseQuery()` behind Suspense boundaries with skeleton fallbacks.
 
 ---
 
@@ -1026,72 +1161,67 @@ Transactions provide full CRUD functionality.
 
 Operations:
 
-- `getTransactions()`
-- `getTransaction()`
+- `getTransactions()` — paginated list with server-side search, filters, sorting
+- `getTransaction()` — single record for edit
 - `createTransaction()`
 - `updateTransaction()`
 - `deleteTransaction()`
 
-Transactions are owned by the authenticated user.
+All transaction Server Functions use `requireAuthMiddleware`. Inputs are validated with Zod at the server boundary.
 
-Queries may support:
+List state is URL-driven via TanStack Router search params validated by `transactionFiltersSchema`:
 
-- Search
-- Filtering
-- Sorting
-- Pagination
+- `page`, `category_id`, `type`, `search`, `sort`, `sortDirection`
+- Selecting "Sve" / "Svi" clears a filter (`undefined`), omits it from the URL, and does not apply a backend filter
+- Changing category, type, search, sort, or sortDirection resets `page` to 1
+- Changing only `page` preserves active filters
 
-Query parameters are represented through TanStack Router URL search parameters where appropriate.
+Query keys:
+
+```text
+['transactions', filters]           // list (filters mirror URL search params)
+['transactions', 'detail', id]      // detail
+```
+
+Out-of-range pages are clamped server-side. Delete handles the last-item-on-page edge case by navigating to the last valid page when needed.
+
+Mutations invalidate `['transactions']` and `['dashboard']` to keep list/detail data and dashboard aggregates synchronized.
 
 ---
 
 ### Categories API
 
-Categories provide CRUD functionality for user-defined transaction categories.
+Categories are read-only in the current implementation.
 
-Operations:
+Implemented operation:
 
-- `getCategories()`
-- `getCategory()`
-- `createCategory()`
-- `updateCategory()`
-- `deleteCategory()`
+- `getCategories()` — ordered list for transaction forms and filters
 
-Categories are owned by the authenticated user.
+Query key: `['categories']`
 
-Categories may be referenced by transactions and budgets.
+Category CRUD Server Functions are not implemented. Navigation references a future `/categories` page.
 
 ---
 
 ### Budgets API
 
-Budgets provide CRUD functionality for category-based monthly budgets.
+Budgets are read-only in the current implementation.
 
-Operations:
+Implemented operation:
 
-- `getBudgets()`
-- `getBudget()`
-- `createBudget()`
-- `updateBudget()`
-- `deleteBudget()`
+- `getBudgets()` — current-month budget progress for the dashboard widget
 
-Budgets are associated with the authenticated user and a transaction category.
+Query key: `['dashboard', 'budgets']`
+
+Budget CRUD Server Functions are not implemented. Navigation references a future `/budgets` page.
 
 ---
 
 ### Analytics API
 
-Analytics provides read-only aggregated financial data.
+Not implemented. No analytics Server Functions or routes exist yet.
 
-Potential operations include:
-
-- `getExpenseBreakdown()`
-- `getIncomeExpenseTrend()`
-- `getCategorySpending()`
-
-The exact analytics operations will be defined together with the Analytics page requirements.
-
-Analytics operations should return aggregated domain data rather than raw transaction records whenever possible.
+When implemented, analytics should provide read-only aggregated financial data rather than raw transaction records.
 
 ---
 
@@ -1156,7 +1286,7 @@ The API layer follows these principles:
 7. Client-side validation uses Zod.
 8. Important validation is repeated on the server boundary.
 9. Authentication is derived from the server-side session.
-10. Authorization is enforced through server checks and database RLS.
+10. Authorization is enforced through `requireAuthMiddleware` and database RLS.
 11. Server Functions return domain-level data rather than raw database responses.
 12. Only affected queries are invalidated after mutations.
 13. Critical and non-critical queries use different loading strategies based on rendering requirements.
@@ -1183,37 +1313,40 @@ The project follows a feature-based architecture.
 src/
 │
 ├── components/
-│   └── ui/
+│   └── ui/              # shared UI primitives (FormField, DatePicker, Sonner, …)
 │
 ├── experiments/
 │
 ├── features/
-│   ├── analytics/
 │   ├── auth/
 │   │   └── middleware/
 │   │       └── require-auth.middleware.ts
-│   ├── budgets/
-│   ├── categories/
+│   ├── categories/      # read-only getCategories
 │   ├── dashboard/
-│   ├── settings/
-│   └── transactions/
+│   └── transactions/    # full CRUD
 │
-├── integrations/
+├── integrations/        # Supabase, TanStack Query providers
 │
-├── lib/
-│   ├── constants/
-│   ├── hooks/
-│   ├── utils/
-│   └── validation/
+├── lib/                 # shared utilities (format-currency, format-date, form-errors, route-errors)
 │
 └── routes/
+    ├── _public/         # /, /login, /register
+    └── _protected/      # /dashboard, /transactions/*
 ```
 
-Global components are stored inside `components/ui`.
+Imports use the `@/` path alias (maps to `src/`).
 
-Business logic is organized by feature.
+Global UI components live in `components/ui`. Business logic is organized by feature. Each feature owns its components, queries, server functions, schemas, and feature-specific utilities.
 
-Each feature owns its own components, queries, server functions, schemas and utilities.
+Reusable primitives introduced during Transactions work include:
+
+- `FormField`, `form-field-error`, form error helpers (`lib/form-errors.ts`)
+- `DatePicker`, `Toaster` (Sonner)
+- `getRouteError()` (`lib/route-errors.ts`)
+- Currency/date formatting (`lib/format-currency.ts`, `lib/format-date.ts`)
+- Reusable transaction form fields and schema patterns (kept under `features/transactions/`)
+
+Truly generic UI and utilities stay in shared locations; transaction-specific helpers stay in the transactions feature.
 
 ---
 
@@ -1241,9 +1374,13 @@ TanStack Query uses shared query option factories.
 Examples:
 
 - dashboardSummaryQuery()
+- monthlyTrendQuery()
+- recentTransactionsQuery()
+- budgetsQuery()
 - transactionsQuery()
+- transactionQuery()
 - categoriesQuery()
-- analyticsQuery()
+- currentUserQuery()
 
 The same query options object is reused by:
 
@@ -1277,7 +1414,37 @@ Examples
 
 ### Data Flow
 
----
+Read path:
+
+```text
+Route Loader / Component
+  ↓
+queryOptions() factory
+  ↓
+TanStack Query (ensureQueryData / prefetchQuery / useQuery / useSuspenseQuery)
+  ↓
+Server Function (+ requireAuthMiddleware for protected operations)
+  ↓
+Supabase Server Client
+  ↓
+PostgreSQL / RLS
+```
+
+Mutation path:
+
+```text
+TanStack Form + Zod
+  ↓
+TanStack Query Mutation
+  ↓
+Server Function (+ requireAuthMiddleware)
+  ↓
+PostgreSQL / RLS
+  ↓
+Query invalidation (affected namespaces only)
+  ↓
+UI (toast, navigation)
+```
 
 ## 13. Rendering Strategy
 
@@ -1311,8 +1478,7 @@ Examples include:
 - Login
 - Register
 - Dashboard
-- Transactions
-- Analytics
+- Transactions (list, create, edit)
 
 Route loaders are used to prepare critical server data before the route renders.
 
@@ -1411,11 +1577,11 @@ Independent non-critical widgets use separate React Suspense boundaries.
 Example:
 
 ```tsx
-<Suspense fallback={<ChartSkeleton />}>
-  <ExpenseChart />
+<Suspense fallback={<MonthlyTrendSkeleton />}>
+  <MonthlyTrend />
 </Suspense>
 
-<Suspense fallback={<TransactionsSkeleton />}>
+<Suspense fallback={<RecentTransactionsSkeleton />}>
   <RecentTransactions />
 </Suspense>
 ```
@@ -1446,9 +1612,11 @@ Route Loader
             │
             ├── Dashboard Summary
             │
-            ├── Chart Suspense
+            ├── Monthly Trend Suspense
             │
-            └── Transactions Suspense
+            ├── Recent Transactions Suspense
+            │
+            └── Budgets Suspense
                     │
                     ▼
              Progressive Reveal
@@ -1538,10 +1706,11 @@ The application follows these general rules:
 The preferred pattern for a dashboard with one critical widget and multiple independent secondary widgets is:
 
 ```ts
-export const Route = createFileRoute('/dashboard')({
+export const Route = createFileRoute('/_protected/dashboard')({
   loader: async ({ context }) => {
-    void context.queryClient.prefetchQuery(expenseChartQuery())
+    void context.queryClient.prefetchQuery(monthlyTrendQuery())
     void context.queryClient.prefetchQuery(recentTransactionsQuery())
+    void context.queryClient.prefetchQuery(budgetsQuery())
 
     await context.queryClient.ensureQueryData(dashboardSummaryQuery())
   },
@@ -1559,11 +1728,11 @@ const { data } = useSuspenseQuery(dashboardSummaryQuery())
 Independent widgets use their own Suspense boundaries:
 
 ```tsx
-<Suspense fallback={<ChartSkeleton />}>
-  <ExpenseChart />
+<Suspense fallback={<MonthlyTrendSkeleton />}>
+  <MonthlyTrend />
 </Suspense>
 
-<Suspense fallback={<TransactionsSkeleton />}>
+<Suspense fallback={<RecentTransactionsSkeleton />}>
   <RecentTransactions />
 </Suspense>
 ```
@@ -1728,25 +1897,30 @@ The appropriate hook depends on whether the query should participate in SSR and 
 
 `useSuspenseQuery()` is the preferred hook for data that participates in SSR and progressive rendering.
 
-Example:
+Example (dashboard summary — critical, loader-awaited):
+
+```ts
+const { data } = useSuspenseQuery(dashboardSummaryQuery())
+```
+
+Example (transaction list — URL-driven, loader-awaited but consumed with `useQuery()` for `keepPreviousData` during filter transitions):
 
 ```ts
 const search = useSearch({ from: '/_protected/transactions/' })
-const { data } = useSuspenseQuery(transactionsQuery(search))
+const { data } = useQuery({
+  ...transactionsQuery(search),
+  placeholderData: keepPreviousData,
+})
 ```
 
-If the query is not already available in the Query Cache, the component suspends until the query resolves.
+If a suspense query is not already available in the Query Cache, the component suspends until the query resolves.
 
-This allows the component to be placed inside an independent Suspense boundary.
+`useSuspenseQuery()` is preferred for:
 
-`useSuspenseQuery()` is therefore preferred for:
+- SSR-rendered dashboard widgets prefetched in the route loader
+- Critical page data consumed by components behind Suspense boundaries
 
-- SSR-rendered widgets
-- Critical page data consumed by components
-- Non-critical widgets that are prefetched in the Route Loader
-- Components that should progressively reveal their content
-
-TanStack Router's Query integration supports `useSuspenseQuery()` during SSR and streams query results as they resolve.
+`useQuery()` is used when client-side fetching behavior is intentionally different (e.g. transaction list with placeholder data during filter changes).
 
 ---
 
@@ -1995,22 +2169,17 @@ When search parameters change, TanStack Query receives a new query key and can r
 
 ### Pagination
 
-Standard pagination is used where a page represents a discrete set of results.
+Standard pagination is used for the transactions list.
 
-Example:
+Pagination state (`page`) is stored in TanStack Router search params. The list query key includes the full filters object (not `page` alone):
 
 ```ts
-queryKey: [
-  'transactions',
-  {
-    page,
-  },
-]
+queryKey: ['transactions', { page, category_id, type, search, sort, sortDirection }]
 ```
 
-Each page is represented by its own Query Cache entry.
+Each distinct filter/page combination has its own Query Cache entry.
 
-Pagination state is stored in TanStack Router search parameters when it should be reflected in the URL.
+Server-side pagination returns `page`, `pageSize`, `total`, and `totalPages`. Out-of-range pages are clamped in `getTransactions()`. Deleting the last item on a page navigates to the last valid page.
 
 ---
 
@@ -2037,20 +2206,18 @@ For standard table-based transaction management, URL-driven pagination is prefer
 
 ### Error Handling
 
-Query errors are handled through TanStack Query.
+Query errors are handled through TanStack Query and route/component boundaries.
 
-The application distinguishes between:
+The application distinguishes:
 
-- Loading state
-- Error state
-- Empty state
-- Successful state
+- **Loading / empty / success** — Suspense for prefetched widgets; inline states for transaction list
+- **Zod validation errors** — route search param validation, form field errors
+- **Server/domain errors** — thrown by Server Functions, surfaced via route `errorComponent` or mutation toasts
+- **Route error boundaries** — shared `getRouteError()` helper; implemented on transaction routes and dashboard widgets
 
-Suspense handles pending states for `useSuspenseQuery()`.
+Suspense handles pending states for `useSuspenseQuery()`. Transaction list query errors may be handled at both route and component level when using `useQuery()`.
 
-Error boundaries or route-level error handling handle query failures where appropriate.
-
-Server Functions remain responsible for producing meaningful typed errors at the server boundary.
+Server Functions throw meaningful errors at the server boundary rather than returning custom `{ success, error }` wrappers.
 
 ---
 
@@ -2229,12 +2396,15 @@ When URL state affects server data, the relevant parameters must also be include
 
 Form state is managed through TanStack Form.
 
-Examples include:
+Implemented forms:
 
-- Transaction creation
-- Transaction editing
-- Category creation
-- Budget creation
+- Transaction create (`/transactions/new`)
+- Transaction edit (`/transactions/$transactionId/edit`)
+
+Planned forms (not implemented):
+
+- Category management
+- Budget management
 - Profile settings
 
 The general flow is:
