@@ -29,6 +29,8 @@ type UseTransactionFormConfig = {
   initialValues?: TransactionFormValues
 }
 
+export type TransactionFormApi = ReturnType<typeof useTransactionForm>['form']
+
 export function useTransactionForm({
   mode,
   transactionId,

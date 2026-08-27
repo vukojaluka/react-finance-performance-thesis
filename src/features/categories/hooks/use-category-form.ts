@@ -25,6 +25,8 @@ type UseCategoryFormConfig = {
   initialValues?: CategoryFormValues
 }
 
+export type CategoryFormApi = ReturnType<typeof useCategoryForm>['form']
+
 export function useCategoryForm({
   mode,
   categoryId,

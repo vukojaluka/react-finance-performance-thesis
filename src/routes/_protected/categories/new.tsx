@@ -2,7 +2,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
 import { CategoriesErrorState } from '@/features/categories/components/categories-error'
-import { CategoryForm } from '@/features/categories/components/category-form'
+import { CategoryForm } from '@/features/categories/components/form/category-form'
 import { getRouteError } from '@/lib/route-errors'
 
 export const Route = createFileRoute('/_protected/categories/new')({

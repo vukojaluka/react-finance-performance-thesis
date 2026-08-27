@@ -1,10 +1,8 @@
 import { FormField, getFormFieldAriaProps } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
+import type { CategoryFormApi } from '@/features/categories/hooks/use-category-form'
 import { CATEGORY_COLOR_PRESETS } from '@/features/categories/lib/category-form'
-import type { useCategoryForm } from '@/features/categories/hooks/use-category-form'
 import { cn } from '@/lib/utils'
-
-type CategoryFormApi = ReturnType<typeof useCategoryForm>['form']
 
 type CategoryFormFieldsProps = {
   form: CategoryFormApi

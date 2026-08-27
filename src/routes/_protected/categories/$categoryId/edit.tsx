@@ -5,8 +5,8 @@ import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CategoryForm } from '@/features/categories/components/category-form'
-import { CategoryFormSkeleton } from '@/features/categories/components/category-form-skeleton'
+import { CategoryForm } from '@/features/categories/components/form/category-form'
+import { CategoryFormCardSkeleton } from '@/features/categories/components/form/category-form-card'
 import { categoryQuery } from '@/features/categories/queries/categories.query'
 import { getRouteError } from '@/lib/route-errors'
 
@@ -48,7 +48,7 @@ function EditCategoryPage() {
 function EditCategoryPending() {
   return (
     <div className="w-full h-full min-w-0">
-      <CategoryFormSkeleton />
+      <CategoryFormCardSkeleton />
     </div>
   )
 }

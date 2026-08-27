@@ -6,8 +6,8 @@ import { ArrowLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
-import { TransactionForm } from '@/features/transactions/components/transaction-form'
-import { TransactionFormSkeleton } from '@/features/transactions/components/transaction-form-skeleton'
+import { TransactionForm } from '@/features/transactions/components/form/transaction-form'
+import { TransactionFormCardSkeleton } from '@/features/transactions/components/form/transaction-form-card'
 import { transactionQuery } from '@/features/transactions/queries/transactions.query'
 import { getRouteError } from '@/lib/route-errors'
 
@@ -56,7 +56,7 @@ function EditTransactionPage() {
 function EditTransactionPending() {
   return (
     <div className="w-full h-full min-w-0">
-      <TransactionFormSkeleton />
+      <TransactionFormCardSkeleton />
     </div>
   )
 }

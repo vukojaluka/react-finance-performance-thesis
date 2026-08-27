@@ -9,10 +9,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import type { CategoryListItem } from '@/features/categories/server/get-categories'
-import type { useTransactionForm } from '@/features/transactions/hooks/use-transaction-form'
+import type { TransactionFormApi } from '@/features/transactions/hooks/use-transaction-form'
 import { TRANSACTION_TYPE_ITEMS } from '@/features/transactions/lib/transaction-form'
-
-type TransactionFormApi = ReturnType<typeof useTransactionForm>['form']
 
 type TransactionFormFieldsProps = {
   form: TransactionFormApi

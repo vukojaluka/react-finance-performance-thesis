@@ -3,7 +3,7 @@ import type { ErrorComponentProps } from '@tanstack/react-router'
 
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
 import { TransactionsErrorState } from '@/features/transactions/components/transactions-error'
-import { TransactionForm } from '@/features/transactions/components/transaction-form'
+import { TransactionForm } from '@/features/transactions/components/form/transaction-form'
 import { getRouteError } from '@/lib/route-errors'
 
 export const Route = createFileRoute('/_protected/transactions/new')({
