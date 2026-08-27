@@ -28,6 +28,8 @@ type UseBudgetFormConfig = {
   initialValues?: BudgetFormValues
 }
 
+export type BudgetFormApi = ReturnType<typeof useBudgetForm>['form']
+
 export function useBudgetForm({
   mode,
   budgetId,

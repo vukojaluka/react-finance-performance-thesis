@@ -9,7 +9,10 @@ import {
   BudgetCategoryCard,
   BudgetCategoryCardSkeleton,
 } from '@/features/budgets/components/budget-category-card'
-import { BudgetOverviewCard } from '@/features/budgets/components/budget-overview-card'
+import {
+  BudgetOverviewCard,
+  BudgetOverviewCardSkeleton,
+} from '@/features/budgets/components/budget-overview-card'
 import { BudgetsErrorState } from '@/features/budgets/components/budgets-error'
 import { BudgetsPeriodNavigation } from '@/features/budgets/components/budgets-period-navigation'
 import { budgetsQuery } from '@/features/budgets/queries/budgets.query'
@@ -128,14 +131,7 @@ export function BudgetsPageSkeleton() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
-            <Skeleton className="mx-auto aspect-square w-full max-w-56 rounded-full" />
-            <div className="min-w-0 flex-1 space-y-3">
-              <Skeleton className="h-8 w-48" />
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-4 w-36" />
-            </div>
-          </div>
+          <BudgetOverviewCardSkeleton />
           <div className="grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 3 }).map((_, index) => (
               <BudgetCategoryCardSkeleton key={index} />

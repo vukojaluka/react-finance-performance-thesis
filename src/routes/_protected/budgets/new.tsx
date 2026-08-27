@@ -1,8 +1,9 @@
 import { createFileRoute, stripSearchParams, useRouter } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
-import { BudgetForm } from '@/features/budgets/components/budget-form'
+import { BudgetForm } from '@/features/budgets/components/form/budget-form'
 import { BudgetsErrorState } from '@/features/budgets/components/budgets-error'
+import { budgetsQuery } from '@/features/budgets/queries/budgets.query'
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
 import {
   BUDGET_SEARCH_DEFAULTS,
@@ -15,8 +16,12 @@ export const Route = createFileRoute('/_protected/budgets/new')({
   search: {
     middlewares: [stripSearchParams(BUDGET_SEARCH_DEFAULTS)],
   },
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(categoriesQuery())
+  loaderDeps: ({ search }) => search,
+  loader: async ({ context, deps: search }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(categoriesQuery()),
+      context.queryClient.ensureQueryData(budgetsQuery(search)),
+    ])
   },
   component: NewBudgetPage,
   errorComponent: NewBudgetError,

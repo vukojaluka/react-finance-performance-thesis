@@ -3,9 +3,18 @@ export type BudgetPeriod = {
   year: number
 }
 
+export type BudgetMonthOption = {
+  value: number
+  label: string
+}
+
 const monthLabelFormatter = new Intl.DateTimeFormat('hr-HR', {
   month: 'long',
   year: 'numeric',
+})
+
+const monthOptionLabelFormatter = new Intl.DateTimeFormat('hr-HR', {
+  month: 'long',
 })
 
 export function getCurrentBudgetPeriod(): BudgetPeriod {
@@ -41,6 +50,23 @@ export function getNextBudgetPeriod({
   }
 
   return { month: month + 1, year }
+}
+
+export function getMonthOptions(): BudgetMonthOption[] {
+  return Array.from({ length: 12 }, (_, index) => {
+    const month = index + 1
+
+    return {
+      value: month,
+      label: monthOptionLabelFormatter.format(new Date(2026, index, 1)),
+    }
+  })
+}
+
+export function getYearOptions(): number[] {
+  const currentYear = new Date().getFullYear()
+
+  return Array.from({ length: 7 }, (_, index) => currentYear - 2 + index)
 }
 
 export function getMonthDateRange({ month, year }: BudgetPeriod): {

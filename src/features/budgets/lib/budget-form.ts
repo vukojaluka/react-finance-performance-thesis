@@ -1,6 +1,8 @@
 import { getCurrentBudgetPeriod } from '@/features/budgets/lib/budget-period'
-import type { BudgetDetail } from '@/features/budgets/server/get-budget'
 import type { BudgetPeriodFilters } from '@/features/budgets/schemas/budget-search.schema'
+import type { BudgetDetail } from '@/features/budgets/server/get-budget'
+import type { CategoryBudgetProgress } from '@/features/budgets/server/get-budgets'
+import type { CategoryListItem } from '@/features/categories/server/get-categories'
 
 export type BudgetFormMode = 'create' | 'edit'
 
@@ -49,4 +51,27 @@ export function mapBudgetToFormValues(budget: BudgetDetail): BudgetFormValues {
     month: budget.month,
     year: budget.year,
   }
+}
+
+export function getOccupiedCategoryIds(
+  overviewCategories: CategoryBudgetProgress[],
+  excludeBudgetId?: string,
+): Set<string> {
+  return new Set(
+    overviewCategories
+      .filter((budget) => budget.budgetId !== excludeBudgetId)
+      .map((budget) => budget.categoryId),
+  )
+}
+
+export function getAvailableCategories(
+  categories: CategoryListItem[],
+  occupiedCategoryIds: Set<string>,
+  selectedCategoryId: string,
+): CategoryListItem[] {
+  return categories.filter(
+    (category) =>
+      category.id === selectedCategoryId ||
+      !occupiedCategoryIds.has(category.id),
+  )
 }

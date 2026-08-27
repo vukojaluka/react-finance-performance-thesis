@@ -5,8 +5,8 @@ import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { BudgetForm } from '@/features/budgets/components/budget-form'
-import { BudgetFormSkeleton } from '@/features/budgets/components/budget-form-skeleton'
+import { BudgetForm } from '@/features/budgets/components/form/budget-form'
+import { BudgetFormCardSkeleton } from '@/features/budgets/components/form/budget-form-card'
 import { budgetQuery } from '@/features/budgets/queries/budgets.query'
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
 import { getRouteError } from '@/lib/route-errors'
@@ -52,7 +52,7 @@ function EditBudgetPage() {
 function EditBudgetPending() {
   return (
     <div className="w-full h-full min-w-0">
-      <BudgetFormSkeleton />
+      <BudgetFormCardSkeleton />
     </div>
   )
 }
@@ -89,16 +89,7 @@ function EditBudgetError(props: ErrorComponentProps) {
             type="button"
             variant="outline"
             size="sm"
-            render={
-              <Link
-                to="/budgets"
-                search={(prev) => ({
-                  ...prev,
-                  month: cancelSearch?.month ?? month,
-                  year: cancelSearch?.year ?? year,
-                })}
-              />
-            }
+            render={<Link to="/budgets" />}
           >
             <ArrowLeftIcon className="w-4 h-4" />
             Natrag na budžete

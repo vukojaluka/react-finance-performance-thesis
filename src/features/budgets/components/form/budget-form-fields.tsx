@@ -1,6 +1,3 @@
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-
 import { FormField, getFormFieldAriaProps } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
 import {
@@ -10,86 +7,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import type { BudgetFormApi } from '@/features/budgets/hooks/use-budget-form'
+import {
+  getMonthOptions,
+  getYearOptions,
+} from '@/features/budgets/lib/budget-period'
 import type { CategoryListItem } from '@/features/categories/server/get-categories'
-import { budgetsQuery } from '@/features/budgets/queries/budgets.query'
-import type { useBudgetForm } from '@/features/budgets/hooks/use-budget-form'
-
-type BudgetFormApi = ReturnType<typeof useBudgetForm>['form']
 
 type BudgetFormFieldsProps = {
   form: BudgetFormApi
-  mode: 'create' | 'edit'
-  budgetId?: string
+  availableCategories: CategoryListItem[]
+  hasCategories: boolean
+  hasAvailableCategories: boolean
+  allCategoriesBudgeted: boolean
 }
 
-const MONTH_OPTIONS = Array.from({ length: 12 }, (_, index) => {
-  const month = index + 1
-  const label = new Intl.DateTimeFormat('hr-HR', { month: 'long' }).format(
-    new Date(2026, index, 1),
-  )
-
-  return { value: month, label }
-})
-
-function getYearOptions(): number[] {
-  const currentYear = new Date().getFullYear()
-
-  return Array.from({ length: 7 }, (_, index) => currentYear - 2 + index)
-}
-
-function getAvailableCategories(
-  categories: CategoryListItem[],
-  occupiedCategoryIds: Set<string>,
-  selectedCategoryId: string,
-) {
-  return categories.filter(
-    (category) =>
-      category.id === selectedCategoryId ||
-      !occupiedCategoryIds.has(category.id),
-  )
-}
-
-type BudgetFormFieldsContentProps = {
-  form: BudgetFormApi
-  mode: 'create' | 'edit'
-  budgetId?: string
-  month: number
-  year: number
-  categoryId: string
-}
-
-function BudgetFormFieldsContent({
+export function BudgetFormFields({
   form,
-  mode,
-  budgetId,
-  month,
-  year,
-  categoryId,
-}: BudgetFormFieldsContentProps) {
-  const { data: categories = [] } = useQuery(categoriesQuery())
-  const { data: overview } = useQuery({
-    ...budgetsQuery({ month, year }),
-    enabled: month >= 1 && year >= 1000,
-  })
-  const yearOptions = useMemo(() => getYearOptions(), [])
-
-  const occupiedCategoryIds = new Set(
-    (overview?.categories ?? [])
-      .filter((budget) => budget.budgetId !== budgetId)
-      .map((budget) => budget.categoryId),
-  )
-
-  const availableCategories = getAvailableCategories(
-    categories,
-    occupiedCategoryIds,
-    categoryId,
-  )
-
-  const hasCategories = categories.length > 0
-  const hasAvailableCategories = availableCategories.length > 0
-  const allCategoriesBudgeted =
-    hasCategories && !hasAvailableCategories && mode === 'create'
+  availableCategories,
+  hasCategories,
+  hasAvailableCategories,
+  allCategoriesBudgeted,
+}: BudgetFormFieldsProps) {
+  const monthOptions = getMonthOptions()
+  const yearOptions = getYearOptions()
 
   return (
     <>
@@ -110,7 +51,7 @@ function BudgetFormFieldsContent({
                 <Select
                   value={field.state.value}
                   items={Object.fromEntries(
-                    MONTH_OPTIONS.map((option) => [option.value, option.label]),
+                    monthOptions.map((option) => [option.value, option.label]),
                   )}
                   onValueChange={(value) => {
                     if (value) {
@@ -127,7 +68,7 @@ function BudgetFormFieldsContent({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {MONTH_OPTIONS.map((option) => (
+                    {monthOptions.map((option) => (
                       <SelectItem
                         key={option.value}
                         value={option.value}
@@ -290,32 +231,5 @@ function BudgetFormFieldsContent({
         }}
       </form.Field>
     </>
-  )
-}
-
-export function BudgetFormFields({
-  form,
-  mode,
-  budgetId,
-}: BudgetFormFieldsProps) {
-  return (
-    <form.Subscribe
-      selector={(state) => ({
-        month: state.values.month,
-        year: state.values.year,
-        categoryId: state.values.category_id,
-      })}
-    >
-      {(values) => (
-        <BudgetFormFieldsContent
-          form={form}
-          mode={mode}
-          budgetId={budgetId}
-          month={values.month}
-          year={values.year}
-          categoryId={values.categoryId}
-        />
-      )}
-    </form.Subscribe>
   )
 }
