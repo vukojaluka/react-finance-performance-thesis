@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { ArrowRightIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -15,7 +16,6 @@ import { formatBam } from '@/lib/format-currency'
 
 import { recentTransactionsQuery } from '../queries/recent-transactions.query'
 import type { RecentTransaction } from '../server/get-recent-transactions'
-import { ArrowRightIcon } from 'lucide-react'
 
 const dateFormatter = new Intl.DateTimeFormat('hr-HR', {
   day: 'numeric',
@@ -61,7 +61,7 @@ function RecentTransactionItem({
   )
 }
 
-function RecentTransactionsContent() {
+function RecentTransactionsWidgetContent() {
   const { data } = useSuspenseQuery(recentTransactionsQuery())
 
   return (
@@ -102,7 +102,7 @@ function RecentTransactionsContent() {
   )
 }
 
-export function RecentTransactionsSkeleton() {
+export function RecentTransactionsWidgetSkeleton() {
   return (
     <Card size="sm" className="min-w-0 h-128">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -122,6 +122,6 @@ export function RecentTransactionsSkeleton() {
   )
 }
 
-export function RecentTransactions() {
-  return <RecentTransactionsContent />
+export function RecentTransactionsWidget() {
+  return <RecentTransactionsWidgetContent />
 }

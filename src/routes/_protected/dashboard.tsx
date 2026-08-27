@@ -3,19 +3,19 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 
 import {
-  Budgets,
-  BudgetsSkeleton,
+  BudgetsWidget,
+  BudgetsWidgetSkeleton,
 } from '@/features/dashboard/components/budgets-widget'
-import { DashboardSummaryCards } from '@/features/dashboard/components/dashboard-summary-cards'
+import { DashboardSummaryWidget } from '@/features/dashboard/components/dashboard-summary-widget'
 import { DashboardWidgetError } from '@/features/dashboard/components/dashboard-widget-error'
 import {
-  MonthlyTrend,
-  MonthlyTrendSkeleton,
-} from '@/features/dashboard/components/monthly-trend'
+  MonthlyTrendWidget,
+  MonthlyTrendWidgetSkeleton,
+} from '@/features/dashboard/components/monthly-trend-widget'
 import {
-  RecentTransactions,
-  RecentTransactionsSkeleton,
-} from '@/features/dashboard/components/recent-transactions'
+  RecentTransactionsWidget,
+  RecentTransactionsWidgetSkeleton,
+} from '@/features/dashboard/components/recent-transactions-widget'
 import { budgetsQuery } from '@/features/dashboard/queries/budgets.query'
 import { dashboardSummaryQuery } from '@/features/dashboard/queries/dashboard-summary.query'
 import { monthlyTrendQuery } from '@/features/dashboard/queries/monthly-trend.query'
@@ -42,7 +42,7 @@ export const Route = createFileRoute('/_protected/dashboard')({
 function DashboardPage() {
   return (
     <div className="flex h-full flex-col gap-2 lg:gap-4">
-      <DashboardSummaryCards />
+      <DashboardSummaryWidget />
 
       <div className="grid min-w-0 gap-2 lg:grid-cols-3 lg:gap-4">
         <div className="min-w-0 lg:col-span-2">
@@ -63,8 +63,8 @@ function DashboardPage() {
                   />
                 )}
               >
-                <Suspense fallback={<MonthlyTrendSkeleton />}>
-                  <MonthlyTrend />
+                <Suspense fallback={<MonthlyTrendWidgetSkeleton />}>
+                  <MonthlyTrendWidget />
                 </Suspense>
               </CatchBoundary>
             )}
@@ -89,8 +89,8 @@ function DashboardPage() {
                   />
                 )}
               >
-                <Suspense fallback={<RecentTransactionsSkeleton />}>
-                  <RecentTransactions />
+                <Suspense fallback={<RecentTransactionsWidgetSkeleton />}>
+                  <RecentTransactionsWidget />
                 </Suspense>
               </CatchBoundary>
             )}
@@ -115,8 +115,8 @@ function DashboardPage() {
               />
             )}
           >
-            <Suspense fallback={<BudgetsSkeleton />}>
-              <Budgets />
+            <Suspense fallback={<BudgetsWidgetSkeleton />}>
+              <BudgetsWidget />
             </Suspense>
           </CatchBoundary>
         )}

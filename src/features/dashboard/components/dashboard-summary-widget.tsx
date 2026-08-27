@@ -49,7 +49,7 @@ function KpiCard({
   )
 }
 
-function DashboardSummaryCardsContent({ data }: { data: DashboardSummary }) {
+function DashboardSummaryWidgetContent({ data }: { data: DashboardSummary }) {
   return (
     <div className="grid gap-2 lg:gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <KpiCard
@@ -94,7 +94,7 @@ function DashboardSummaryCardsContent({ data }: { data: DashboardSummary }) {
   )
 }
 
-export function DashboardSummaryCardsSkeleton() {
+export function DashboardSummaryWidgetSkeleton() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {Array.from({ length: 4 }).map((_, index) => (
@@ -111,7 +111,7 @@ export function DashboardSummaryCardsSkeleton() {
   )
 }
 
-export function DashboardSummaryCardsError({
+export function DashboardSummaryWidgetError({
   message = 'Nije moguće učitati sažetak nadzorne ploče.',
 }: {
   message?: string
@@ -130,16 +130,16 @@ export function DashboardSummaryCardsError({
   )
 }
 
-export function DashboardSummaryCards() {
+export function DashboardSummaryWidget() {
   const { data, isPending, isError, error } = useQuery(dashboardSummaryQuery())
 
   if (isPending) {
-    return <DashboardSummaryCardsSkeleton />
+    return <DashboardSummaryWidgetSkeleton />
   }
 
   if (isError) {
     return (
-      <DashboardSummaryCardsError
+      <DashboardSummaryWidgetError
         message={
           error instanceof Error
             ? error.message
@@ -149,5 +149,5 @@ export function DashboardSummaryCards() {
     )
   }
 
-  return <DashboardSummaryCardsContent data={data} />
+  return <DashboardSummaryWidgetContent data={data} />
 }

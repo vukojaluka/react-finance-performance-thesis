@@ -94,5 +94,4 @@ export const getDashboardSummary = createServerFn({ method: 'GET' })
       balance: totalIncome - totalExpenses,
       currentMonthBalance: currentMonthIncome - currentMonthExpenses,
     }
-  },
-)
+  })

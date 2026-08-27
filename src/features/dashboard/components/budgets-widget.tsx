@@ -53,7 +53,7 @@ function BudgetItem({ budget }: { budget: DashboardBudget }) {
   )
 }
 
-function BudgetsContent() {
+function BudgetsWidgetContent() {
   const { data } = useSuspenseQuery(budgetsQuery())
 
   return (
@@ -80,7 +80,7 @@ function BudgetsContent() {
   )
 }
 
-export function BudgetsSkeleton() {
+export function BudgetsWidgetSkeleton() {
   return (
     <Card size="sm" className="min-w-0">
       <CardHeader>
@@ -102,6 +102,6 @@ export function BudgetsSkeleton() {
   )
 }
 
-export function Budgets() {
-  return <BudgetsContent />
+export function BudgetsWidget() {
+  return <BudgetsWidgetContent />
 }

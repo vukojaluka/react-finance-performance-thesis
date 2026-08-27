@@ -24,7 +24,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-function MonthlyTrendContent() {
+function MonthlyTrendWidgetContent() {
   const { data } = useSuspenseQuery(monthlyTrendQuery())
 
   return (
@@ -78,7 +78,7 @@ function MonthlyTrendContent() {
   )
 }
 
-export function MonthlyTrendSkeleton() {
+export function MonthlyTrendWidgetSkeleton() {
   return (
     <Card size="sm" className="min-w-0 h-80 lg:h-128">
       <CardHeader>
@@ -91,6 +91,6 @@ export function MonthlyTrendSkeleton() {
   )
 }
 
-export function MonthlyTrend() {
-  return <MonthlyTrendContent />
+export function MonthlyTrendWidget() {
+  return <MonthlyTrendWidgetContent />
 }
