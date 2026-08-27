@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 import { formatBam } from '@/lib/format-currency'
 
 import { budgetsQuery } from '../queries/budgets.query'
-import type { DashboardBudget } from '../server/get-budgets'
+import type { DashboardBudget } from '@/features/dashboard/server/get-budgets'
 
 function BudgetItem({ budget }: { budget: DashboardBudget }) {
   const isOverBudget = budget.percentage > 100

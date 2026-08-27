@@ -673,7 +673,17 @@ Filter/search changes reset `page` to 1. Page-only navigation preserves search. 
 
 ### Budgets
 
-Not implemented as a standalone page. Budget data is read through `getBudgets()` for the dashboard widget. Navigation includes a `/budgets` link, but the route is not implemented yet.
+Visualization-oriented monthly budget management at `/budgets` with URL-driven `month`/`year` period state, overall donut summary, category progress cards, and full CRUD via `/budgets/new` and `/budgets/$budgetId/edit`.
+
+Rendering Strategy
+
+- List route validates `month`/`year` search params (defaults to current period), prefetches `budgetsQuery({ month, year })`, and renders overview + category cards (not a table)
+- Dashboard widget reuses the same `getBudgets()` Server Function for the current month via `['dashboard', 'budgets']`
+
+Performance Notes
+
+- `getBudgets({ month, year })` performs two server-side queries (budgets + expense rows for the month) and aggregates spending by category without sending transaction collections to the browser
+- Budget mutations invalidate `['budgets']` and `['dashboard']`
 
 ---
 
@@ -789,19 +799,19 @@ Implemented.
 
 Description
 
-Budget CRUD is not implemented. `getBudgets()` provides read-only current-month budget progress for the dashboard widget.
+Complete CRUD feature: visualization-oriented list with URL-driven `month`/`year` period navigation, overall monthly summary, per-category progress cards, create, edit, delete, form validation, and cache invalidation. Dashboard widget reuses the same budget read model for the current month.
 
 Business Value
 
-Budget tracking on dashboard; management UI is planned.
+Users can set monthly spending limits per category and track progress against actual expense transactions.
 
 Thesis Value
 
-TBD when CRUD is implemented.
+Demonstrates period-as-URL-state, server-side spending aggregation, visualization-first UI (not table CRUD), and shared read models between dashboard and management pages.
 
 Priority
 
-Read-only dashboard widget only.
+Implemented.
 
 ---
 
@@ -1261,15 +1271,27 @@ Mutations invalidate `['categories']`. Successful updates also invalidate `['tra
 
 ### Budgets API
 
-Budgets are read-only in the current implementation.
+Budget Server Functions provide monthly overview data and CRUD operations.
 
-Implemented operation:
+Implemented operations:
 
-- `getBudgets()` — current-month budget progress for the dashboard widget
+- `getBudgets({ month, year })` — monthly overview with per-category spending progress
+- `getBudget(budgetId)` — single budget for edit form
+- `createBudget()` — create budget for category/month/year
+- `updateBudget()` — update budget fields with ownership checks
+- `deleteBudget()` — delete budget only (does not affect transactions)
 
-Query key: `['dashboard', 'budgets']`
+Query keys:
 
-Budget CRUD Server Functions are not implemented. Navigation references a future `/budgets` page.
+```text
+['budgets', { month, year }]
+['budgets', 'detail', budgetId]
+['dashboard', 'budgets']
+```
+
+`getBudgets()` aggregates expense transactions by `category_id` for the selected month date range. Income transactions are excluded. Duplicate `(user_id, category_id, month, year)` violations map to a safe Croatian error message.
+
+Mutations invalidate `['budgets']` and `['dashboard']`.
 
 ---
 
