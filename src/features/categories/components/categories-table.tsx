@@ -33,7 +33,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
   const isDeleteDialogOpen = deleteCategoryId !== null
 
   function handleClearSearch() {
-    void navigate({ search: {} })
+    void navigate({ search: { page: 1 } })
   }
 
   if (categories.length === 0) {

@@ -1,17 +1,41 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  redirect,
+  stripSearchParams,
+  useRouter,
+} from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
 import { CategoriesErrorState } from '@/features/categories/components/categories-error'
 import { CategoriesList } from '@/features/categories/components/categories-list'
 import { CategoriesSearch } from '@/features/categories/components/categories-search'
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
-import { categorySearchSchema } from '@/features/categories/schemas/category-search.schema'
+import {
+  CATEGORY_SEARCH_DEFAULTS,
+  categorySearchSchema,
+} from '@/features/categories/schemas/category-search.schema'
 import { getRouteError } from '@/lib/route-errors'
 
 export const Route = createFileRoute('/_protected/categories/')({
   validateSearch: categorySearchSchema,
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(categoriesQuery())
+  search: {
+    middlewares: [stripSearchParams(CATEGORY_SEARCH_DEFAULTS)],
+  },
+  loaderDeps: ({ search }) => search,
+  loader: async ({ context, deps: search }) => {
+    const result = await context.queryClient.ensureQueryData(
+      categoriesQuery(search),
+    )
+
+    if (result.page !== search.page) {
+      throw redirect({
+        to: '/categories',
+        search: {
+          ...search,
+          page: result.page,
+        },
+      })
+    }
   },
   component: CategoriesIndexPage,
   errorComponent: CategoriesIndexError,

@@ -661,13 +661,13 @@ Routes:
 
 Rendering Strategy
 
-- List loader awaits `categoriesQuery()`
+- List loader awaits `categoriesQuery(search)`
 - Edit loader awaits `categoryQuery(categoryId)`
-- Search is optional via URL search param `search` (no pagination; category counts stay small)
+- Search and page are URL-driven; out-of-range pages are clamped server-side
 
 Performance Notes
 
-The full category list is reused by transaction forms and filters. Server-side pagination is intentionally omitted.
+Filter/search changes reset `page` to 1. Page-only navigation preserves search. Transaction forms still use the unfiltered `categoriesQuery()` full list.
 
 ---
 
@@ -769,7 +769,7 @@ Not started.
 
 Description
 
-Complete CRUD feature: list with optional URL-driven name search, create, edit, delete, form validation, and cache invalidation. `getCategories()` remains the shared read path for transaction forms and filters.
+Complete CRUD feature: list with URL-driven name search and server-side pagination, create, edit, delete, form validation, and cache invalidation. Unfiltered `categoriesQuery()` remains the shared read path for transaction forms and filters.
 
 Business Value
 
@@ -777,7 +777,7 @@ Categories organize transactions and budgets; users can manage their own classif
 
 Thesis Value
 
-Demonstrates a simpler CRUD variant than Transactions (no pagination/sort filters) while reusing the same Server Function, form, and invalidation patterns.
+Demonstrates a simpler CRUD variant than Transactions (search + pagination, no type/category/sort filters) while reusing the same Server Function, form, and invalidation patterns.
 
 Priority
 
@@ -1228,7 +1228,7 @@ Categories provide full CRUD functionality.
 
 Operations:
 
-- `getCategories()` — ordered list for management UI, transaction forms, and filters
+- `getCategories()` — paginated list with optional name search for the management UI; unfiltered call still returns the full ordered list for transaction forms and filters
 - `getCategory()` — single record for edit
 - `createCategory()`
 - `updateCategory()`
@@ -1236,16 +1236,22 @@ Operations:
 
 All category Server Functions use `requireAuthMiddleware`. Inputs are validated with Zod at the server boundary.
 
-List search is URL-driven via TanStack Router search params validated by `categorySearchSchema`:
+List state is URL-driven via TanStack Router search params validated by `categorySearchSchema`:
 
-- `search` (optional name filter; client-side over the full list)
+- `page`, `search` (optional name filter)
+- Changing search resets `page` to 1
+- Changing only `page` preserves search
+- Default `page=1` is omitted from the URL
 
 Query keys:
 
 ```text
-['categories']                      # list (shared with transaction forms)
+['categories']                      # full list (transaction forms and filters)
+['categories', filters]             # paginated list (filters mirror URL search params)
 ['categories', 'detail', id]        # detail
 ```
+
+Out-of-range pages are clamped server-side. Delete handles the last-item-on-page edge case by navigating to the last valid page when needed.
 
 Duplicate names map to a safe domain error (`UNIQUE(user_id, name)`). Delete is blocked when transactions or budgets still reference the category (FK `ON DELETE NO ACTION`).
 

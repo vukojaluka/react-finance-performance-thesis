@@ -1,28 +1,24 @@
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Link, useSearch } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CategoriesErrorState } from '@/features/categories/components/categories-error'
+import { CategoriesPagination } from '@/features/categories/components/categories-pagination'
 import { CategoriesTable } from '@/features/categories/components/categories-table'
 import { categoriesQuery } from '@/features/categories/queries/categories.query'
-import { filterCategoriesBySearch } from '@/features/categories/schemas/category-search.schema'
 import { cn } from '@/lib/utils'
 
 export function CategoriesList() {
   const search = useSearch({ from: '/_protected/categories/' })
-  const { data, isError, error, refetch, isFetching } = useQuery(
-    categoriesQuery(),
-  )
+  const { data, isError, error, refetch, isPlaceholderData, isFetching } =
+    useQuery({
+      ...categoriesQuery(search),
+      placeholderData: keepPreviousData,
+    })
 
-  const filteredCategories = useMemo(
-    () => filterCategoriesBySearch(data ?? [], search.search),
-    [data, search.search],
-  )
-
-  const isPending = isFetching && !data
+  const isPending = isPlaceholderData || (isFetching && !data)
 
   if (isError) {
     return (
@@ -69,7 +65,8 @@ export function CategoriesList() {
               isPending && 'opacity-60 pointer-events-none',
             )}
           >
-            <CategoriesTable categories={filteredCategories} />
+            <CategoriesTable categories={data.data} />
+            <CategoriesPagination data={data} />
           </div>
         </CardContent>
       </Card>

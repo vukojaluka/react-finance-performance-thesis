@@ -21,6 +21,7 @@ export const Route = createFileRoute('/_protected/transactions/')({
   search: {
     middlewares: [
       stripSearchParams({
+        page: TRANSACTION_SEARCH_DEFAULTS.page,
         sort: TRANSACTION_SEARCH_DEFAULTS.sort,
         sortDirection: TRANSACTION_SEARCH_DEFAULTS.sortDirection,
       }),

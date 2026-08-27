@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { hasActiveCategorySearch } from '@/features/categories/schemas/category-search.schema'
-import type { CategorySearch } from '@/features/categories/schemas/category-search.schema'
+import type { CategoryFilters } from '@/features/categories/schemas/category-search.schema'
 
 export function CategoriesSearch() {
   const search = useSearch({ from: '/_protected/categories/' })
@@ -16,11 +16,12 @@ export function CategoriesSearch() {
   const [searchInput, setSearchInput] = useState(search.search ?? '')
 
   const setSearch = useCallback(
-    (patch: Partial<CategorySearch>) => {
+    (patch: Partial<CategoryFilters>) => {
       void navigate({
         search: (prev) => ({
           ...prev,
           ...patch,
+          page: 1,
         }),
       })
     },
@@ -46,7 +47,7 @@ export function CategoriesSearch() {
   function clearSearch() {
     debouncedSetSearch.clear()
     setSearchInput('')
-    void navigate({ search: {} })
+    void navigate({ search: { page: 1 } })
   }
 
   return (
