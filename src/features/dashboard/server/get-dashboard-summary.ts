@@ -1,7 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { createServerFn } from '@tanstack/react-start'
 
 import { requireAuthMiddleware } from '@/features/auth/middleware/require-auth.middleware'
-import { createSupabaseServerClient } from '@/integrations/supabase/server'
 import type { Database } from '@/integrations/supabase/database.types'
 
 export type DashboardSummary = {
@@ -60,7 +60,7 @@ function sumByType(
 }
 
 async function fetchTransactionSummaryRows(
-  supabase: ReturnType<typeof createSupabaseServerClient>,
+  supabase: SupabaseClient<Database>,
 ) {
   const { data, error } = await supabase
     .from('transactions')

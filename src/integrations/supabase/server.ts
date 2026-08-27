@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { createServerOnlyFn } from '@tanstack/react-start'
 import {
   getCookies,
   setCookie,
@@ -7,7 +8,7 @@ import {
 
 import type { Database } from './database.types'
 
-export function createSupabaseServerClient() {
+export const createSupabaseServerClient = createServerOnlyFn(() => {
   return createServerClient<Database>(
     process.env.VITE_SUPABASE_URL!,
     process.env.VITE_SUPABASE_PUBLISHABLE_KEY!,
@@ -31,4 +32,4 @@ export function createSupabaseServerClient() {
       },
     },
   )
-}
+})
