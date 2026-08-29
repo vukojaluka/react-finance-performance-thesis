@@ -1,11 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
@@ -38,8 +33,8 @@ function BudgetItem({ budget }: { budget: DashboardBudget }) {
         className={cn(
           'gap-0',
           isOverBudget
-            ? '[&_[data-slot=progress-indicator]]:bg-red-600 dark:[&_[data-slot=progress-indicator]]:bg-red-400'
-            : '[&_[data-slot=progress-indicator]]:bg-emerald-600 dark:[&_[data-slot=progress-indicator]]:bg-emerald-400',
+            ? '**:data-[slot=progress-indicator]:bg-red-600 dark:**:data-[slot=progress-indicator]:bg-red-400'
+            : '**:data-[slot=progress-indicator]:bg-emerald-600 dark:**:data-[slot=progress-indicator]:bg-emerald-400',
         )}
       />
       <p className="text-muted-foreground text-xs tabular-nums">

@@ -38,9 +38,7 @@ export function BudgetCategoryCard({ budget }: BudgetCategoryCardProps) {
             </div>
             <p className="text-muted-foreground text-xs tabular-nums">
               <span
-                className={cn(
-                  isOverBudget && 'text-red-600 dark:text-red-400',
-                )}
+                className={cn(isOverBudget && 'text-red-600 dark:text-red-400')}
               >
                 {formatBam(budget.spentAmount)}
               </span>
@@ -65,8 +63,8 @@ export function BudgetCategoryCard({ budget }: BudgetCategoryCardProps) {
             className={cn(
               'gap-0',
               isOverBudget
-                ? '[&_[data-slot=progress-indicator]]:bg-red-600 dark:[&_[data-slot=progress-indicator]]:bg-red-400'
-                : '[&_[data-slot=progress-indicator]]:bg-emerald-600 dark:[&_[data-slot=progress-indicator]]:bg-emerald-400',
+                ? '**:data-[slot=progress-indicator]:bg-red-600 dark:**:data-[slot=progress-indicator]:bg-red-400'
+                : '**:data-[slot=progress-indicator]:bg-emerald-600 dark:**:data-[slot=progress-indicator]:bg-emerald-400',
             )}
           />
 
