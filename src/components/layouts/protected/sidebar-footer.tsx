@@ -7,8 +7,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { logout } from '@/features/auth/server/logout'
+import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 
 export function ProtectedSidebarFooter() {
   const navigate = useNavigate()
@@ -18,7 +18,7 @@ export function ProtectedSidebarFooter() {
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: async () => {
-      queryClient.removeQueries({ queryKey: currentUserQuery().queryKey })
+      clearUserQueryCache(queryClient)
       await router.invalidate()
       await navigate({ to: '/login', search: { redirect: '/dashboard' } })
     },

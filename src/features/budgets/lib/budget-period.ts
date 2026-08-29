@@ -63,10 +63,20 @@ export function getMonthOptions(): BudgetMonthOption[] {
   })
 }
 
-export function getYearOptions(): number[] {
+export function getYearOptions(selectedYear?: number): number[] {
   const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: 7 }, (_, index) => currentYear - 2 + index)
 
-  return Array.from({ length: 7 }, (_, index) => currentYear - 2 + index)
+  if (
+    selectedYear !== undefined &&
+    !years.includes(selectedYear) &&
+    selectedYear >= 1000 &&
+    selectedYear <= 9999
+  ) {
+    return [...years, selectedYear].sort((left, right) => left - right)
+  }
+
+  return years
 }
 
 export function getMonthDateRange({ month, year }: BudgetPeriod): {

@@ -1,14 +1,14 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 import { TransactionsErrorState } from '@/features/transactions/components/transactions-error'
 import { TransactionForm } from '@/features/transactions/components/form/transaction-form'
 import { getRouteError } from '@/lib/route-errors'
 
 export const Route = createFileRoute('/_protected/transactions/new')({
   loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(categoriesQuery())
+    await context.queryClient.ensureQueryData(categoryOptionsQuery())
   },
   component: NewTransactionPage,
   errorComponent: NewTransactionError,

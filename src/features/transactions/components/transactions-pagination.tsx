@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 import type { PaginatedTransactions } from '@/features/transactions/server/get-transactions'
@@ -9,15 +9,15 @@ type TransactionsPaginationProps = {
 }
 
 export function TransactionsPagination({ data }: TransactionsPaginationProps) {
-  const search = useSearch({ from: '/_protected/transactions/' })
   const navigate = useNavigate({ from: '/transactions' })
 
   if (data.totalPages <= 1) {
     return null
   }
 
-  const isFirstPage = search.page <= 1
-  const isLastPage = search.page >= data.totalPages
+  const currentPage = data.page
+  const isFirstPage = currentPage <= 1
+  const isLastPage = currentPage >= data.totalPages
 
   function goToPage(page: number) {
     void navigate({
@@ -31,7 +31,7 @@ export function TransactionsPagination({ data }: TransactionsPaginationProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-4">
       <p className="text-muted-foreground text-sm text-center sm:text-left">
-        Stranica {search.page} od {data.totalPages}
+        Stranica {currentPage} od {data.totalPages}
       </p>
       <div className="flex items-center gap-2">
         <Button
@@ -40,7 +40,7 @@ export function TransactionsPagination({ data }: TransactionsPaginationProps) {
           variant="outline"
           size="sm"
           disabled={isFirstPage}
-          onClick={() => goToPage(search.page - 1)}
+          onClick={() => goToPage(currentPage - 1)}
         >
           <ChevronLeftIcon className="size-4" />
           Prethodna
@@ -51,7 +51,7 @@ export function TransactionsPagination({ data }: TransactionsPaginationProps) {
           variant="outline"
           size="sm"
           disabled={isLastPage}
-          onClick={() => goToPage(search.page + 1)}
+          onClick={() => goToPage(currentPage + 1)}
         >
           Sljedeća
           <ChevronRightIcon className="size-4" />

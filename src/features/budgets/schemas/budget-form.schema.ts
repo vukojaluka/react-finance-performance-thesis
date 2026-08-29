@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-import { budgetPeriodSchema } from '@/features/budgets/schemas/budget-search.schema'
-
 export const budgetIdSchema = z.object({
   budgetId: z.guid('Neispravan identifikator budžeta.'),
 })
@@ -87,10 +85,15 @@ const amountSubmitSchema = amountInputSchema
   })
   .pipe(z.number())
 
+const budgetFormPeriodSchema = z.object({
+  month: z.number().int().min(1).max(12),
+  year: z.number().int().min(1000).max(9999),
+})
+
 const budgetBaseSchema = z.object({
   category_id: z.guid('Odaberite kategoriju.'),
-  month: budgetPeriodSchema.shape.month,
-  year: budgetPeriodSchema.shape.year,
+  month: budgetFormPeriodSchema.shape.month,
+  year: budgetFormPeriodSchema.shape.year,
 })
 
 export const budgetFormValuesSchema = budgetBaseSchema

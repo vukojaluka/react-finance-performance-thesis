@@ -30,7 +30,6 @@ export function BudgetFormFields({
   allCategoriesBudgeted,
 }: BudgetFormFieldsProps) {
   const monthOptions = getMonthOptions()
-  const yearOptions = getYearOptions()
 
   return (
     <>
@@ -86,6 +85,7 @@ export function BudgetFormFields({
 
         <form.Field name="year">
           {(field) => {
+            const yearOptions = getYearOptions(field.state.value)
             const aria = getFormFieldAriaProps(
               field.name,
               field.state.meta.errors,

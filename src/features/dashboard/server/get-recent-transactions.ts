@@ -31,11 +31,12 @@ function readJoinedCategoryName(
 export const getRecentTransactions = createServerFn({ method: 'GET' })
   .middleware([requireAuthMiddleware])
   .handler(async ({ context }): Promise<RecentTransaction[]> => {
-    const { supabase } = context
+    const { supabase, user } = context
 
     const { data, error } = await supabase
       .from('transactions')
       .select('id, title, amount, type, transaction_date, categories(name)')
+      .eq('user_id', user.id)
       .order('transaction_date', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(RECENT_TRANSACTIONS_LIMIT)

@@ -61,10 +61,12 @@ function sumByType(
 
 async function fetchTransactionSummaryRows(
   supabase: SupabaseClient<Database>,
+  userId: string,
 ) {
   const { data, error } = await supabase
     .from('transactions')
     .select('amount, type, transaction_date')
+    .eq('user_id', userId)
 
   if (error) {
     throw new Error('Nije moguće učitati sažetak nadzorne ploče.')
@@ -76,9 +78,9 @@ async function fetchTransactionSummaryRows(
 export const getDashboardSummary = createServerFn({ method: 'GET' })
   .middleware([requireAuthMiddleware])
   .handler(async ({ context }): Promise<DashboardSummary> => {
-    const { supabase } = context
+    const { supabase, user } = context
 
-    const rows = await fetchTransactionSummaryRows(supabase)
+    const rows = await fetchTransactionSummaryRows(supabase, user.id)
     const currentMonthRange = getCurrentMonthDateRange()
     const allTimeTotals = sumByType(rows)
     const currentMonthTotals = sumByType(rows, currentMonthRange)

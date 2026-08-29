@@ -71,7 +71,7 @@ export function BudgetOverviewCard({ summary }: BudgetOverviewCardProps) {
               <ChartTooltip
                 content={
                   <ChartTooltipContent
-                    formatter={(value, name) => (
+                    formatter={(_value, name) => (
                       <span className="font-mono tabular-nums">
                         {name === 'remaining'
                           ? formatBam(summary.remaining)

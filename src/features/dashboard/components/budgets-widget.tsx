@@ -30,6 +30,7 @@ function BudgetItem({ budget }: { budget: DashboardBudget }) {
       </div>
       <Progress
         value={progressValue}
+        aria-label={`${budget.name}: ${Math.round(budget.percentage)}% iskorišteno`}
         className={cn(
           'gap-0',
           isOverBudget

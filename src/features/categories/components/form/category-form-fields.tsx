@@ -65,6 +65,8 @@ export function CategoryFormFields({ form }: CategoryFormFieldsProps) {
                     onChange={(e) => field.handleChange(e.target.value)}
                     className="min-w-0 flex-1"
                     aria-label="Hex kod boje"
+                    aria-invalid={aria['aria-invalid']}
+                    aria-describedby={aria['aria-describedby']}
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">

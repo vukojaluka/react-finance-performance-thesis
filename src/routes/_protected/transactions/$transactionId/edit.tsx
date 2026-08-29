@@ -5,7 +5,7 @@ import { ArrowLeftIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 import { TransactionForm } from '@/features/transactions/components/form/transaction-form'
 import { TransactionFormCardSkeleton } from '@/features/transactions/components/form/transaction-form-card'
 import { transactionQuery } from '@/features/transactions/queries/transactions.query'
@@ -27,7 +27,7 @@ export const Route = createFileRoute(
       context.queryClient.ensureQueryData(
         transactionQuery(params.transactionId),
       ),
-      context.queryClient.ensureQueryData(categoriesQuery()),
+      context.queryClient.ensureQueryData(categoryOptionsQuery()),
     ])
   },
   pendingComponent: EditTransactionPending,

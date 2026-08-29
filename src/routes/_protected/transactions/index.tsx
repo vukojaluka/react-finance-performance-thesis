@@ -1,11 +1,12 @@
 import {
   createFileRoute,
+  redirect,
   stripSearchParams,
   useRouter,
 } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 import { TransactionsErrorState } from '@/features/transactions/components/transactions-error'
 import { TransactionsFilters } from '@/features/transactions/components/transactions-filters'
 import { TransactionsList } from '@/features/transactions/components/transactions-list'
@@ -29,10 +30,20 @@ export const Route = createFileRoute('/_protected/transactions/')({
   },
   loaderDeps: ({ search }) => search,
   loader: async ({ context, deps: search }) => {
-    await Promise.all([
+    const [transactionsResult] = await Promise.all([
       context.queryClient.ensureQueryData(transactionsQuery(search)),
-      context.queryClient.ensureQueryData(categoriesQuery()),
+      context.queryClient.ensureQueryData(categoryOptionsQuery()),
     ])
+
+    if (transactionsResult.page !== search.page) {
+      throw redirect({
+        to: '/transactions',
+        search: {
+          ...search,
+          page: transactionsResult.page,
+        },
+      })
+    }
   },
   component: TransactionsIndexPage,
   errorComponent: TransactionsIndexError,

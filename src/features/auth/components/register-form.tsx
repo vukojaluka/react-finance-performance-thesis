@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { registerSchema } from '@/features/auth/schemas/register.schema'
 import { register } from '@/features/auth/server/register'
+import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 
 export function RegisterForm() {
   const navigate = useNavigate()
@@ -45,7 +46,8 @@ export function RegisterForm() {
         const result = await registerFn({ data: value })
 
         if (result.status === 'authenticated') {
-          queryClient.removeQueries({ queryKey: currentUserQuery().queryKey })
+          clearUserQueryCache(queryClient)
+          await queryClient.fetchQuery(currentUserQuery())
           await router.invalidate()
           await navigate({ to: '/dashboard' })
           return

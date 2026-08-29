@@ -104,7 +104,7 @@ function aggregateMonthlyTrend(
 export const getMonthlyTrend = createServerFn({ method: 'GET' })
   .middleware([requireAuthMiddleware])
   .handler(async ({ context }): Promise<MonthlyTrendPoint[]> => {
-    const { supabase } = context
+    const { supabase, user } = context
 
     const dateRange = getLastSixMonthsRange()
     const monthKeys = buildMonthKeys()
@@ -112,6 +112,7 @@ export const getMonthlyTrend = createServerFn({ method: 'GET' })
     const { data, error } = await supabase
       .from('transactions')
       .select('amount, type, transaction_date')
+      .eq('user_id', user.id)
       .gte('transaction_date', dateRange.start)
       .lte('transaction_date', dateRange.end)
 

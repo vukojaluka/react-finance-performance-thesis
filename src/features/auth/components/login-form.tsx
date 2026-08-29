@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { loginSchema } from '@/features/auth/schemas/login.schema'
 import { login } from '@/features/auth/server/login'
+import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 
 type LoginFormProps = {
   redirectTo: string
@@ -42,7 +43,8 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
 
       try {
         await loginFn({ data: value })
-        queryClient.removeQueries({ queryKey: currentUserQuery().queryKey })
+        clearUserQueryCache(queryClient)
+        await queryClient.fetchQuery(currentUserQuery())
         await router.invalidate()
         await navigate({ to: redirectTo })
       } catch (error) {

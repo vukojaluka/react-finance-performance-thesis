@@ -129,7 +129,17 @@ export const getTransactions = createServerFn({ method: 'GET' })
         ? 0
         : Math.ceil(firstPage.total / TRANSACTIONS_PAGE_SIZE)
 
-    if (totalPages > 0 && filters.page > totalPages) {
+    if (totalPages === 0) {
+      return {
+        data: [],
+        page: 1,
+        pageSize: TRANSACTIONS_PAGE_SIZE,
+        total: 0,
+        totalPages: 0,
+      }
+    }
+
+    if (filters.page > totalPages) {
       const clampedPage = totalPages
       const clamped = await fetchTransactionsPage(
         supabase,

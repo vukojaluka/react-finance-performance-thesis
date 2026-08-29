@@ -6,7 +6,7 @@ import {
 } from '@/features/budgets/lib/budget-form'
 import type { BudgetFormMode } from '@/features/budgets/lib/budget-form'
 import { budgetsQuery } from '@/features/budgets/queries/budgets.query'
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 
 type UseBudgetCategoryAvailabilityConfig = {
   month: number
@@ -23,7 +23,7 @@ export function useBudgetCategoryAvailability({
   budgetId,
   mode,
 }: UseBudgetCategoryAvailabilityConfig) {
-  const { data: categories = [] } = useQuery(categoriesQuery())
+  const { data: categories = [] } = useQuery(categoryOptionsQuery())
   const { data: overview } = useQuery({
     ...budgetsQuery({ month, year }),
     enabled: month >= 1 && year >= 1000,

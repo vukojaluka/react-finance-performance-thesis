@@ -121,7 +121,13 @@ export function TransactionsTable({ data }: TransactionsTableProps) {
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger
-                      render={<Button variant="ghost" size="icon" />}
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Akcije transakcije"
+                        />
+                      }
                     >
                       <MoreHorizontalIcon className="size-4" />
                     </DropdownMenuTrigger>

@@ -59,80 +59,55 @@ async function fetchCategoriesPage(
 
 export const getCategories = createServerFn({ method: 'GET' })
   .middleware([requireAuthMiddleware])
-  .validator((input: unknown) => {
-    if (input == null) {
-      return undefined
+  .validator(categorySearchSchema)
+  .handler(async ({ context, data: filters }): Promise<PaginatedCategories> => {
+    const { user, supabase } = context
+
+    const firstPage = await fetchCategoriesPage(
+      supabase,
+      user.id,
+      filters,
+      filters.page,
+    )
+    const totalPages =
+      firstPage.total === 0
+        ? 0
+        : Math.ceil(firstPage.total / CATEGORIES_PAGE_SIZE)
+
+    if (totalPages === 0) {
+      return {
+        data: [],
+        page: 1,
+        pageSize: CATEGORIES_PAGE_SIZE,
+        total: 0,
+        totalPages: 0,
+      }
     }
 
-    return categorySearchSchema.parse(input)
-  })
-  .handler(
-    async ({
-      context,
-      data: filters,
-    }): Promise<CategoryListItem[] | PaginatedCategories> => {
-      const { user, supabase } = context
+    const clampedPage = Math.min(filters.page, totalPages)
 
-      if (!filters) {
-        const { data, error } = await supabase
-          .from('categories')
-          .select('id, name, color')
-          .eq('user_id', user.id)
-          .order('name', { ascending: true })
-
-        if (error) {
-          throw new Error('Nije moguće učitati kategorije.')
-        }
-
-        return data
-      }
-
-      const firstPage = await fetchCategoriesPage(
+    if (clampedPage !== filters.page) {
+      const clamped = await fetchCategoriesPage(
         supabase,
         user.id,
         filters,
-        filters.page,
+        clampedPage,
       )
-      const totalPages =
-        firstPage.total === 0
-          ? 0
-          : Math.ceil(firstPage.total / CATEGORIES_PAGE_SIZE)
-
-      if (totalPages === 0) {
-        return {
-          data: [],
-          page: 1,
-          pageSize: CATEGORIES_PAGE_SIZE,
-          total: 0,
-          totalPages: 0,
-        }
-      }
-
-      const clampedPage = Math.min(filters.page, totalPages)
-
-      if (clampedPage !== filters.page) {
-        const clamped = await fetchCategoriesPage(
-          supabase,
-          user.id,
-          filters,
-          clampedPage,
-        )
-
-        return {
-          data: clamped.rows,
-          page: clampedPage,
-          pageSize: CATEGORIES_PAGE_SIZE,
-          total: clamped.total,
-          totalPages,
-        }
-      }
 
       return {
-        data: firstPage.rows,
-        page: filters.page,
+        data: clamped.rows,
+        page: clampedPage,
         pageSize: CATEGORIES_PAGE_SIZE,
-        total: firstPage.total,
+        total: clamped.total,
         totalPages,
       }
-    },
-  )
+    }
+
+    return {
+      data: firstPage.rows,
+      page: filters.page,
+      pageSize: CATEGORIES_PAGE_SIZE,
+      total: firstPage.total,
+      totalPages,
+    }
+  })

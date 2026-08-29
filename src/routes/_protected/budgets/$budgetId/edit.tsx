@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BudgetForm } from '@/features/budgets/components/form/budget-form'
 import { BudgetFormCardSkeleton } from '@/features/budgets/components/form/budget-form-card'
 import { budgetQuery } from '@/features/budgets/queries/budgets.query'
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 import { getRouteError } from '@/lib/route-errors'
 
 export const Route = createFileRoute('/_protected/budgets/$budgetId/edit')({
@@ -23,7 +23,7 @@ export const Route = createFileRoute('/_protected/budgets/$budgetId/edit')({
   loader: async ({ context, params }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(budgetQuery(params.budgetId)),
-      context.queryClient.ensureQueryData(categoriesQuery()),
+      context.queryClient.ensureQueryData(categoryOptionsQuery()),
     ])
   },
   pendingComponent: EditBudgetPending,

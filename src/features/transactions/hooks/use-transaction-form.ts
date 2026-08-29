@@ -5,7 +5,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
 
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 import {
   TRANSACTION_FORM_COPY,
   getCreateDefaultValues,
@@ -40,7 +40,7 @@ export function useTransactionForm({
   const queryClient = useQueryClient()
   const createTransactionFn = useServerFn(createTransaction)
   const updateTransactionFn = useServerFn(updateTransaction)
-  const { data: categories = [] } = useQuery(categoriesQuery())
+  const { data: categories = [] } = useQuery(categoryOptionsQuery())
   const categoryItems = useMemo(
     () =>
       Object.fromEntries(
@@ -77,6 +77,7 @@ export function useTransactionForm({
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['transactions'] }),
         queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+        queryClient.invalidateQueries({ queryKey: ['budgets'] }),
       ])
       await navigate({
         to: '/transactions',

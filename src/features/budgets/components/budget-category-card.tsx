@@ -60,6 +60,7 @@ export function BudgetCategoryCard({ budget }: BudgetCategoryCardProps) {
         <CardContent className="space-y-4">
           <Progress
             value={progressValue}
+            aria-label={`${budget.categoryName}: ${percentageLabel}% iskorišteno`}
             className={cn(
               'gap-0',
               isOverBudget

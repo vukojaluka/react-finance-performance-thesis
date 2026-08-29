@@ -23,7 +23,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { categoriesQuery } from '@/features/categories/queries/categories.query'
+import { categoryOptionsQuery } from '@/features/categories/queries/categories.query'
 import { hasActiveTransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
 import type { TransactionFilters } from '@/features/transactions/schemas/transaction-search.schema'
 import { cn } from '@/lib/utils'
@@ -48,7 +48,7 @@ const SORT_DIRECTION_ITEMS = {
 export function TransactionsFilters() {
   const search = useSearch({ from: '/_protected/transactions/' })
   const navigate = useNavigate({ from: '/transactions' })
-  const { data: categories = [] } = useQuery(categoriesQuery())
+  const { data: categories = [] } = useQuery(categoryOptionsQuery())
 
   const categoryItems = {
     all: 'Sve',

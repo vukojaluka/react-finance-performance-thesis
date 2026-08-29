@@ -25,6 +25,7 @@ export function useDeleteTransaction() {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['transactions'] }),
         queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+        queryClient.invalidateQueries({ queryKey: ['budgets'] }),
       ])
 
       const refreshed = await queryClient.fetchQuery(transactionsQuery(search))

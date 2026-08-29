@@ -86,7 +86,13 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    render={<Button variant="ghost" size="icon" />}
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Akcije kategorije"
+                      />
+                    }
                   >
                     <MoreHorizontalIcon className="size-4" />
                   </DropdownMenuTrigger>
