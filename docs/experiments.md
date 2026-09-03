@@ -98,11 +98,32 @@ Location:
 
 `src/experiments/experiment-001`
 
-Artificial delays:
+The isolated route selects its strategy from the URL:
 
-- Dashboard Summary — 1000ms
-- Expense Chart — 2500ms
-- Recent Transactions — 3500ms
+- `/experiments/experiment-001?variant=v1`
+- `/experiments/experiment-001?variant=v2`
+- `/experiments/experiment-001?variant=v3`
+- `/experiments/experiment-001?variant=v3b`
+
+Canonical thesis labels: **V1 / V2 / V3 / V3B**. Missing or invalid `variant` values deterministically select **V1**. The visible page label (`Active variant`) is the parsed variant.
+
+This route is a public, unauthenticated child of the root route. It does **not** use the protected layout or Supabase. The production Dashboard at `/dashboard` is a separate surface: it implements the **V3B Early Prefetch** pattern with live `['dashboard', …]` queries (including `['dashboard', 'monthly-trend']`) and is **not** the Experiment 001 measurement target.
+
+Artificial delays (fixed `setTimeout`, no jitter; identical for V1/V2/V3/V3B; not varied by device profile):
+
+- Dashboard Summary — 1000ms — `getDashboardSummary`
+- Expense Chart — 2500ms — `getExpenseChart` (visible card title: **Monthly Trend**)
+- Budgets — 3000ms — `getExperimentBudgets`
+- Recent Transactions — 3500ms — `getRecentTransactions`
+
+Canonical query keys:
+
+- Summary: `['experiment-001', 'dashboard-summary']` — `DashboardSummaryWidget`
+- Chart: `['experiment-001', 'expense-chart']` — `ExpenseChartWidget`
+- Transactions: `['experiment-001', 'recent-transactions']` — `RecentTransactionsWidget`
+- Budgets: `['experiment-001', 'budgets']` — `BudgetsWidget`
+
+Do not use the stale experiment key `monthly-trend`. That name remains only on the production Dashboard query `['dashboard', 'monthly-trend']`.
 
 All queries use:
 
@@ -121,6 +142,7 @@ await Promise.all([
   ensureQueryData(summary),
   ensureQueryData(chart),
   ensureQueryData(transactions),
+  ensureQueryData(budgets),
 ])
 ```
 
@@ -138,7 +160,7 @@ Characteristics:
 await ensureQueryData(summary)
 ```
 
-Chart and Transactions start only when rendered through `useSuspenseQuery()`.
+Chart, Transactions and Budgets start only when rendered through `useSuspenseQuery()`.
 
 Characteristics:
 
@@ -148,13 +170,14 @@ Characteristics:
 
 ---
 
-### Version 3 (Discarded) — Late Prefetch
+### Version 3 — Late Prefetch (not selected for production)
 
 ```ts
 await ensureQueryData(summary)
 
 void prefetchQuery(chart)
 void prefetchQuery(transactions)
+void prefetchQuery(budgets)
 ```
 
 Characteristics:
@@ -162,21 +185,22 @@ Characteristics:
 - non-blocking prefetch
 - however query execution still begins after the critical query finishes
 
-Measured result:
+Measured result (exploratory development observation, not a formal thesis measurement):
 
 No meaningful improvement compared to Version 2.
 
 Note:
 
-This intermediate implementation was evaluated during the experiment but was not selected for the final application architecture because it produced no measurable improvement over Version 2.
+This intermediate implementation was evaluated during exploratory development but was not selected for the final application architecture because it produced no measurable improvement over Version 2. It remains available on the isolated experiment route for the formal comparison.
 
 ---
 
-### Version 3 — Early Prefetch
+### Version 3B — Early Prefetch
 
 ```ts
 void prefetchQuery(chart)
 void prefetchQuery(transactions)
+void prefetchQuery(budgets)
 
 await ensureQueryData(summary)
 ```
@@ -187,7 +211,7 @@ Characteristics:
 - only critical query blocks SSR
 - non-critical queries execute in parallel while critical content loads
 
-Measured result:
+Measured result (exploratory development observation, not a formal thesis measurement):
 
 Approximately one second faster total page completion under identical artificial latency.
 
@@ -195,7 +219,19 @@ Approximately one second faster total page completion under identical artificial
 
 ## Measurements
 
-Collected:
+The values in this document are historical exploratory observations, not formal thesis results. Formal collection follows [`experiment-001-measurement-protocol.md`](./experiment-001-measurement-protocol.md) and is recorded in [`experiment-001-results-template.md`](./experiment-001-results-template.md). Formal measurements have **not** started.
+
+Formal protocol (summary only — the protocol document is authoritative):
+
+- Primary evidence: Lighthouse (n=10 per variant per profile) and Network (n=10), including User Timing milestones from Network samples
+- Diagnostic evidence: Performance (n=3) and React DevTools Profiler (n=3, profiling build only)
+- Device profiles: Lighthouse Mobile (M) and Lighthouse Desktop (D)
+- Cold client caches; warm preview process; no warm-cache cohort
+- INP is N/A (load-only); TTI is informational only
+- Variant order: Latin square S1 V1→V2→V3→V3B, S2 V2→V3→V3B→V1, S3 V3→V3B→V1→V2, S4 V3B→V1→V2→V3
+- Each tool’s samples are independent navigations (Lighthouse `M-LH-V1-01` is not the same page load as Network `M-NW-V1-01`)
+
+Exploratory collection during development included:
 
 - Server Function execution count
 - Server Function execution order
@@ -209,13 +245,15 @@ Collected:
 
 ## Results
 
-| Strategy | Initial Content | Total Completion | Notes |
-|----------|----------------|-----------------|-------|
-| Version 1 | Slow | ~3.5s | Blocking SSR |
-| Version 2 | Fast | ~4.5s | Progressive rendering |
-| Version 3 | Fast | ~3.5s | Early Prefetch |
+The table below is **exploratory** (development-time). Do not copy these values into the formal results template.
 
-An additional Late Prefetch strategy was evaluated during the experiment but was excluded from the final architecture because it behaved identically to Version 2.
+| Strategy   | Initial Content | Total Completion | Notes                 |
+| ---------- | --------------- | ---------------- | --------------------- |
+| Version 1  | Slow            | ~3.5s            | Blocking SSR          |
+| Version 2  | Fast            | ~4.5s            | Progressive rendering |
+| Version 3B | Fast            | ~3.5s            | Early Prefetch        |
+
+An additional Late Prefetch strategy (V3) was evaluated during the experiment but was excluded from the final architecture because it behaved identically to Version 2 in these exploratory observations. V3 remains available on the isolated experiment route for the formal V3 vs V3B comparison.
 
 ---
 
@@ -231,13 +269,13 @@ The final Early Prefetch strategy produced the best overall result.
 
 Starting independent non-critical queries before awaiting the critical query reduced total loading time by approximately one second while preserving progressive rendering and avoiding duplicate Server Function executions.
 
-This rendering strategy was selected for the final application architecture.
+This rendering strategy was selected for the production Dashboard (`/dashboard`). Formal confirmation uses the isolated experiment route and the measurement protocol, not these exploratory timings.
 
 ---
 
 ## Status
 
-Completed
+Exploratory implementation completed; prerequisites P1–P9 implemented; formal measurements not started. Independent preflight is the next step before the formal benchmark.
 
 ---
 

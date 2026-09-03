@@ -117,9 +117,9 @@ export const getMonthlyTrend = createServerFn({ method: 'GET' })
       .lte('transaction_date', dateRange.end)
 
     if (error) {
+      console.log('[dashboard][getMonthlyTrend] Error:', error)
       throw new Error('Nije moguće učitati mjesečni trend.')
     }
 
     return aggregateMonthlyTrend(data, monthKeys)
-  },
-)
+  })
