@@ -15,3 +15,5 @@ todos.json
 
 # Local Netlify folder
 .netlify
+docs/measurements/experiment-001/lighthouse/*.html
+docs/measurements/experiment-001/raw/measure.log

@@ -1,0 +1,2136 @@
+{
+  "meta": {
+    "commit": "643de69",
+    "startedAt": "2026-09-24T06:12:00.126Z",
+    "chromePath": "/usr/local/bin/google-chrome",
+    "baseUrl": "http://127.0.0.1:3000/experiments/experiment-001",
+    "lhRuns": 3,
+    "nwRuns": 3,
+    "note": "Automated cloud-agent session. Sample size reduced vs protocol n=10; methodology otherwise follows experiment-001-measurement-protocol.md.",
+    "finishedAt": "2026-09-24T06:18:32.404Z"
+  },
+  "lighthouse": {
+    "samples": [
+      {
+        "id": "M-LH-V1-01",
+        "profile": "M",
+        "variant": "V1",
+        "score": 79,
+        "fcp": 3381,
+        "lcp": 3381,
+        "lcpElement": "3,380 ms",
+        "cls": 0,
+        "si": 6880,
+        "tbt": 58,
+        "tti": 4375,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V1-01.json"
+      },
+      {
+        "id": "M-LH-V1-02",
+        "profile": "M",
+        "variant": "V1",
+        "score": 78,
+        "fcp": 3481,
+        "lcp": 3481,
+        "lcpElement": "3,480 ms",
+        "cls": 0,
+        "si": 6887,
+        "tbt": 38,
+        "tti": 4467,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V1-02.json"
+      },
+      {
+        "id": "M-LH-V1-03",
+        "profile": "M",
+        "variant": "V1",
+        "score": 78,
+        "fcp": 3485,
+        "lcp": 3485,
+        "lcpElement": "3,490 ms",
+        "cls": 0,
+        "si": 6870,
+        "tbt": 32,
+        "tti": 4467,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V1-03.json"
+      },
+      {
+        "id": "M-LH-V2-01",
+        "profile": "M",
+        "variant": "V2",
+        "score": 84,
+        "fcp": 3155,
+        "lcp": 3155,
+        "lcpElement": "3,150 ms",
+        "cls": 0,
+        "si": 5162,
+        "tbt": 38,
+        "tti": 4300,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V2-01.json"
+      },
+      {
+        "id": "M-LH-V2-02",
+        "profile": "M",
+        "variant": "V2",
+        "score": 81,
+        "fcp": 3464,
+        "lcp": 3464,
+        "lcpElement": "3,460 ms",
+        "cls": 0,
+        "si": 5215,
+        "tbt": 41,
+        "tti": 4305,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V2-02.json"
+      },
+      {
+        "id": "M-LH-V2-03",
+        "profile": "M",
+        "variant": "V2",
+        "score": 90,
+        "fcp": 2555,
+        "lcp": 2555,
+        "lcpElement": "2,560 ms",
+        "cls": 0,
+        "si": 5005,
+        "tbt": 20,
+        "tti": 4048,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V2-03.json"
+      },
+      {
+        "id": "M-LH-V3-01",
+        "profile": "M",
+        "variant": "V3",
+        "score": 84,
+        "fcp": 3156,
+        "lcp": 3156,
+        "lcpElement": "3,160 ms",
+        "cls": 0,
+        "si": 5159,
+        "tbt": 39,
+        "tti": 4303,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V3-01.json"
+      },
+      {
+        "id": "M-LH-V3-02",
+        "profile": "M",
+        "variant": "V3",
+        "score": 88,
+        "fcp": 2708,
+        "lcp": 2708,
+        "lcpElement": "2,710 ms",
+        "cls": 0,
+        "si": 5066,
+        "tbt": 19,
+        "tti": 4201,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V3-02.json"
+      },
+      {
+        "id": "M-LH-V3-03",
+        "profile": "M",
+        "variant": "V3",
+        "score": 89,
+        "fcp": 2557,
+        "lcp": 2557,
+        "lcpElement": "2,560 ms",
+        "cls": 0,
+        "si": 5100,
+        "tbt": 94,
+        "tti": 4352,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V3-03.json"
+      },
+      {
+        "id": "M-LH-V3B-01",
+        "profile": "M",
+        "variant": "V3B",
+        "score": 85,
+        "fcp": 3156,
+        "lcp": 3156,
+        "lcpElement": "3,160 ms",
+        "cls": 0,
+        "si": 4353,
+        "tbt": 56,
+        "tti": 4321,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V3B-01.json"
+      },
+      {
+        "id": "M-LH-V3B-02",
+        "profile": "M",
+        "variant": "V3B",
+        "score": 82,
+        "fcp": 3463,
+        "lcp": 3463,
+        "lcpElement": "3,460 ms",
+        "cls": 0,
+        "si": 4403,
+        "tbt": 16,
+        "tti": 4194,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V3B-02.json"
+      },
+      {
+        "id": "M-LH-V3B-03",
+        "profile": "M",
+        "variant": "V3B",
+        "score": 87,
+        "fcp": 3006,
+        "lcp": 3006,
+        "lcpElement": "3,010 ms",
+        "cls": 0,
+        "si": 4330,
+        "tbt": 35,
+        "tti": 4298,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/M-LH-V3B-03.json"
+      },
+      {
+        "id": "D-LH-V1-01",
+        "profile": "D",
+        "variant": "V1",
+        "score": 93,
+        "fcp": 792,
+        "lcp": 832,
+        "lcpElement": "830 ms",
+        "cls": 0.022,
+        "si": 2602,
+        "tbt": 0,
+        "tti": 832,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V1-01.json"
+      },
+      {
+        "id": "D-LH-V1-02",
+        "profile": "D",
+        "variant": "V1",
+        "score": 93,
+        "fcp": 746,
+        "lcp": 746,
+        "lcpElement": "750 ms",
+        "cls": 0.022,
+        "si": 2576,
+        "tbt": 0,
+        "tti": 746,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V1-02.json"
+      },
+      {
+        "id": "D-LH-V1-03",
+        "profile": "D",
+        "variant": "V1",
+        "score": 93,
+        "fcp": 766,
+        "lcp": 766,
+        "lcpElement": "770 ms",
+        "cls": 0.022,
+        "si": 2594,
+        "tbt": 0,
+        "tti": 766,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V1-03.json"
+      },
+      {
+        "id": "D-LH-V2-01",
+        "profile": "D",
+        "variant": "V2",
+        "score": 94,
+        "fcp": 772,
+        "lcp": 772,
+        "lcpElement": "770 ms",
+        "cls": 0.012,
+        "si": 2290,
+        "tbt": 0,
+        "tti": 772,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V2-01.json"
+      },
+      {
+        "id": "D-LH-V2-02",
+        "profile": "D",
+        "variant": "V2",
+        "score": 94,
+        "fcp": 774,
+        "lcp": 774,
+        "lcpElement": "770 ms",
+        "cls": 0.013,
+        "si": 2293,
+        "tbt": 0,
+        "tti": 774,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V2-02.json"
+      },
+      {
+        "id": "D-LH-V2-03",
+        "profile": "D",
+        "variant": "V2",
+        "score": 94,
+        "fcp": 728,
+        "lcp": 728,
+        "lcpElement": "730 ms",
+        "cls": 0.012,
+        "si": 2281,
+        "tbt": 0,
+        "tti": 728,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V2-03.json"
+      },
+      {
+        "id": "D-LH-V3-01",
+        "profile": "D",
+        "variant": "V3",
+        "score": 94,
+        "fcp": 793,
+        "lcp": 813,
+        "lcpElement": "810 ms",
+        "cls": 0.013,
+        "si": 2315,
+        "tbt": 0,
+        "tti": 813,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V3-01.json"
+      },
+      {
+        "id": "D-LH-V3-02",
+        "profile": "D",
+        "variant": "V3",
+        "score": 94,
+        "fcp": 773,
+        "lcp": 773,
+        "lcpElement": "770 ms",
+        "cls": 0.013,
+        "si": 2291,
+        "tbt": 0,
+        "tti": 773,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V3-02.json"
+      },
+      {
+        "id": "D-LH-V3-03",
+        "profile": "D",
+        "variant": "V3",
+        "score": 94,
+        "fcp": 795,
+        "lcp": 815,
+        "lcpElement": "820 ms",
+        "cls": 0.013,
+        "si": 2305,
+        "tbt": 0,
+        "tti": 815,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V3-03.json"
+      },
+      {
+        "id": "D-LH-V3B-01",
+        "profile": "D",
+        "variant": "V3B",
+        "score": 95,
+        "fcp": 830,
+        "lcp": 890,
+        "lcpElement": "890 ms",
+        "cls": 0.012,
+        "si": 1900,
+        "tbt": 0,
+        "tti": 890,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V3B-01.json"
+      },
+      {
+        "id": "D-LH-V3B-02",
+        "profile": "D",
+        "variant": "V3B",
+        "score": 95,
+        "fcp": 833,
+        "lcp": 893,
+        "lcpElement": "890 ms",
+        "cls": 0.013,
+        "si": 1885,
+        "tbt": 0,
+        "tti": 893,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V3B-02.json"
+      },
+      {
+        "id": "D-LH-V3B-03",
+        "profile": "D",
+        "variant": "V3B",
+        "score": 95,
+        "fcp": 798,
+        "lcp": 858,
+        "lcpElement": "860 ms",
+        "cls": 0.012,
+        "si": 1885,
+        "tbt": 0,
+        "tti": 858,
+        "artifactPath": "docs/measurements/experiment-001/lighthouse/D-LH-V3B-03.json"
+      }
+    ],
+    "summary": {
+      "M-V1": {
+        "score": {
+          "n": 3,
+          "mean": 78,
+          "median": 78,
+          "values": [
+            79,
+            78,
+            78
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 3449,
+          "median": 3481,
+          "values": [
+            3381,
+            3481,
+            3485
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 3449,
+          "median": 3481,
+          "values": [
+            3381,
+            3481,
+            3485
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 6879,
+          "median": 6880,
+          "values": [
+            6880,
+            6887,
+            6870
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 43,
+          "median": 38,
+          "values": [
+            58,
+            38,
+            32
+          ]
+        }
+      },
+      "M-V2": {
+        "score": {
+          "n": 3,
+          "mean": 85,
+          "median": 84,
+          "values": [
+            84,
+            81,
+            90
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 3058,
+          "median": 3155,
+          "values": [
+            3155,
+            3464,
+            2555
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 3058,
+          "median": 3155,
+          "values": [
+            3155,
+            3464,
+            2555
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 5127,
+          "median": 5162,
+          "values": [
+            5162,
+            5215,
+            5005
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 33,
+          "median": 38,
+          "values": [
+            38,
+            41,
+            20
+          ]
+        }
+      },
+      "M-V3": {
+        "score": {
+          "n": 3,
+          "mean": 87,
+          "median": 88,
+          "values": [
+            84,
+            88,
+            89
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 2807,
+          "median": 2708,
+          "values": [
+            3156,
+            2708,
+            2557
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 2807,
+          "median": 2708,
+          "values": [
+            3156,
+            2708,
+            2557
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 5108,
+          "median": 5100,
+          "values": [
+            5159,
+            5066,
+            5100
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 51,
+          "median": 39,
+          "values": [
+            39,
+            19,
+            94
+          ]
+        }
+      },
+      "M-V3B": {
+        "score": {
+          "n": 3,
+          "mean": 85,
+          "median": 85,
+          "values": [
+            85,
+            82,
+            87
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 3208,
+          "median": 3156,
+          "values": [
+            3156,
+            3463,
+            3006
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 3208,
+          "median": 3156,
+          "values": [
+            3156,
+            3463,
+            3006
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 4362,
+          "median": 4353,
+          "values": [
+            4353,
+            4403,
+            4330
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 36,
+          "median": 35,
+          "values": [
+            56,
+            16,
+            35
+          ]
+        }
+      },
+      "D-V1": {
+        "score": {
+          "n": 3,
+          "mean": 93,
+          "median": 93,
+          "values": [
+            93,
+            93,
+            93
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 768,
+          "median": 766,
+          "values": [
+            792,
+            746,
+            766
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 781,
+          "median": 766,
+          "values": [
+            832,
+            746,
+            766
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0.022,
+            0.022,
+            0.022
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 2591,
+          "median": 2594,
+          "values": [
+            2602,
+            2576,
+            2594
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V2": {
+        "score": {
+          "n": 3,
+          "mean": 94,
+          "median": 94,
+          "values": [
+            94,
+            94,
+            94
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 758,
+          "median": 772,
+          "values": [
+            772,
+            774,
+            728
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 758,
+          "median": 772,
+          "values": [
+            772,
+            774,
+            728
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0.012,
+            0.013,
+            0.012
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 2288,
+          "median": 2290,
+          "values": [
+            2290,
+            2293,
+            2281
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V3": {
+        "score": {
+          "n": 3,
+          "mean": 94,
+          "median": 94,
+          "values": [
+            94,
+            94,
+            94
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 787,
+          "median": 793,
+          "values": [
+            793,
+            773,
+            795
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 800,
+          "median": 813,
+          "values": [
+            813,
+            773,
+            815
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0.013,
+            0.013,
+            0.013
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 2304,
+          "median": 2305,
+          "values": [
+            2315,
+            2291,
+            2305
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V3B": {
+        "score": {
+          "n": 3,
+          "mean": 95,
+          "median": 95,
+          "values": [
+            95,
+            95,
+            95
+          ]
+        },
+        "fcp": {
+          "n": 3,
+          "mean": 820,
+          "median": 830,
+          "values": [
+            830,
+            833,
+            798
+          ]
+        },
+        "lcp": {
+          "n": 3,
+          "mean": 880,
+          "median": 890,
+          "values": [
+            890,
+            893,
+            858
+          ]
+        },
+        "cls": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0.012,
+            0.013,
+            0.012
+          ]
+        },
+        "si": {
+          "n": 3,
+          "mean": 1890,
+          "median": 1885,
+          "values": [
+            1900,
+            1885,
+            1885
+          ]
+        },
+        "tbt": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "network": {
+    "samples": [
+      {
+        "id": "M-NW-V1-01",
+        "profile": "M",
+        "variant": "V1",
+        "wallMs": 6648,
+        "requestCount": 53,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 6180,
+          "B": 6180,
+          "C": 6342,
+          "D": 6180,
+          "E": 6180,
+          "F": 6342
+        },
+        "navigation": {
+          "responseStart": 3509.1999999999534,
+          "responseEnd": 3603.29999999993,
+          "domContentLoaded": 4056.5999999999767,
+          "loadEventEnd": 6052.29999999993
+        },
+        "displayedVariant": "v1",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V1-02",
+        "profile": "M",
+        "variant": "V1",
+        "wallMs": 6648,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 6182,
+          "B": 6182,
+          "C": 6341,
+          "D": 6182,
+          "E": 6182,
+          "F": 6341
+        },
+        "navigation": {
+          "responseStart": 3508.5999999999767,
+          "responseEnd": 3605.399999999907,
+          "domContentLoaded": 4036.399999999907,
+          "loadEventEnd": 6056.599999999977
+        },
+        "displayedVariant": "v1",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V1-03",
+        "profile": "M",
+        "variant": "V1",
+        "wallMs": 6638,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 6174,
+          "B": 6174,
+          "C": 6329,
+          "D": 6174,
+          "E": 6174,
+          "F": 6330
+        },
+        "navigation": {
+          "responseStart": 3508.3000000000466,
+          "responseEnd": 3604.9000000000233,
+          "domContentLoaded": 4018.20000000007,
+          "loadEventEnd": 6048
+        },
+        "displayedVariant": "v1",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V2-01",
+        "profile": "M",
+        "variant": "V2",
+        "wallMs": 7692,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 7212,
+          "B": 7212,
+          "C": 7380,
+          "D": 7212,
+          "E": 7212,
+          "F": 7380
+        },
+        "navigation": {
+          "responseStart": 4509.79999999993,
+          "responseEnd": 4607.699999999953,
+          "domContentLoaded": 5053.099999999977,
+          "loadEventEnd": 7079.5
+        },
+        "displayedVariant": "v2",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V2-02",
+        "profile": "M",
+        "variant": "V2",
+        "wallMs": 7690,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 7213,
+          "B": 7213,
+          "C": 7383,
+          "D": 7213,
+          "E": 7213,
+          "F": 7383
+        },
+        "navigation": {
+          "responseStart": 4510.599999999977,
+          "responseEnd": 4611.900000000023,
+          "domContentLoaded": 5044.199999999953,
+          "loadEventEnd": 7083.599999999977
+        },
+        "displayedVariant": "v2",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V2-03",
+        "profile": "M",
+        "variant": "V2",
+        "wallMs": 7652,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 7162,
+          "B": 7162,
+          "C": 7346,
+          "D": 7162,
+          "E": 7162,
+          "F": 7346
+        },
+        "navigation": {
+          "responseStart": 4510.20000000007,
+          "responseEnd": 4607.800000000047,
+          "domContentLoaded": 5054.70000000007,
+          "loadEventEnd": 7034
+        },
+        "displayedVariant": "v2",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V3-01",
+        "profile": "M",
+        "variant": "V3",
+        "wallMs": 7707,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 7236,
+          "B": 7237,
+          "C": 7399,
+          "D": 7237,
+          "E": 7237,
+          "F": 7400
+        },
+        "navigation": {
+          "responseStart": 4510.400000000023,
+          "responseEnd": 4611.5,
+          "domContentLoaded": 5045.900000000023,
+          "loadEventEnd": 7104.5
+        },
+        "displayedVariant": "v3",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V3-02",
+        "profile": "M",
+        "variant": "V3",
+        "wallMs": 7691,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 7213,
+          "B": 7213,
+          "C": 7380,
+          "D": 7213,
+          "E": 7213,
+          "F": 7380
+        },
+        "navigation": {
+          "responseStart": 4510,
+          "responseEnd": 4610.099999999977,
+          "domContentLoaded": 5047.199999999953,
+          "loadEventEnd": 7082.800000000047
+        },
+        "displayedVariant": "v3",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V3-03",
+        "profile": "M",
+        "variant": "V3",
+        "wallMs": 7683,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 7207,
+          "B": 7207,
+          "C": 7372,
+          "D": 7207,
+          "E": 7207,
+          "F": 7372
+        },
+        "navigation": {
+          "responseStart": 4509.79999999993,
+          "responseEnd": 4607.399999999907,
+          "domContentLoaded": 5046.899999999907,
+          "loadEventEnd": 7076.29999999993
+        },
+        "displayedVariant": "v3",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V3B-01",
+        "profile": "M",
+        "variant": "V3B",
+        "wallMs": 6667,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 6199,
+          "B": 6199,
+          "C": 6360,
+          "D": 6199,
+          "E": 6199,
+          "F": 6360
+        },
+        "navigation": {
+          "responseStart": 3508.0999999999767,
+          "responseEnd": 3607.5,
+          "domContentLoaded": 4039.79999999993,
+          "loadEventEnd": 6071.79999999993
+        },
+        "displayedVariant": "v3b",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V3B-02",
+        "profile": "M",
+        "variant": "V3B",
+        "wallMs": 6667,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 6195,
+          "B": 6195,
+          "C": 6360,
+          "D": 6195,
+          "E": 6195,
+          "F": 6360
+        },
+        "navigation": {
+          "responseStart": 3506.79999999993,
+          "responseEnd": 3604.399999999907,
+          "domContentLoaded": 4045,
+          "loadEventEnd": 6065.599999999977
+        },
+        "displayedVariant": "v3b",
+        "complete": "true"
+      },
+      {
+        "id": "M-NW-V3B-03",
+        "profile": "M",
+        "variant": "V3B",
+        "wallMs": 6629,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 6158,
+          "B": 6158,
+          "C": 6321,
+          "D": 6158,
+          "E": 6158,
+          "F": 6321
+        },
+        "navigation": {
+          "responseStart": 3506,
+          "responseEnd": 3601.9000000000233,
+          "domContentLoaded": 4029.4000000000233,
+          "loadEventEnd": 6027.599999999977
+        },
+        "displayedVariant": "v3b",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V1-01",
+        "profile": "D",
+        "variant": "V1",
+        "wallMs": 4417,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 4072,
+          "B": 4072,
+          "C": 4114,
+          "D": 4072,
+          "E": 4072,
+          "F": 4114
+        },
+        "navigation": {
+          "responseStart": 3509.29999999993,
+          "responseEnd": 3527.29999999993,
+          "domContentLoaded": 3631.29999999993,
+          "loadEventEnd": 4042.0999999999767
+        },
+        "displayedVariant": "v1",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V1-02",
+        "profile": "D",
+        "variant": "V1",
+        "wallMs": 4413,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 4071,
+          "B": 4071,
+          "C": 4109,
+          "D": 4071,
+          "E": 4071,
+          "F": 4109
+        },
+        "navigation": {
+          "responseStart": 3509.0999999999767,
+          "responseEnd": 3526,
+          "domContentLoaded": 3624.399999999907,
+          "loadEventEnd": 4041.5
+        },
+        "displayedVariant": "v1",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V1-03",
+        "profile": "D",
+        "variant": "V1",
+        "wallMs": 4420,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 4077,
+          "B": 4077,
+          "C": 4117,
+          "D": 4077,
+          "E": 4077,
+          "F": 4117
+        },
+        "navigation": {
+          "responseStart": 3509.9000000000233,
+          "responseEnd": 3528.5,
+          "domContentLoaded": 3620.70000000007,
+          "loadEventEnd": 4046.3000000000466
+        },
+        "displayedVariant": "v1",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V2-01",
+        "profile": "D",
+        "variant": "V2",
+        "wallMs": 5411,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 5067,
+          "B": 5067,
+          "C": 5107,
+          "D": 5067,
+          "E": 5067,
+          "F": 5107
+        },
+        "navigation": {
+          "responseStart": 4510.5,
+          "responseEnd": 4529.399999999907,
+          "domContentLoaded": 4622.79999999993,
+          "loadEventEnd": 5037.099999999977
+        },
+        "displayedVariant": "v2",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V2-02",
+        "profile": "D",
+        "variant": "V2",
+        "wallMs": 5418,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 5076,
+          "B": 5076,
+          "C": 5114,
+          "D": 5076,
+          "E": 5076,
+          "F": 5114
+        },
+        "navigation": {
+          "responseStart": 4509.900000000023,
+          "responseEnd": 4527.300000000047,
+          "domContentLoaded": 4620.599999999977,
+          "loadEventEnd": 5046.099999999977
+        },
+        "displayedVariant": "v2",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V2-03",
+        "profile": "D",
+        "variant": "V2",
+        "wallMs": 5421,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 5079,
+          "B": 5079,
+          "C": 5118,
+          "D": 5079,
+          "E": 5079,
+          "F": 5118
+        },
+        "navigation": {
+          "responseStart": 4509.20000000007,
+          "responseEnd": 4525.70000000007,
+          "domContentLoaded": 4616.70000000007,
+          "loadEventEnd": 5047.900000000023
+        },
+        "displayedVariant": "v2",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V3-01",
+        "profile": "D",
+        "variant": "V3",
+        "wallMs": 5421,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 5076,
+          "B": 5076,
+          "C": 5117,
+          "D": 5076,
+          "E": 5076,
+          "F": 5117
+        },
+        "navigation": {
+          "responseStart": 4509.899999999907,
+          "responseEnd": 4527.799999999814,
+          "domContentLoaded": 4622.399999999907,
+          "loadEventEnd": 5045.09999999986
+        },
+        "displayedVariant": "v3",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V3-02",
+        "profile": "D",
+        "variant": "V3",
+        "wallMs": 5416,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 5075,
+          "B": 5075,
+          "C": 5113,
+          "D": 5075,
+          "E": 5075,
+          "F": 5113
+        },
+        "navigation": {
+          "responseStart": 4510.40000000014,
+          "responseEnd": 4528.5,
+          "domContentLoaded": 4616.300000000047,
+          "loadEventEnd": 5044.199999999953
+        },
+        "displayedVariant": "v3",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V3-03",
+        "profile": "D",
+        "variant": "V3",
+        "wallMs": 5416,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 5075,
+          "B": 5075,
+          "C": 5113,
+          "D": 5075,
+          "E": 5075,
+          "F": 5113
+        },
+        "navigation": {
+          "responseStart": 4508.199999999953,
+          "responseEnd": 4525.799999999814,
+          "domContentLoaded": 4623,
+          "loadEventEnd": 5044.699999999953
+        },
+        "displayedVariant": "v3",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V3B-01",
+        "profile": "D",
+        "variant": "V3B",
+        "wallMs": 4414,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 4071,
+          "B": 4071,
+          "C": 4109,
+          "D": 4071,
+          "E": 4071,
+          "F": 4109
+        },
+        "navigation": {
+          "responseStart": 3507.8000000000466,
+          "responseEnd": 3524.6999999999534,
+          "domContentLoaded": 3620.1999999999534,
+          "loadEventEnd": 4040
+        },
+        "displayedVariant": "v3b",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V3B-02",
+        "profile": "D",
+        "variant": "V3B",
+        "wallMs": 4406,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 4063,
+          "B": 4063,
+          "C": 4101,
+          "D": 4063,
+          "E": 4063,
+          "F": 4101
+        },
+        "navigation": {
+          "responseStart": 3505.5,
+          "responseEnd": 3521.399999999907,
+          "domContentLoaded": 3610.8000000000466,
+          "loadEventEnd": 4033.1999999999534
+        },
+        "displayedVariant": "v3b",
+        "complete": "true"
+      },
+      {
+        "id": "D-NW-V3B-03",
+        "profile": "D",
+        "variant": "V3B",
+        "wallMs": 4415,
+        "requestCount": 52,
+        "staticAssetCount": 51,
+        "serverFunctionRequestCount": 0,
+        "serverFunctionUrls": [],
+        "milestones": {
+          "A": 4072,
+          "B": 4072,
+          "C": 4110,
+          "D": 4072,
+          "E": 4072,
+          "F": 4110
+        },
+        "navigation": {
+          "responseStart": 3505.899999999907,
+          "responseEnd": 3524.5,
+          "domContentLoaded": 3616.0999999998603,
+          "loadEventEnd": 4041.5999999998603
+        },
+        "displayedVariant": "v3b",
+        "complete": "true"
+      }
+    ],
+    "summary": {
+      "M-V1": {
+        "A": {
+          "n": 3,
+          "mean": 6179,
+          "median": 6180,
+          "values": [
+            6180,
+            6182,
+            6174
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 6179,
+          "median": 6180,
+          "values": [
+            6180,
+            6182,
+            6174
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 6337,
+          "median": 6341,
+          "values": [
+            6342,
+            6341,
+            6329
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 6179,
+          "median": 6180,
+          "values": [
+            6180,
+            6182,
+            6174
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 6179,
+          "median": 6180,
+          "values": [
+            6180,
+            6182,
+            6174
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 6338,
+          "median": 6341,
+          "values": [
+            6342,
+            6341,
+            6330
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            53,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "M-V2": {
+        "A": {
+          "n": 3,
+          "mean": 7196,
+          "median": 7212,
+          "values": [
+            7212,
+            7213,
+            7162
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 7196,
+          "median": 7212,
+          "values": [
+            7212,
+            7213,
+            7162
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 7370,
+          "median": 7380,
+          "values": [
+            7380,
+            7383,
+            7346
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 7196,
+          "median": 7212,
+          "values": [
+            7212,
+            7213,
+            7162
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 7196,
+          "median": 7212,
+          "values": [
+            7212,
+            7213,
+            7162
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 7370,
+          "median": 7380,
+          "values": [
+            7380,
+            7383,
+            7346
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "M-V3": {
+        "A": {
+          "n": 3,
+          "mean": 7219,
+          "median": 7213,
+          "values": [
+            7236,
+            7213,
+            7207
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 7219,
+          "median": 7213,
+          "values": [
+            7237,
+            7213,
+            7207
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 7384,
+          "median": 7380,
+          "values": [
+            7399,
+            7380,
+            7372
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 7219,
+          "median": 7213,
+          "values": [
+            7237,
+            7213,
+            7207
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 7219,
+          "median": 7213,
+          "values": [
+            7237,
+            7213,
+            7207
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 7384,
+          "median": 7380,
+          "values": [
+            7400,
+            7380,
+            7372
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "M-V3B": {
+        "A": {
+          "n": 3,
+          "mean": 6184,
+          "median": 6195,
+          "values": [
+            6199,
+            6195,
+            6158
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 6184,
+          "median": 6195,
+          "values": [
+            6199,
+            6195,
+            6158
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 6347,
+          "median": 6360,
+          "values": [
+            6360,
+            6360,
+            6321
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 6184,
+          "median": 6195,
+          "values": [
+            6199,
+            6195,
+            6158
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 6184,
+          "median": 6195,
+          "values": [
+            6199,
+            6195,
+            6158
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 6347,
+          "median": 6360,
+          "values": [
+            6360,
+            6360,
+            6321
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V1": {
+        "A": {
+          "n": 3,
+          "mean": 4073,
+          "median": 4072,
+          "values": [
+            4072,
+            4071,
+            4077
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 4073,
+          "median": 4072,
+          "values": [
+            4072,
+            4071,
+            4077
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 4113,
+          "median": 4114,
+          "values": [
+            4114,
+            4109,
+            4117
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 4073,
+          "median": 4072,
+          "values": [
+            4072,
+            4071,
+            4077
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 4073,
+          "median": 4072,
+          "values": [
+            4072,
+            4071,
+            4077
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 4113,
+          "median": 4114,
+          "values": [
+            4114,
+            4109,
+            4117
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V2": {
+        "A": {
+          "n": 3,
+          "mean": 5074,
+          "median": 5076,
+          "values": [
+            5067,
+            5076,
+            5079
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 5074,
+          "median": 5076,
+          "values": [
+            5067,
+            5076,
+            5079
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 5113,
+          "median": 5114,
+          "values": [
+            5107,
+            5114,
+            5118
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 5074,
+          "median": 5076,
+          "values": [
+            5067,
+            5076,
+            5079
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 5074,
+          "median": 5076,
+          "values": [
+            5067,
+            5076,
+            5079
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 5113,
+          "median": 5114,
+          "values": [
+            5107,
+            5114,
+            5118
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V3": {
+        "A": {
+          "n": 3,
+          "mean": 5075,
+          "median": 5075,
+          "values": [
+            5076,
+            5075,
+            5075
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 5075,
+          "median": 5075,
+          "values": [
+            5076,
+            5075,
+            5075
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 5114,
+          "median": 5113,
+          "values": [
+            5117,
+            5113,
+            5113
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 5075,
+          "median": 5075,
+          "values": [
+            5076,
+            5075,
+            5075
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 5075,
+          "median": 5075,
+          "values": [
+            5076,
+            5075,
+            5075
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 5114,
+          "median": 5113,
+          "values": [
+            5117,
+            5113,
+            5113
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "D-V3B": {
+        "A": {
+          "n": 3,
+          "mean": 4069,
+          "median": 4071,
+          "values": [
+            4071,
+            4063,
+            4072
+          ]
+        },
+        "B": {
+          "n": 3,
+          "mean": 4069,
+          "median": 4071,
+          "values": [
+            4071,
+            4063,
+            4072
+          ]
+        },
+        "C": {
+          "n": 3,
+          "mean": 4107,
+          "median": 4109,
+          "values": [
+            4109,
+            4101,
+            4110
+          ]
+        },
+        "D": {
+          "n": 3,
+          "mean": 4069,
+          "median": 4071,
+          "values": [
+            4071,
+            4063,
+            4072
+          ]
+        },
+        "E": {
+          "n": 3,
+          "mean": 4069,
+          "median": 4071,
+          "values": [
+            4071,
+            4063,
+            4072
+          ]
+        },
+        "F": {
+          "n": 3,
+          "mean": 4107,
+          "median": 4109,
+          "values": [
+            4109,
+            4101,
+            4110
+          ]
+        },
+        "requestCount": {
+          "n": 3,
+          "mean": 52,
+          "median": 52,
+          "values": [
+            52,
+            52,
+            52
+          ]
+        },
+        "serverFunctionRequestCount": {
+          "n": 3,
+          "mean": 0,
+          "median": 0,
+          "values": [
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  }
+}

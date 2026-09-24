@@ -1,5 +1,10 @@
 # Experiment 001
 
+> **Note:** This file holds **exploratory** development-time timings only.
+> Formal Lighthouse / Network results live in
+> [`optimization.md`](./optimization.md#measurements) and
+> [`experiment-001-results.md`](./experiment-001-results.md).
+
 ## Environment
 
 - TanStack Start
@@ -10,13 +15,14 @@
 
 ---
 
-## Measured Results
+## Measured Results (exploratory)
 
 | Strategy | Dashboard Visible | Chart Visible | Transactions Visible | Full Completion |
 |----------|------------------:|--------------:|---------------------:|----------------:|
 | Version 1 | ~3.5s | ~3.5s | ~3.5s | ~3.5s |
 | Version 2 | ~1.0s | ~2.5s | ~3.5s | ~4.5s |
-| Version 3 | ~1.0s | ~2.5s | ~3.5s | ~3.5s |
+| Version 3 Late Prefetch | ~1.0s | ~2.5s | ~3.5s | ~4.5s |
+| Version 3B Early Prefetch | ~1.0s | ~2.5s | ~3.5s | ~3.5s |
 
 During development an intermediate "Late Prefetch" strategy was also evaluated.
 

@@ -219,63 +219,70 @@ Approximately one second faster total page completion under identical artificial
 
 ## Measurements
 
-The values in this document are historical exploratory observations, not formal thesis results. Formal collection follows [`experiment-001-measurement-protocol.md`](./experiment-001-measurement-protocol.md) and is recorded in [`experiment-001-results-template.md`](./experiment-001-results-template.md). Formal measurements have **not** started.
+Exploratory development observations remain in [`measurements.md`](./measurements.md).
+
+Formal collection follows [`experiment-001-measurement-protocol.md`](./experiment-001-measurement-protocol.md).
+A first formal session (2026-09-24, commit `643de69`, **n = 3** per variant × profile) is recorded in:
+
+- [`optimization.md`](./optimization.md#measurements) — narrative + tables
+- [`experiment-001-results.md`](./experiment-001-results.md) — aggregate workbook
+- [`measurements/experiment-001/`](./measurements/experiment-001/) — Lighthouse JSON + Network samples
+
+Protocol target remains n = 10; the recorded session used n = 3 for automation. Widen samples before final thesis tables if needed.
 
 Formal protocol (summary only — the protocol document is authoritative):
 
-- Primary evidence: Lighthouse (n=10 per variant per profile) and Network (n=10), including User Timing milestones from Network samples
-- Diagnostic evidence: Performance (n=3) and React DevTools Profiler (n=3, profiling build only)
+- Primary evidence: Lighthouse and Network (User Timing milestones)
+- Diagnostic evidence: Performance and React DevTools Profiler (profiling build)
 - Device profiles: Lighthouse Mobile (M) and Lighthouse Desktop (D)
-- Cold client caches; warm preview process; no warm-cache cohort
+- Cold client caches; warm preview process
 - INP is N/A (load-only); TTI is informational only
-- Variant order: Latin square S1 V1→V2→V3→V3B, S2 V2→V3→V3B→V1, S3 V3→V3B→V1→V2, S4 V3B→V1→V2→V3
-- Each tool’s samples are independent navigations (Lighthouse `M-LH-V1-01` is not the same page load as Network `M-NW-V1-01`)
-
-Exploratory collection during development included:
-
-- Server Function execution count
-- Server Function execution order
-- Loader duration
-- Browser Network waterfall
-- React Suspense reveal order
-- Duplicate Server Function executions
-- User perceived loading
 
 ---
 
 ## Results
 
-The table below is **exploratory** (development-time). Do not copy these values into the formal results template.
+Exploratory (development-time):
 
 | Strategy   | Initial Content | Total Completion | Notes                 |
 | ---------- | --------------- | ---------------- | --------------------- |
 | Version 1  | Slow            | ~3.5s            | Blocking SSR          |
 | Version 2  | Fast            | ~4.5s            | Progressive rendering |
+| Version 3  | Fast            | ~4.5s            | Late Prefetch ≈ V2    |
 | Version 3B | Fast            | ~3.5s            | Early Prefetch        |
 
-An additional Late Prefetch strategy (V3) was evaluated during the experiment but was excluded from the final architecture because it behaved identically to Version 2 in these exploratory observations. V3 remains available on the isolated experiment route for the formal V3 vs V3B comparison.
+Formal session headline (means, n = 3):
+
+| Metric | V1 | V2 | V3 | V3B |
+| --- | ---: | ---: | ---: | ---: |
+| Lighthouse SI Mobile (ms) | 6879 | 5127 | 5108 | **4362** |
+| Lighthouse SI Desktop (ms) | 2591 | 2288 | 2304 | **1890** |
+| Unthrottled milestone F (ms) | 3695 | 4694 | 4696 | **3696** |
+| Lighthouse score Desktop | 93 | 94 | 94 | **95** |
+
+V3 matched V2 on completion and Speed Index. V3B matched V1 on total completion while winning Speed Index on both profiles.
 
 ---
 
 ## Conclusion
 
-Version 1 provides the simplest implementation but blocks SSR until every query finishes.
+Version 1 provides the simplest implementation but blocks SSR until every query finishes and has the worst Speed Index.
 
-Version 2 significantly improves perceived performance by rendering critical content first while progressively revealing secondary widgets.
+Version 2 improves progressive paint (better SI) by revealing critical content first, but total completion is ~1 s slower because non-critical queries start late.
 
-An intermediate Late Prefetch strategy was also evaluated but produced no measurable improvement over Version 2.
+Late Prefetch (V3) produced no meaningful improvement over Version 2.
 
-The final Early Prefetch strategy produced the best overall result.
+Early Prefetch (V3B) produced the best overall result: V1-like total completion with the best Speed Index (Mobile and Desktop).
 
-Starting independent non-critical queries before awaiting the critical query reduced total loading time by approximately one second while preserving progressive rendering and avoiding duplicate Server Function executions.
+Starting independent non-critical queries before awaiting the critical query removes the non-critical waterfall while preserving progressive rendering. Under SSR Query dehydration, separate browser Server Function RPCs were largely absent; SI and milestone F are the reliable comparative signals.
 
-This rendering strategy was selected for the production Dashboard (`/dashboard`). Formal confirmation uses the isolated experiment route and the measurement protocol, not these exploratory timings.
+This rendering strategy remains selected for the production Dashboard (`/dashboard`).
 
 ---
 
 ## Status
 
-Exploratory implementation completed; prerequisites P1–P9 implemented; formal measurements not started. Independent preflight is the next step before the formal benchmark.
+Formal measurement session recorded (n = 3). Optional follow-up: expand to protocol n = 10 and add Performance / React Profiler diagnostics.
 
 ---
 
