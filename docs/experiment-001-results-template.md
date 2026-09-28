@@ -10,6 +10,8 @@ Blank workbook for formal Experiment 1 measurements.
 4. Summarize medians only after all valid samples for a variant/profile/tool are complete.
 5. Leave result cells blank or write `N/A` with reason — do not invent values.
 6. Do not copy exploratory values from [`measurements.md`](./measurements.md) or from [`experiments.md`](./experiments.md) into this template.
+7. Do not copy pilot / preliminary measurement values into this template. That n=3 Lighthouse and Network set lives only on branch `origin/cursor/experiment-001-optimization-results-c674` (commit `0e1accdf8392547b63420e2e40c37e2a3fee102f`) and is summarized in [`experiment-001-results-audit.md`](./experiment-001-results-audit.md). It is not the final dataset.
+8. Follow [`measurements/experiment-001/final-measurement-checklist.md`](./measurements/experiment-001/final-measurement-checklist.md) while collecting. Track each required sample in [`measurements/experiment-001/final-measurement-tracker.md`](./measurements/experiment-001/final-measurement-tracker.md). Store files under `docs/measurements/experiment-001/profile-m/` or `profile-d/`, then `variant-v1|v2|v3|v3b/<tool>/<SAMPLE-ID>/`. Network evidence for a final sample is `network.har` plus `notes.md`.
 
 ---
 
@@ -40,6 +42,7 @@ Do not treat `M-LH-V1-01` and `M-NW-V1-01` as the same page load. Analyze each t
 | Date started                                     |                                                       |
 | Date completed                                   |                                                       |
 | Git commit SHA                                   |                                                       |
+| package-lock.json SHA-256                        |                                                       |
 | Branch                                           |                                                       |
 | Node.js version                                  |                                                       |
 | npm version                                      |                                                       |
