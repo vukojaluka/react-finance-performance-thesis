@@ -52,7 +52,6 @@ Procedure: [final-measurement-checklist.md](./final-measurement-checklist.md).
 | Lighthouse                       |      80 |
 | Network                          |      80 |
 | Performance                      |      24 |
-| React Profiler                   |      24 |
 | **Total required valid samples** | **208** |
 | Collected in this tree           |     184 |
 
