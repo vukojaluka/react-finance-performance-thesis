@@ -2,7 +2,7 @@
 
 Live status board for the **final thesis measurement** campaign.
 
-No sample has been collected. Every row starts at `PENDING`.
+Lighthouse, Network, and Performance rows are `RECORDED` / `Valid` where the artifact file exists. React Profiler rows stay `PENDING`.
 
 This tracker does not contain pilot / preliminary measurement values. That n=3 set stays on `origin/cursor/experiment-001-optimization-results-c674` (`0e1accdf8392547b63420e2e40c37e2a3fee102f`).
 
@@ -62,9 +62,9 @@ Procedure: [final-measurement-checklist.md](./final-measurement-checklist.md).
 | Performance                      |      24 |
 | React Profiler                   |      24 |
 | **Total required valid samples** | **208** |
-| Collected in this tree           |       0 |
+| Collected in this tree           |     184 |
 
-Artifact path is the sample directory. Create it when the sample is valid.
+Artifact path is the saved measurement file. Lighthouse HTML sits beside the JSON. Network User Timing notes sit beside the HAR as `<sample-id>.notes.md`.
 
 ## Profile M — Mobile
 
@@ -72,39 +72,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| M-LH-V1-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-01/` | —             | —                | —     |
-| M-LH-V1-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-02/` | —             | —                | —     |
-| M-LH-V1-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-03/` | —             | —                | —     |
-| M-LH-V1-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-04/` | —             | —                | —     |
-| M-LH-V1-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-05/` | —             | —                | —     |
-| M-LH-V1-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-06/` | —             | —                | —     |
-| M-LH-V1-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-07/` | —             | —                | —     |
-| M-LH-V1-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-08/` | —             | —                | —     |
-| M-LH-V1-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-09/` | —             | —                | —     |
-| M-LH-V1-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-10/` | —             | —                | —     |
+| M-LH-V1-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-01.json` | Valid | — | pre-existing first pass |
+| M-LH-V1-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-02.json` | Valid | — | — |
+| M-LH-V1-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-03.json` | Valid | — | — |
+| M-LH-V1-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-04.json` | Valid | — | — |
+| M-LH-V1-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-05.json` | Valid | — | — |
+| M-LH-V1-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-06.json` | Valid | — | — |
+| M-LH-V1-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-07.json` | Valid | — | — |
+| M-LH-V1-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-08.json` | Valid | — | — |
+| M-LH-V1-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-09.json` | Valid | — | — |
+| M-LH-V1-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-10.json` | Valid | — | — |
 
 ### Mobile V1 — Network
 
 | Sample ID  | Status  | Artifact path                                                               | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | --------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-NW-V1-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-01/` | —             | —                | —     |
-| M-NW-V1-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-02/` | —             | —                | —     |
-| M-NW-V1-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-03/` | —             | —                | —     |
-| M-NW-V1-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-04/` | —             | —                | —     |
-| M-NW-V1-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-05/` | —             | —                | —     |
-| M-NW-V1-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-06/` | —             | —                | —     |
-| M-NW-V1-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-07/` | —             | —                | —     |
-| M-NW-V1-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-08/` | —             | —                | —     |
-| M-NW-V1-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-09/` | —             | —                | —     |
-| M-NW-V1-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-10/` | —             | —                | —     |
+| M-NW-V1-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-01.har` | Valid | — | pre-existing first pass |
+| M-NW-V1-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-02.har` | Valid | — | — |
+| M-NW-V1-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-03.har` | Valid | — | — |
+| M-NW-V1-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-04.har` | Valid | — | — |
+| M-NW-V1-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-05.har` | Valid | — | — |
+| M-NW-V1-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-06.har` | Valid | — | — |
+| M-NW-V1-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-07.har` | Valid | — | — |
+| M-NW-V1-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-08.har` | Valid | — | — |
+| M-NW-V1-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-09.har` | Valid | — | — |
+| M-NW-V1-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/network/M-NW-V1-10.har` | Valid | — | — |
 
 ### Mobile V1 — Performance
 
 | Sample ID  | Status  | Artifact path                                                                   | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-PF-V1-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-01/` | —             | —                | —     |
-| M-PF-V1-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-02/` | —             | —                | —     |
-| M-PF-V1-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-03/` | —             | —                | —     |
+| M-PF-V1-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-01.json` | Valid | — | pre-existing first pass |
+| M-PF-V1-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-02.json` | Valid | — | — |
+| M-PF-V1-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-03.json` | Valid | — | — |
 
 ### Mobile V1 — React Profiler
 
@@ -118,39 +118,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| M-LH-V2-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-01/` | —             | —                | —     |
-| M-LH-V2-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-02/` | —             | —                | —     |
-| M-LH-V2-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-03/` | —             | —                | —     |
-| M-LH-V2-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-04/` | —             | —                | —     |
-| M-LH-V2-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-05/` | —             | —                | —     |
-| M-LH-V2-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-06/` | —             | —                | —     |
-| M-LH-V2-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-07/` | —             | —                | —     |
-| M-LH-V2-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-08/` | —             | —                | —     |
-| M-LH-V2-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-09/` | —             | —                | —     |
-| M-LH-V2-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-10/` | —             | —                | —     |
+| M-LH-V2-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-01.json` | Valid | — | pre-existing first pass |
+| M-LH-V2-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-02.json` | Valid | — | — |
+| M-LH-V2-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-03.json` | Valid | — | — |
+| M-LH-V2-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-04.json` | Valid | — | — |
+| M-LH-V2-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-05.json` | Valid | — | — |
+| M-LH-V2-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-06.json` | Valid | — | — |
+| M-LH-V2-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-07.json` | Valid | — | — |
+| M-LH-V2-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-08.json` | Valid | — | — |
+| M-LH-V2-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-09.json` | Valid | — | — |
+| M-LH-V2-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/lighthouse/M-LH-V2-10.json` | Valid | — | — |
 
 ### Mobile V2 — Network
 
 | Sample ID  | Status  | Artifact path                                                               | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | --------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-NW-V2-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-01/` | —             | —                | —     |
-| M-NW-V2-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-02/` | —             | —                | —     |
-| M-NW-V2-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-03/` | —             | —                | —     |
-| M-NW-V2-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-04/` | —             | —                | —     |
-| M-NW-V2-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-05/` | —             | —                | —     |
-| M-NW-V2-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-06/` | —             | —                | —     |
-| M-NW-V2-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-07/` | —             | —                | —     |
-| M-NW-V2-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-08/` | —             | —                | —     |
-| M-NW-V2-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-09/` | —             | —                | —     |
-| M-NW-V2-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-10/` | —             | —                | —     |
+| M-NW-V2-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-01.har` | Valid | — | pre-existing first pass |
+| M-NW-V2-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-02.har` | Valid | — | — |
+| M-NW-V2-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-03.har` | Valid | — | — |
+| M-NW-V2-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-04.har` | Valid | — | — |
+| M-NW-V2-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-05.har` | Valid | — | — |
+| M-NW-V2-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-06.har` | Valid | — | — |
+| M-NW-V2-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-07.har` | Valid | — | — |
+| M-NW-V2-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-08.har` | Valid | — | — |
+| M-NW-V2-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-09.har` | Valid | — | — |
+| M-NW-V2-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/network/M-NW-V2-10.har` | Valid | — | — |
 
 ### Mobile V2 — Performance
 
 | Sample ID  | Status  | Artifact path                                                                   | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-PF-V2-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-01/` | —             | —                | —     |
-| M-PF-V2-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-02/` | —             | —                | —     |
-| M-PF-V2-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-03/` | —             | —                | —     |
+| M-PF-V2-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-01.json` | Valid | — | pre-existing first pass |
+| M-PF-V2-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-02.json` | Valid | — | — |
+| M-PF-V2-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-03.json` | Valid | — | — |
 
 ### Mobile V2 — React Profiler
 
@@ -164,39 +164,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| M-LH-V3-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-01/` | —             | —                | —     |
-| M-LH-V3-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-02/` | —             | —                | —     |
-| M-LH-V3-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-03/` | —             | —                | —     |
-| M-LH-V3-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-04/` | —             | —                | —     |
-| M-LH-V3-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-05/` | —             | —                | —     |
-| M-LH-V3-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-06/` | —             | —                | —     |
-| M-LH-V3-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-07/` | —             | —                | —     |
-| M-LH-V3-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-08/` | —             | —                | —     |
-| M-LH-V3-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-09/` | —             | —                | —     |
-| M-LH-V3-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-10/` | —             | —                | —     |
+| M-LH-V3-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-01.json` | Valid | — | pre-existing first pass |
+| M-LH-V3-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-02.json` | Valid | — | — |
+| M-LH-V3-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-03.json` | Valid | — | — |
+| M-LH-V3-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-04.json` | Valid | — | — |
+| M-LH-V3-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-05.json` | Valid | — | — |
+| M-LH-V3-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-06.json` | Valid | — | — |
+| M-LH-V3-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-07.json` | Valid | — | — |
+| M-LH-V3-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-08.json` | Valid | — | — |
+| M-LH-V3-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-09.json` | Valid | — | — |
+| M-LH-V3-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/lighthouse/M-LH-V3-10.json` | Valid | — | — |
 
 ### Mobile V3 — Network
 
 | Sample ID  | Status  | Artifact path                                                               | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | --------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-NW-V3-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-01/` | —             | —                | —     |
-| M-NW-V3-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-02/` | —             | —                | —     |
-| M-NW-V3-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-03/` | —             | —                | —     |
-| M-NW-V3-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-04/` | —             | —                | —     |
-| M-NW-V3-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-05/` | —             | —                | —     |
-| M-NW-V3-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-06/` | —             | —                | —     |
-| M-NW-V3-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-07/` | —             | —                | —     |
-| M-NW-V3-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-08/` | —             | —                | —     |
-| M-NW-V3-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-09/` | —             | —                | —     |
-| M-NW-V3-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-10/` | —             | —                | —     |
+| M-NW-V3-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-01.har` | Valid | — | pre-existing first pass |
+| M-NW-V3-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-02.har` | Valid | — | — |
+| M-NW-V3-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-03.har` | Valid | — | — |
+| M-NW-V3-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-04.har` | Valid | — | — |
+| M-NW-V3-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-05.har` | Valid | — | — |
+| M-NW-V3-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-06.har` | Valid | — | — |
+| M-NW-V3-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-07.har` | Valid | — | — |
+| M-NW-V3-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-08.har` | Valid | — | — |
+| M-NW-V3-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-09.har` | Valid | — | — |
+| M-NW-V3-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/network/M-NW-V3-10.har` | Valid | — | — |
 
 ### Mobile V3 — Performance
 
 | Sample ID  | Status  | Artifact path                                                                   | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-PF-V3-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-01/` | —             | —                | —     |
-| M-PF-V3-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-02/` | —             | —                | —     |
-| M-PF-V3-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-03/` | —             | —                | —     |
+| M-PF-V3-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-01.json` | Valid | — | pre-existing first pass |
+| M-PF-V3-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-02.json` | Valid | — | — |
+| M-PF-V3-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-03.json` | Valid | — | — |
 
 ### Mobile V3 — React Profiler
 
@@ -210,39 +210,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID   | Status  | Artifact path                                                                    | Valid/Invalid | Exclusion reason | Notes |
 | ----------- | ------- | -------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-LH-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-01/` | —             | —                | —     |
-| M-LH-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-02/` | —             | —                | —     |
-| M-LH-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-03/` | —             | —                | —     |
-| M-LH-V3B-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-04/` | —             | —                | —     |
-| M-LH-V3B-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-05/` | —             | —                | —     |
-| M-LH-V3B-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-06/` | —             | —                | —     |
-| M-LH-V3B-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-07/` | —             | —                | —     |
-| M-LH-V3B-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-08/` | —             | —                | —     |
-| M-LH-V3B-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-09/` | —             | —                | —     |
-| M-LH-V3B-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-10/` | —             | —                | —     |
+| M-LH-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-01.json` | Valid | — | pre-existing first pass |
+| M-LH-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-02.json` | Valid | — | — |
+| M-LH-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-03.json` | Valid | — | — |
+| M-LH-V3B-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-04.json` | Valid | — | — |
+| M-LH-V3B-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-05.json` | Valid | — | — |
+| M-LH-V3B-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-06.json` | Valid | — | — |
+| M-LH-V3B-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-07.json` | Valid | — | — |
+| M-LH-V3B-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-08.json` | Valid | — | — |
+| M-LH-V3B-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-09.json` | Valid | — | — |
+| M-LH-V3B-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/lighthouse/M-LH-V3B-10.json` | Valid | — | — |
 
 ### Mobile V3B — Network
 
 | Sample ID   | Status  | Artifact path                                                                 | Valid/Invalid | Exclusion reason | Notes |
 | ----------- | ------- | ----------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-NW-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-01/` | —             | —                | —     |
-| M-NW-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-02/` | —             | —                | —     |
-| M-NW-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-03/` | —             | —                | —     |
-| M-NW-V3B-04 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-04/` | —             | —                | —     |
-| M-NW-V3B-05 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-05/` | —             | —                | —     |
-| M-NW-V3B-06 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-06/` | —             | —                | —     |
-| M-NW-V3B-07 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-07/` | —             | —                | —     |
-| M-NW-V3B-08 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-08/` | —             | —                | —     |
-| M-NW-V3B-09 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-09/` | —             | —                | —     |
-| M-NW-V3B-10 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-10/` | —             | —                | —     |
+| M-NW-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-01.har` | Valid | — | pre-existing first pass |
+| M-NW-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-02.har` | Valid | — | — |
+| M-NW-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-03.har` | Valid | — | — |
+| M-NW-V3B-04 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-04.har` | Valid | — | — |
+| M-NW-V3B-05 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-05.har` | Valid | — | — |
+| M-NW-V3B-06 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-06.har` | Valid | — | — |
+| M-NW-V3B-07 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-07.har` | Valid | — | — |
+| M-NW-V3B-08 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-08.har` | Valid | — | — |
+| M-NW-V3B-09 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-09.har` | Valid | — | — |
+| M-NW-V3B-10 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-10.har` | Valid | — | — |
 
 ### Mobile V3B — Performance
 
 | Sample ID   | Status  | Artifact path                                                                     | Valid/Invalid | Exclusion reason | Notes |
 | ----------- | ------- | --------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-PF-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-01/` | —             | —                | —     |
-| M-PF-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-02/` | —             | —                | —     |
-| M-PF-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-03/` | —             | —                | —     |
+| M-PF-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-01.json` | Valid | — | pre-existing first pass |
+| M-PF-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-02.json` | Valid | — | — |
+| M-PF-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-03.json` | Valid | — | — |
 
 ### Mobile V3B — React Profiler
 
@@ -258,39 +258,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| D-LH-V1-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-01/` | —             | —                | —     |
-| D-LH-V1-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-02/` | —             | —                | —     |
-| D-LH-V1-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-03/` | —             | —                | —     |
-| D-LH-V1-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-04/` | —             | —                | —     |
-| D-LH-V1-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-05/` | —             | —                | —     |
-| D-LH-V1-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-06/` | —             | —                | —     |
-| D-LH-V1-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-07/` | —             | —                | —     |
-| D-LH-V1-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-08/` | —             | —                | —     |
-| D-LH-V1-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-09/` | —             | —                | —     |
-| D-LH-V1-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-10/` | —             | —                | —     |
+| D-LH-V1-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-01 .json` | Valid | — | pre-existing first pass |
+| D-LH-V1-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-02.json` | Valid | — | — |
+| D-LH-V1-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-03.json` | Valid | — | — |
+| D-LH-V1-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-04.json` | Valid | — | — |
+| D-LH-V1-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-05.json` | Valid | — | — |
+| D-LH-V1-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-06.json` | Valid | — | — |
+| D-LH-V1-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-07.json` | Valid | — | — |
+| D-LH-V1-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-08.json` | Valid | — | — |
+| D-LH-V1-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-09.json` | Valid | — | — |
+| D-LH-V1-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/lighthouse/D-LH-V1-10.json` | Valid | — | — |
 
 ### Desktop V1 — Network
 
 | Sample ID  | Status  | Artifact path                                                               | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | --------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-NW-V1-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-01/` | —             | —                | —     |
-| D-NW-V1-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-02/` | —             | —                | —     |
-| D-NW-V1-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-03/` | —             | —                | —     |
-| D-NW-V1-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-04/` | —             | —                | —     |
-| D-NW-V1-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-05/` | —             | —                | —     |
-| D-NW-V1-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-06/` | —             | —                | —     |
-| D-NW-V1-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-07/` | —             | —                | —     |
-| D-NW-V1-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-08/` | —             | —                | —     |
-| D-NW-V1-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-09/` | —             | —                | —     |
-| D-NW-V1-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-10/` | —             | —                | —     |
+| D-NW-V1-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-01.har` | Valid | — | pre-existing first pass |
+| D-NW-V1-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-02.har` | Valid | — | — |
+| D-NW-V1-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-03.har` | Valid | — | — |
+| D-NW-V1-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-04.har` | Valid | — | — |
+| D-NW-V1-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-05.har` | Valid | — | — |
+| D-NW-V1-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-06.har` | Valid | — | — |
+| D-NW-V1-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-07.har` | Valid | — | — |
+| D-NW-V1-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-08.har` | Valid | — | — |
+| D-NW-V1-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-09.har` | Valid | — | — |
+| D-NW-V1-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/network/D-NW-V1-10.har` | Valid | — | — |
 
 ### Desktop V1 — Performance
 
 | Sample ID  | Status  | Artifact path                                                                   | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-PF-V1-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-01/` | —             | —                | —     |
-| D-PF-V1-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-02/` | —             | —                | —     |
-| D-PF-V1-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-03/` | —             | —                | —     |
+| D-PF-V1-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-01.json` | Valid | — | pre-existing first pass |
+| D-PF-V1-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-02.json` | Valid | — | — |
+| D-PF-V1-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-03.json` | Valid | — | — |
 
 ### Desktop V1 — React Profiler
 
@@ -304,39 +304,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| D-LH-V2-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-01/` | —             | —                | —     |
-| D-LH-V2-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-02/` | —             | —                | —     |
-| D-LH-V2-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-03/` | —             | —                | —     |
-| D-LH-V2-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-04/` | —             | —                | —     |
-| D-LH-V2-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-05/` | —             | —                | —     |
-| D-LH-V2-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-06/` | —             | —                | —     |
-| D-LH-V2-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-07/` | —             | —                | —     |
-| D-LH-V2-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-08/` | —             | —                | —     |
-| D-LH-V2-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-09/` | —             | —                | —     |
-| D-LH-V2-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-10/` | —             | —                | —     |
+| D-LH-V2-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-01.json` | Valid | — | pre-existing first pass |
+| D-LH-V2-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-02.json` | Valid | — | — |
+| D-LH-V2-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-03.json` | Valid | — | — |
+| D-LH-V2-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-04.json` | Valid | — | — |
+| D-LH-V2-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-05.json` | Valid | — | — |
+| D-LH-V2-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-06.json` | Valid | — | — |
+| D-LH-V2-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-07.json` | Valid | — | — |
+| D-LH-V2-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-08.json` | Valid | — | — |
+| D-LH-V2-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-09.json` | Valid | — | — |
+| D-LH-V2-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/lighthouse/D-LH-V2-10.json` | Valid | — | — |
 
 ### Desktop V2 — Network
 
 | Sample ID  | Status  | Artifact path                                                               | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | --------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-NW-V2-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-01/` | —             | —                | —     |
-| D-NW-V2-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-02/` | —             | —                | —     |
-| D-NW-V2-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-03/` | —             | —                | —     |
-| D-NW-V2-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-04/` | —             | —                | —     |
-| D-NW-V2-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-05/` | —             | —                | —     |
-| D-NW-V2-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-06/` | —             | —                | —     |
-| D-NW-V2-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-07/` | —             | —                | —     |
-| D-NW-V2-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-08/` | —             | —                | —     |
-| D-NW-V2-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-09/` | —             | —                | —     |
-| D-NW-V2-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-10/` | —             | —                | —     |
+| D-NW-V2-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-01.har` | Valid | — | pre-existing first pass |
+| D-NW-V2-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-02.har` | Valid | — | — |
+| D-NW-V2-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-03.har` | Valid | — | — |
+| D-NW-V2-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-04.har` | Valid | — | — |
+| D-NW-V2-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-05.har` | Valid | — | — |
+| D-NW-V2-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-06.har` | Valid | — | — |
+| D-NW-V2-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-07.har` | Valid | — | — |
+| D-NW-V2-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-08.har` | Valid | — | — |
+| D-NW-V2-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-09.har` | Valid | — | — |
+| D-NW-V2-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/network/D-NW-V2-10.har` | Valid | — | — |
 
 ### Desktop V2 — Performance
 
 | Sample ID  | Status  | Artifact path                                                                   | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-PF-V2-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-01/` | —             | —                | —     |
-| D-PF-V2-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-02/` | —             | —                | —     |
-| D-PF-V2-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-03/` | —             | —                | —     |
+| D-PF-V2-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-01.json` | Valid | — | pre-existing first pass |
+| D-PF-V2-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-02.json` | Valid | — | — |
+| D-PF-V2-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-03.json` | Valid | — | — |
 
 ### Desktop V2 — React Profiler
 
@@ -350,39 +350,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| D-LH-V3-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-01/` | —             | —                | —     |
-| D-LH-V3-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-02/` | —             | —                | —     |
-| D-LH-V3-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-03/` | —             | —                | —     |
-| D-LH-V3-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-04/` | —             | —                | —     |
-| D-LH-V3-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-05/` | —             | —                | —     |
-| D-LH-V3-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-06/` | —             | —                | —     |
-| D-LH-V3-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-07/` | —             | —                | —     |
-| D-LH-V3-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-08/` | —             | —                | —     |
-| D-LH-V3-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-09/` | —             | —                | —     |
-| D-LH-V3-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-10/` | —             | —                | —     |
+| D-LH-V3-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-01.json` | Valid | — | pre-existing first pass |
+| D-LH-V3-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-02.json` | Valid | — | — |
+| D-LH-V3-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-03.json` | Valid | — | — |
+| D-LH-V3-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-04.json` | Valid | — | — |
+| D-LH-V3-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-05.json` | Valid | — | — |
+| D-LH-V3-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-06.json` | Valid | — | — |
+| D-LH-V3-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-07.json` | Valid | — | — |
+| D-LH-V3-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-08.json` | Valid | — | — |
+| D-LH-V3-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-09.json` | Valid | — | — |
+| D-LH-V3-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/lighthouse/D-LH-V3-10.json` | Valid | — | — |
 
 ### Desktop V3 — Network
 
 | Sample ID  | Status  | Artifact path                                                               | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | --------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-NW-V3-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-01/` | —             | —                | —     |
-| D-NW-V3-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-02/` | —             | —                | —     |
-| D-NW-V3-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-03/` | —             | —                | —     |
-| D-NW-V3-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-04/` | —             | —                | —     |
-| D-NW-V3-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-05/` | —             | —                | —     |
-| D-NW-V3-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-06/` | —             | —                | —     |
-| D-NW-V3-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-07/` | —             | —                | —     |
-| D-NW-V3-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-08/` | —             | —                | —     |
-| D-NW-V3-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-09/` | —             | —                | —     |
-| D-NW-V3-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-10/` | —             | —                | —     |
+| D-NW-V3-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-01.har` | Valid | — | pre-existing first pass |
+| D-NW-V3-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-02.har` | Valid | — | — |
+| D-NW-V3-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-03.har` | Valid | — | — |
+| D-NW-V3-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-04.har` | Valid | — | — |
+| D-NW-V3-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-05.har` | Valid | — | — |
+| D-NW-V3-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-06.har` | Valid | — | — |
+| D-NW-V3-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-07.har` | Valid | — | — |
+| D-NW-V3-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-08.har` | Valid | — | — |
+| D-NW-V3-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-09.har` | Valid | — | — |
+| D-NW-V3-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/network/D-NW-V3-10.har` | Valid | — | — |
 
 ### Desktop V3 — Performance
 
 | Sample ID  | Status  | Artifact path                                                                   | Valid/Invalid | Exclusion reason | Notes |
 | ---------- | ------- | ------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-PF-V3-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-01/` | —             | —                | —     |
-| D-PF-V3-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-02/` | —             | —                | —     |
-| D-PF-V3-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-03/` | —             | —                | —     |
+| D-PF-V3-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-01.json` | Valid | — | pre-existing first pass |
+| D-PF-V3-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-02.json` | Valid | — | — |
+| D-PF-V3-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-03.json` | Valid | — | — |
 
 ### Desktop V3 — React Profiler
 
@@ -396,39 +396,39 @@ Artifact path is the sample directory. Create it when the sample is valid.
 
 | Sample ID   | Status  | Artifact path                                                                    | Valid/Invalid | Exclusion reason | Notes |
 | ----------- | ------- | -------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-LH-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-01/` | —             | —                | —     |
-| D-LH-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-02/` | —             | —                | —     |
-| D-LH-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-03/` | —             | —                | —     |
-| D-LH-V3B-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-04/` | —             | —                | —     |
-| D-LH-V3B-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-05/` | —             | —                | —     |
-| D-LH-V3B-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-06/` | —             | —                | —     |
-| D-LH-V3B-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-07/` | —             | —                | —     |
-| D-LH-V3B-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-08/` | —             | —                | —     |
-| D-LH-V3B-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-09/` | —             | —                | —     |
-| D-LH-V3B-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-10/` | —             | —                | —     |
+| D-LH-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-01.json` | Valid | — | pre-existing first pass |
+| D-LH-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-02.json` | Valid | — | — |
+| D-LH-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-03.json` | Valid | — | — |
+| D-LH-V3B-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-04.json` | Valid | — | — |
+| D-LH-V3B-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-05.json` | Valid | — | — |
+| D-LH-V3B-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-06.json` | Valid | — | — |
+| D-LH-V3B-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-07.json` | Valid | — | — |
+| D-LH-V3B-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-08.json` | Valid | — | — |
+| D-LH-V3B-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-09.json` | Valid | — | — |
+| D-LH-V3B-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/lighthouse/D-LH-V3B-10.json` | Valid | — | — |
 
 ### Desktop V3B — Network
 
 | Sample ID   | Status  | Artifact path                                                                 | Valid/Invalid | Exclusion reason | Notes |
 | ----------- | ------- | ----------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-NW-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-01/` | —             | —                | —     |
-| D-NW-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-02/` | —             | —                | —     |
-| D-NW-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-03/` | —             | —                | —     |
-| D-NW-V3B-04 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-04/` | —             | —                | —     |
-| D-NW-V3B-05 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-05/` | —             | —                | —     |
-| D-NW-V3B-06 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-06/` | —             | —                | —     |
-| D-NW-V3B-07 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-07/` | —             | —                | —     |
-| D-NW-V3B-08 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-08/` | —             | —                | —     |
-| D-NW-V3B-09 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-09/` | —             | —                | —     |
-| D-NW-V3B-10 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-10/` | —             | —                | —     |
+| D-NW-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-01.har` | Valid | — | pre-existing first pass |
+| D-NW-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-02.har` | Valid | — | — |
+| D-NW-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-03.har` | Valid | — | — |
+| D-NW-V3B-04 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-04.har` | Valid | — | — |
+| D-NW-V3B-05 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-05.har` | Valid | — | — |
+| D-NW-V3B-06 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-06.har` | Valid | — | — |
+| D-NW-V3B-07 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-07.har` | Valid | — | — |
+| D-NW-V3B-08 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-08.har` | Valid | — | — |
+| D-NW-V3B-09 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-09.har` | Valid | — | — |
+| D-NW-V3B-10 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/network/D-NW-V3B-10.har` | Valid | — | — |
 
 ### Desktop V3B — Performance
 
 | Sample ID   | Status  | Artifact path                                                                     | Valid/Invalid | Exclusion reason | Notes |
 | ----------- | ------- | --------------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-PF-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-01/` | —             | —                | —     |
-| D-PF-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-02/` | —             | —                | —     |
-| D-PF-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-03/` | —             | —                | —     |
+| D-PF-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-01.json` | Valid | — | pre-existing first pass |
+| D-PF-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-02.json` | Valid | — | — |
+| D-PF-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-03.json` | Valid | — | — |
 
 ### Desktop V3B — React Profiler
 
