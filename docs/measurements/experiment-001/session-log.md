@@ -14,8 +14,6 @@ Formal samples collected on the production preview. S1 for every tool and both p
 | Lighthouse | 13.4.1, `throttlingMethod: simulate`, performance category only, storage reset enabled |
 | Date | 2026-09-30 |
 
-React Profiler was not run.
-
 Invalid or repeated measurement samples: none. One runner interruption happened after Mobile Lighthouse S5. The 16 samples already saved were kept and were not repeated. The run then continued at Mobile Lighthouse S6.
 
 ## Sessions

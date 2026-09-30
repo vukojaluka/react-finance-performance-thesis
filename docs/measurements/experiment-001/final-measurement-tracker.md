@@ -2,7 +2,7 @@
 
 Live status board for the **final thesis measurement** campaign.
 
-Lighthouse, Network, and Performance rows are `RECORDED` / `Valid` where the artifact file exists. React Profiler rows stay `PENDING`.
+Lighthouse, Network, and Performance rows are `RECORDED` / `Valid` where the artifact file exists.
 
 This tracker does not contain pilot / preliminary measurement values. That n=3 set stays on `origin/cursor/experiment-001-optimization-results-c674` (`0e1accdf8392547b63420e2e40c37e2a3fee102f`).
 
@@ -364,11 +364,3 @@ Artifact path is the saved measurement file. Lighthouse HTML sits beside the JSO
 | D-PF-V3B-01 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-01.json` | Valid         | —                | pre-existing first pass |
 | D-PF-V3B-02 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-02.json` | Valid         | —                | —                       |
 | D-PF-V3B-03 | RECORDED | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-03.json` | Valid         | —                | —                       |
-
-### Desktop V3B — React Profiler
-
-| Sample ID   | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
-| ----------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| D-RP-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-01/` | —             | —                | —     |
-| D-RP-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-02/` | —             | —                | —     |
-| D-RP-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-03/` | —             | —                | —     |
