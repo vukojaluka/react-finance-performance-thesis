@@ -659,15 +659,15 @@ Record full commit SHA and `package-lock.json` hash in metadata. All formal runs
 
 | Item                | State                                                                            |
 | ------------------- | -------------------------------------------------------------------------------- |
-| Protocol document   | Ready for independent preflight; formal benchmark not started                    |
-| Prerequisites P1–P8 | Implemented; independent preflight review is next                                |
-| Formal measurements | Not started                                                                      |
+| Protocol document   | Measurement procedure unchanged                                                  |
+| Prerequisites P1–P8 | Implemented                                                                      |
+| Formal measurements | Complete: 184 samples in `docs/measurements/experiment-001/`                     |
 | Results             | Use [`experiment-001-results-template.md`](./experiment-001-results-template.md) |
 
 ---
 
 ## 18. Next step
 
-Perform a separate preflight review of the implemented prerequisites. Begin formal measurements using this protocol only after that review passes.
+Formal measurements for this protocol are complete. Summarized values belong in the results template.
 
 Do not add `startTransition`, `memo`, or other excluded React APIs.

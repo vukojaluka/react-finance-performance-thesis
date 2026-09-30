@@ -218,7 +218,7 @@ Approximately one second faster total page completion under identical artificial
 
 ## Measurements
 
-The values in this document are historical exploratory observations, not formal thesis results. Formal collection follows [`experiment-001-measurement-protocol.md`](./experiment-001-measurement-protocol.md) and is recorded in [`experiment-001-results-template.md`](./experiment-001-results-template.md). Formal measurements have **not** started.
+The values in this document are historical exploratory observations, not formal thesis results. Formal collection follows [`experiment-001-measurement-protocol.md`](./experiment-001-measurement-protocol.md). The final measurement campaign is complete: 184 raw samples are in [`measurements/experiment-001/`](./measurements/experiment-001/). Summarized values belong in [`experiment-001-results-template.md`](./experiment-001-results-template.md).
 
 Formal protocol (summary only — the protocol document is authoritative):
 
@@ -274,7 +274,7 @@ This rendering strategy was selected for the production Dashboard (`/dashboard`)
 
 ## Status
 
-Exploratory implementation completed; prerequisites P1–P8 implemented; formal measurements not started. Independent preflight is the next step before the formal benchmark.
+Exploratory implementation completed; prerequisites P1–P8 implemented. The formal measurement campaign is complete (184 samples). The timings in this document remain exploratory.
 
 ---
 

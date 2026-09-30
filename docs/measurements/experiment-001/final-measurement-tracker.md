@@ -52,7 +52,7 @@ Procedure: [final-measurement-checklist.md](./final-measurement-checklist.md).
 | Lighthouse                       |      80 |
 | Network                          |      80 |
 | Performance                      |      24 |
-| **Total required valid samples** | **208** |
+| **Total required valid samples** | **184** |
 | Collected in this tree           |     184 |
 
 Artifact path is the saved measurement file. Lighthouse HTML sits beside the JSON. Network User Timing notes sit beside the HAR as `<sample-id>.notes.md`.
