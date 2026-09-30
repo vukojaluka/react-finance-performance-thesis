@@ -43,13 +43,12 @@ Final Network evidence is a HAR file. The pilot custom JSON format is not final 
 
 ## Required valid samples
 
-| Tool           | Session | Build                   | Per variant per profile | Profiles × variants |   Total |
-| -------------- | ------- | ----------------------- | ----------------------: | ------------------- | ------: |
-| Lighthouse     | P       | `npm run build`         |                      10 | 2 × 4               |      80 |
-| Network        | P       | same production preview |                      10 | 2 × 4               |      80 |
-| Performance    | P       | same production preview |                       3 | 2 × 4               |      24 |
-| React Profiler | R       | `npm run build:profile` |                       3 | 2 × 4               |      24 |
-| **Total**      |         |                         |                         |                     | **208** |
+| Tool        | Session | Build                   | Per variant per profile | Profiles × variants |   Total |
+| ----------- | ------- | ----------------------- | ----------------------: | ------------------- | ------: |
+| Lighthouse  | P       | `npm run build`         |                      10 | 2 × 4               |      80 |
+| Network     | P       | same production preview |                      10 | 2 × 4               |      80 |
+| Performance | P       | same production preview |                       3 | 2 × 4               |      24 |
+| **Total**   |         |                         |                         |                     | **184** |
 
 `M-LH-V1-01` and `M-NW-V1-01` are different page loads. Each tool has its own passes.
 
@@ -57,13 +56,12 @@ Final Network evidence is a HAR file. The pilot custom JSON format is not final 
 
 ## Sample IDs and paths
 
-Profile letter: `M` or `D`. Tool letter: `LH`, `NW`, `PF`, `RP`. Variant: `V1`, `V2`, `V3`, `V3B`. Index: `01`–`10` or `01`–`03`.
+Profile letter: `M` or `D`. Tool letter: `LH`, `NW`, `PF`. Variant: `V1`, `V2`, `V3`, `V3B`. Index: `01`–`10` or `01`–`03`.
 
 ```text
 M-LH-V1-01 … M-LH-V1-10
 M-NW-V1-01 … M-NW-V1-10
 M-PF-V1-01 … M-PF-V1-03
-M-RP-V1-01 … M-RP-V1-03
 ```
 
 Repeat that pattern for `V2`, `V3`, and `V3B`, then the same IDs with the `D-` prefix.
@@ -73,16 +71,14 @@ Repeat that pattern for `V2`, `V3`, and `V3B`, then the same IDs with the `D-` p
 | `M-LH-V1-01`  | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-01/`  |
 | `M-NW-V3B-10` | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-10/`   |
 | `D-PF-V2-03`  | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-03/` |
-| `D-RP-V3B-03` | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-03/`  |
 
 Folder names are lowercase (`profile-m`, `variant-v3b`). Sample IDs keep `V3B`.
 
-| Tool           | Files inside the sample directory    |
-| -------------- | ------------------------------------ |
-| Lighthouse     | `lighthouse.json`, `lighthouse.html` |
-| Network        | `network.har`, `notes.md`            |
-| Performance    | `performance.json`                   |
-| React Profiler | `profiler.json`                      |
+| Tool        | Files inside the sample directory    |
+| ----------- | ------------------------------------ |
+| Lighthouse  | `lighthouse.json`, `lighthouse.html` |
+| Network     | `network.har`, `notes.md`            |
+| Performance | `performance.json`                   |
 
 Create the sample directory only when that sample passes validation.
 
@@ -102,7 +98,7 @@ Use this order for every tool and both profiles. Do not replace it with another 
 One cold navigation of one variant is one sample for the current tool.
 
 - Lighthouse and Network each need 10 successful passes per profile (S1 through S4 twice, then S1 and S2 again).
-- Performance and React Profiler each need 3 successful passes per profile (S1, S2, S3). Stop there.
+- Performance needs 3 successful passes per profile (S1, S2, S3). Stop there.
 - The pass index is the sample index. Pass 1 fills `…-01` for every variant. Pass 2 fills `…-02`. On S2, V2 is visited first and that navigation is still V2’s `…-02` when `…-01` already exists.
 - Run the square separately for each tool. Lighthouse pass 1 is not Network pass 1.
 - Run the square separately for Mobile and Desktop.
@@ -150,8 +146,6 @@ Machine rules from the protocol:
 - Remote debugging off
 - One preview process for the whole session; do not restart it between samples
 
-React DevTools stays disabled during Session P. Enable it for Session R only.
-
 ---
 
 ## Session P — production build
@@ -170,7 +164,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 3000 --strictPort
 ```
 
-On this Mac, `npm run preview -- --port 3000 --strictPort` without `--host` listens on `[::1]` only, and `http://127.0.0.1:3000` is refused. `--host 127.0.0.1` is the local bind that serves the protocol URL. Use it for every Session P and Session R preview. Do not use `npm run dev`.
+On this Mac, `npm run preview -- --port 3000 --strictPort` without `--host` listens on `[::1]` only, and `http://127.0.0.1:3000` is refused. `--host 127.0.0.1` is the local bind that serves the protocol URL. Use it for the production preview. Do not use `npm run dev`.
 
 Protocol Section 9 still asks for a once-per-day check that server logs show summary at 1 s, chart at 2.5 s, budgets at 3 s, and transactions at 3.5 s, with no duplicate Server Function pair on one cold V3B navigation. That check uses `VITE_EXPERIMENT_001_LOGGING=true npm run build`. It is not a recorded sample. After it, rebuild with plain `npm run build` and serve that output. The logging build is not the build under test.
 
@@ -248,7 +242,7 @@ A sample is valid when:
 - Visible `data-exp-variant` matches that variant
 - Device and Clear storage match the table above
 - DevTools throttling was off
-- Session is production preview, not `preview:profile` and not `npm run dev`
+- Session is production preview, not `npm run dev`
 - No scroll, hover, or click on the page during the audit
 - No devtools overlay
 - Both JSON and HTML exist in the sample directory
@@ -350,55 +344,20 @@ If marks A–F are missing from the trace, exclude the sample and repeat it.
 
 ---
 
-## Session R — profiling build
-
-React Profiler is a separate session. Stop the production preview before this build. Do not collect Lighthouse, Network, or Performance samples in this session.
-
-**Do not use Lighthouse or Network measurements taken on the profiling build as primary evidence.**
-
-### Switch builds
-
-Stop the Session P preview (Ctrl+C). Then:
-
-```bash
-npm run build:profile
-npm run preview:profile -- --host 127.0.0.1 --port 3000 --strictPort
-```
-
-Allow the React DevTools extension in this Incognito window. Leave every other extension disabled.
-
-Confirm the page still shows the expected `data-exp-variant` label. Then discard one warm-up navigation of any variant. Do not export it.
-
-### Each Profiler sample
-
-1. Apply the same Mobile or Desktop viewport, DPR, CPU throttle, and custom network profile used for Network and Performance.
-2. Open the React DevTools Profiler.
-3. Start recording.
-4. Reload the variant URL.
-5. Do not scroll, hover, or click the page.
-6. Stop after milestone F (`data-exp-complete="true"`).
-7. Export the profile as `profiler.json`.
-
-Walk S1, S2, and S3 until each variant has 3 valid profiles on Mobile, then repeat on Desktop. n=3 per variant per profile.
-
-Keep this `preview:profile` process warm across those Profiler samples. Do not restart it between variants.
-
----
-
 ## Validation checklist
 
 Set a tracker row to `RECORDED` / `Valid` only when every item below is true.
 
 - [ ] Correct variant: URL `variant` and `data-exp-variant` match the sample ID
 - [ ] Correct profile: Mobile or Desktop settings match the sample ID prefix `M` or `D`
-- [ ] Correct tool and session: Lighthouse, Network, and Performance came from Session P; Profiler came from Session R
+- [ ] Correct tool and session: Lighthouse, Network, and Performance came from the production preview
 - [ ] Correct URL: `http://127.0.0.1:3000/experiments/experiment-001?variant=` plus `v1`, `v2`, `v3`, or `v3b`
-- [ ] Correct build: Session P is `npm run build` and `preview`. Session R is `npm run build:profile` and `preview:profile`
-- [ ] Correct throttling: Lighthouse used only its simulated device preset. Network, Performance, and Profiler used the custom DevTools profile for that device
+- [ ] Correct build: `npm run build` and `npm run preview`
+- [ ] Correct throttling: Lighthouse used only its simulated device preset. Network and Performance used the custom DevTools profile for that device
 - [ ] No manual interaction: no scroll, hover, or click on the page during the measured load
-- [ ] No DevTools interference: no second throttle on a Lighthouse run, no React DevTools during Session P, no TanStack Devtools panel, no remote debugging, no extra extension
-- [ ] Required artifact exported: Lighthouse JSON and HTML, or `network.har` plus `notes.md`, or `performance.json`, or `profiler.json`
-- [ ] Required milestones available: Network and Performance have User Timing A–F. Profiler was stopped after milestone F. Lighthouse does not use milestones as its validity gate
+- [ ] No DevTools interference: no second throttle on a Lighthouse run, no TanStack Devtools panel, no remote debugging, no extra extension
+- [ ] Required artifact exported: Lighthouse JSON and HTML, or `network.har` plus `notes.md`, or `performance.json`
+- [ ] Required milestones available: Network and Performance have User Timing A–F. Lighthouse does not use milestones as its validity gate
 - [ ] No invalidation reason: no error boundary, no wrong label, no warm tab inside the 60 second `staleTime`, no restarted preview in the middle of a recorded sample, no mixed build
 
 Invalid samples are excluded and repeated. A `Valid` sample is never replaced and its files are never overwritten.
@@ -413,8 +372,8 @@ Log each failed attempt here. Do not store the failed export in the final sample
 
 ## After the last valid sample
 
-1. Stop `preview:profile`.
-2. Confirm the tracker has 208 `Valid` rows and no remaining `PENDING` rows.
+1. Stop the production preview.
+2. Confirm the tracker has 184 `Valid` rows and no remaining `PENDING` rows.
 3. Enter values from the artifacts into `docs/experiment-001-results-template.md`.
 4. Leave pilot / preliminary measurement numbers out of that workbook.
 5. Compute medians only after every valid sample for that variant, profile, and tool is entered.

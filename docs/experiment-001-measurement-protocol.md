@@ -63,7 +63,7 @@ Formal testing begins only after the implemented prerequisites in Section 6 pass
 - Production build served locally (`npm run build` + `npm run preview`)
 - Cold-cache navigations only (primary cohort)
 - Two device profiles: **Lighthouse Mobile** and **Lighthouse Desktop**
-- Tools: Lighthouse, Chrome DevTools Network, Chrome DevTools Performance, React DevTools Profiler
+- Tools: Lighthouse, Chrome DevTools Network, Chrome DevTools Performance
 
 ### 4.2 Out of scope
 
@@ -116,8 +116,7 @@ Do **not** begin formal measurements until all items below are implemented and v
 | P5  | Four-widget layout parity (summary, chart 2-col + transactions 1-col, budgets)           | **Complete**                                                                  |
 | P6  | Deterministic milestone markers (`data-exp-milestone` attributes and `performance.mark`) | **Complete** — A–F use committed-DOM predicates                               |
 | P7  | Benchmark logging policy                                                                 | **Complete** — off in standard production; opt-in for diagnostics             |
-| P8  | Isolated production profiling build for React DevTools                                   | **Complete** — separate build mode and output                                 |
-| P9  | Implementation preflight validation                                                      | **Complete** — smoke checks passed; measurement-day review remains separate   |
+| P8  | Implementation preflight validation                                                      | **Complete** — smoke checks passed; measurement-day review remains separate   |
 
 ---
 
@@ -239,14 +238,14 @@ Record for every session:
 
 ### 8.2 Browser
 
-| Field            | Requirement                                                    |
-| ---------------- | -------------------------------------------------------------- |
-| Browser          | Google Chrome (stable channel)                                 |
-| Version          | Record full version string                                     |
-| Profile          | Incognito window                                               |
-| Extensions       | Disabled (except React DevTools only during Profiler sessions) |
-| DevTools dock    | Undocked or consistent position across runs                    |
-| Remote debugging | Off                                                            |
+| Field            | Requirement                                 |
+| ---------------- | ------------------------------------------- |
+| Browser          | Google Chrome (stable channel)              |
+| Version          | Record full version string                  |
+| Profile          | Incognito window                            |
+| Extensions       | Disabled                                    |
+| DevTools dock    | Undocked or consistent position across runs |
+| Remote debugging | Off                                         |
 
 ### 8.3 Application server
 
@@ -260,15 +259,6 @@ Record for every session:
 **Do not use** `npm run dev` for formal thesis measurements.
 
 **Netlify runtime note:** `vite preview` uses the built server bundle locally. It is production-equivalent for bundle and SSR behavior but not identical to Netlify Functions cold-start latency. Document this in thesis limitations.
-
-**React Profiler build:** the standard React 19 production client uses the non-profiling `react-dom/client` entry and does not retain useful component timing data. Build and serve the isolated profiling output only for React DevTools Profiler sessions:
-
-```bash
-npm run build:profile
-npm run preview:profile -- --port 3000 --strictPort
-```
-
-This mode aliases `react-dom/client` to `react-dom/profiling` and writes to `dist-profile`; it does not change `npm run build` or `dist`.
 
 ### 8.4 Supabase
 
@@ -349,7 +339,6 @@ Complete once per measurement day (or after any build change). Do not record the
 - [ ] Artificial delays produce expected ordering in server logs: summary 1 s, chart 2.5 s, budgets 3 s, transactions 3.5 s
 - [ ] No duplicate Server Function log pairs on single cold navigation (V3B smoke test)
 - [ ] Milestone markers (`data-exp-milestone` / User Timing) fire in Performance panel
-- [ ] React DevTools Profiler session uses `npm run build:profile` + `npm run preview:profile`
 - [ ] Record Chrome version, commit SHA, Node version in results template metadata
 
 ---
@@ -362,38 +351,36 @@ This protocol distinguishes two things that must not be collapsed:
 
 **A. Formal measurement run**
 
-One **cold navigation** of **one variant** under **one device profile**, on a defined build (`dist` or `dist-profile`). Identity fields: variant URL, profile (M or D), cache policy (HTTP cache cold, Query cache cold, server process warm), and the tool used to observe that navigation.
+One **cold navigation** of **one variant** under **one device profile**, on the production build (`dist`). Identity fields: variant URL, profile (M or D), cache policy (HTTP cache cold, Query cache cold, server process warm), and the tool used to observe that navigation.
 
 **B. Tool evidence**
 
-Evidence collected from a run using Lighthouse, Network, Performance, or React DevTools Profiler.
+Evidence collected from a run using Lighthouse, Network, or Performance.
 
-Lighthouse and DevTools profiling introduce their own reloads and overhead. Therefore:
+Lighthouse and the Performance panel introduce their own reloads and overhead. Therefore:
 
 - Lighthouse runs are **independent** navigation samples.
 - Network recordings are **independent** navigation samples.
 - Performance recordings are **independent** navigation samples.
-- React Profiler runs are **independent** diagnostic samples (and use a **different build** — Section 8.3).
 
 Do **not** imply that Lighthouse sample `M-LH-V1-01` and Network sample `M-NW-V1-01` are the same page load. Analyze each tool’s samples under that tool’s procedure and sample size.
 
-| Tool                    | Evidence tier  | Valid samples per variant per profile | Build                                                    |
-| ----------------------- | -------------- | ------------------------------------: | -------------------------------------------------------- |
-| Lighthouse              | **Primary**    |                                    10 | `npm run build` / `npm run preview`                      |
-| Network                 | **Primary**    |                                    10 | same production preview                                  |
-| Performance             | **Diagnostic** |                                     3 | same production preview                                  |
-| React DevTools Profiler | **Diagnostic** |                                     3 | `npm run build:profile` / `npm run preview:profile` only |
+| Tool        | Evidence tier  | Valid samples per variant per profile | Build                               |
+| ----------- | -------------- | ------------------------------------: | ----------------------------------- |
+| Lighthouse  | **Primary**    |                                    10 | `npm run build` / `npm run preview` |
+| Network     | **Primary**    |                                    10 | same production preview             |
+| Performance | **Diagnostic** |                                     3 | same production preview             |
 
 Milestone User Timing (`exp-milestone-A` … `F`) is created by the page on every navigation. **Primary milestone times** are read from the **Network** samples (n=10) after that navigation completes (Console: `performance.getEntriesByName('exp-milestone-<id>', 'mark')`). Performance traces (n=3) **corroborate** marks and explain scripting/rendering; they are not a substitute for the n=10 Network milestone series.
 
 ### 10.2 Evidence tiers
 
-| Tier                     | Tools                                | Role in thesis                                              |
-| ------------------------ | ------------------------------------ | ----------------------------------------------------------- |
-| **Primary quantitative** | Lighthouse, Network                  | Main comparative evidence; tables and charts                |
-| **Diagnostic**           | Performance, React DevTools Profiler | Explain mechanisms; support discussion, not headline scores |
+| Tier                     | Tools               | Role in thesis                                              |
+| ------------------------ | ------------------- | ----------------------------------------------------------- |
+| **Primary quantitative** | Lighthouse, Network | Main comparative evidence; tables and charts                |
+| **Diagnostic**           | Performance         | Explain mechanisms; support discussion, not headline scores |
 
-Do not describe Performance or Profiler as primary evidence. Thesis interpretation relies primarily on Lighthouse FCP, LCP, CLS, Performance Score, milestone timing (from Network samples), and Network evidence where browser-visible.
+Do not describe Performance traces as primary evidence. Thesis interpretation relies primarily on Lighthouse FCP, LCP, CLS, Performance Score, milestone timing (from Network samples), and Network evidence where browser-visible.
 
 ### 10.3 Lighthouse (primary)
 
@@ -455,29 +442,6 @@ Collect per **Performance sample** (independent cold navigation; n=3 per variant
 
 Recording procedure: Performance panel → enable Screenshots → CPU and Network throttling per profile → **Record and reload** → stop after milestone F + 2 s idle.
 
-### 10.6 React DevTools Profiler (diagnostic)
-
-Profiler samples are **independent** of Lighthouse, Network, and Performance IDs. Collect them in a separate session after primary sampling, using the isolated production **profiling** build from Section 8.3. Do not record Lighthouse or Network thesis rows from `preview:profile`.
-
-The standard React 19 production renderer does not retain the component timing data required by this section.
-
-Collect per Profiler sample:
-
-| Field                                      | Record                                                                                          |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| Total commit count                         | integer                                                                                         |
-| Commit durations                           | list (ms) — one per commit bar                                                                  |
-| Longest commit duration                    | ms                                                                                              |
-| Ranked chart: top component by render time | name + duration (ms)                                                                            |
-| `DashboardSummaryWidget` render time       | ms per commit (if exposed)                                                                      |
-| `ExpenseChartWidget`                       | ms per commit (visible title: Monthly Trend)                                                    |
-| `RecentTransactionsWidget`                 | ms                                                                                              |
-| `BudgetsWidget`                            | ms                                                                                              |
-| `actualDuration` / `baseDuration`          | ms — record from exported Profiler JSON if UI does not show labels; otherwise `N/A` with reason |
-| Unnecessary / duplicate renders            | qualitative note (e.g. summary re-render after Suspense resolve)                                |
-
-Export: Profiler JSON per run.
-
 ---
 
 ## 11. Milestone definitions
@@ -509,12 +473,12 @@ The current widgets do not emit `data-exp-widget-error` because mocks are determ
 
 Record the fields below for **each variant × device profile**, using the sample counts in Section 10.1. Each tool column is a **separate series of navigations**, not one shared page load.
 
-| Variant | Lighthouse (M / D)                         | Network (M / D)                                       | Performance (M / D)                                       | React Profiler (M / D)                        |
-| ------- | ------------------------------------------ | ----------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------- |
-| **V1**  | Score, FCP, LCP, LCP element, CLS, SI, TBT | Request count, doc timing, milestones B–F, duplicates | Nav timing, long tasks, marks A–F, scripting/render/paint | Commit count, max commit, widget ranked times |
-| **V2**  | Same                                       | Same + note deferred query start vs V1                | Same + Suspense gap between B and C                       | Same + expect more commits than V1            |
-| **V3**  | Same                                       | Same + prefetch starts after summary complete         | Same + compare C/D/E spacing vs V3B                       | Same                                          |
-| **V3B** | Same                                       | Same + prefetch starts before summary await           | Same + compare parallel network/script overlap            | Same                                          |
+| Variant | Lighthouse (M / D)                         | Network (M / D)                                       | Performance (M / D)                                       |
+| ------- | ------------------------------------------ | ----------------------------------------------------- | --------------------------------------------------------- |
+| **V1**  | Score, FCP, LCP, LCP element, CLS, SI, TBT | Request count, doc timing, milestones B–F, duplicates | Nav timing, long tasks, marks A–F, scripting/render/paint |
+| **V2**  | Same                                       | Same + note deferred query start vs V1                | Same + Suspense gap between B and C                       |
+| **V3**  | Same                                       | Same + prefetch starts after summary complete         | Same + compare C/D/E spacing vs V3B                       |
+| **V3B** | Same                                       | Same + prefetch starts before summary await           | Same + compare parallel network/script overlap            |
 
 ### 12.1 Primary comparison focus
 
@@ -529,19 +493,18 @@ Record the fields below for **each variant × device profile**, using the sample
 
 ## 13. Measurement procedure
 
-Two session types are required. They must not be mixed on the same preview process if that would change the build under test.
+All formal samples use one production preview. Do not restart that process between Lighthouse, Network, and Performance samples.
 
-| Session type       | Server                                                | Tools                            | Purpose                                    |
-| ------------------ | ----------------------------------------------------- | -------------------------------- | ------------------------------------------ |
-| **P** — production | `npm run preview -- --port 3000 --strictPort`         | Lighthouse, Network, Performance | Primary evidence + Performance diagnostics |
-| **R** — profiling  | `npm run preview:profile -- --port 3000 --strictPort` | React Profiler only              | Commit-level diagnostics                   |
+| Session type       | Server                                        | Tools                            | Purpose                                    |
+| ------------------ | --------------------------------------------- | -------------------------------- | ------------------------------------------ |
+| **P** — production | `npm run preview -- --port 3000 --strictPort` | Lighthouse, Network, Performance | Primary evidence + Performance diagnostics |
 
 ### 13.1 Session setup (once per session)
 
 1. Close unrelated applications.
 2. Open Chrome Incognito.
-3. Start the server for the session type (P or R). Keep that process **warm** for the rest of the session.
-4. For session type P: DevTools → Network → **Disable cache** + **Preserve log** when collecting Network samples. Do **not** leave DevTools throttling on during Lighthouse.
+3. Start the production preview. Keep that process **warm** for the rest of the session.
+4. DevTools → Network → **Disable cache** + **Preserve log** when collecting Network samples. Do **not** leave DevTools throttling on during Lighthouse.
 5. Set viewport per active profile (Section 8.5).
 6. Record metadata in the results template (Section 16).
 
@@ -571,18 +534,7 @@ This is **session ordering**, not a single synchronized page load.
 3. **Network block:** walk the Latin square repeatedly, taking **one** Network recording per variant per pass, until n=10 valid recordings exist per variant. Each recording is its own Empty Cache and Hard Reload with **DevTools** viewport/CPU/network settings from Section 8.5. After milestone F, copy User Timing marks from the Console. Export HAR.
 4. **Performance block (diagnostic):** walk the Latin square until n=3 valid Record-and-reload traces exist per variant. Do not treat these IDs as matching Lighthouse or Network rows.
 
-Do not open React DevTools Profiler during session type P.
-
-**Session type R (profiling build)**
-
-1. Stop the production preview if it occupies port 3000; start `preview:profile`.
-2. One discarded warm-up navigation.
-3. **React Profiler block:** walk the Latin square until n=3 valid profiles exist per variant per profile. Hard reload with Profiler recording; stop after milestone F; export JSON.
-4. Discard any Lighthouse/Network numbers taken on this build — they are not primary evidence.
-
 **Do not** run Lighthouse with DevTools throttling also enabled.
-
-**Do not** run React Profiler (or the profiling build) before Lighthouse/Network on the production build — Profiler overhead and the profiling renderer must not contaminate primary metrics.
 
 ### 13.4 Valid sample criteria
 
@@ -590,7 +542,7 @@ A **sample** (one tool, one navigation) is **valid** when:
 
 - Correct variant URL loaded (`?variant=` matches the intended V1/V2/V3/V3B)
 - Visible `data-exp-variant` label matches that variant
-- Session type matches the tool (P vs R)
+- Collected on the production build (`npm run build` / `npm run preview`)
 - No build/devtools overlay interference
 - No manual interaction during load (scroll/hover/click)
 - Throttling and viewport match Section 8.5 **for that tool** (Lighthouse simulation vs DevTools custom profile)
@@ -601,16 +553,15 @@ Invalid samples are excluded and repeated. Do not replace valid samples. Do not 
 
 ### 13.5 Repetitions
 
-| Tool           | Valid samples per variant per profile | Warm-up                          |
-| -------------- | ------------------------------------: | -------------------------------- |
-| Lighthouse     |                                    10 | 1 per type-P session (discarded) |
-| Network        |                                    10 | included in type-P warm-up       |
-| Performance    |                                     3 | 1 per type-P session (discarded) |
-| React Profiler |                                     3 | 1 per type-R session (discarded) |
+| Tool        | Valid samples per variant per profile | Warm-up                          |
+| ----------- | ------------------------------------: | -------------------------------- |
+| Lighthouse  |                                    10 | 1 per type-P session (discarded) |
+| Network     |                                    10 | included in type-P warm-up       |
+| Performance |                                     3 | 1 per type-P session (discarded) |
 
 **Total primary samples per profile:** 4 variants × 10 = **40 Lighthouse** + **40 Network** → **80 primary samples per profile**, **160** across M + D.
 
-**Total diagnostic samples per profile:** 4 × 3 = **12 Performance** + **12 Profiler**.
+**Total diagnostic samples per profile:** 4 × 3 = **12 Performance** (**24** across M + D).
 
 ### 13.6 Statistical summary
 
@@ -655,9 +606,6 @@ docs/measurements/experiment-001/
       performance/
         M-PF-V1-01/
           performance.json
-      profiler/
-        M-RP-V1-01/
-          profiler.json
 ```
 
 ### 14.2 Results workbook
@@ -672,32 +620,31 @@ Record full commit SHA and `package-lock.json` hash in metadata. All formal runs
 
 ## 15. Threats to validity
 
-| Threat                                      | Mitigation                                                                 | Residual risk                                          |
-| ------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Artificial latency vs real backend latency  | Fixed `sleep` only; no Supabase on the experiment route                    | Findings may not transfer to production DB latency     |
-| Local `vite preview` vs deployed Netlify    | Document environment; optional deploy-preview appendix                     | Cold-start and edge differences                        |
-| Browser HTTP cache                          | Disable cache, Incognito, Lighthouse Clear storage                         | Low                                                    |
-| TanStack Query cache                        | New navigation per sample; avoid repeat within 60 s                        | Medium if protocol violated                            |
-| Server process kept warm                    | Intentional; do not restart preview between samples                        | Low for these stateless mocks                          |
-| Streaming SSR observability                 | Per-query Network RPC rows may be N/A; record User Timing                  | Medium                                                 |
-| Lighthouse simulation                       | Fixed M/D presets; never combine with DevTools throttle                    | Scaling imprecision vs real devices                    |
-| DevTools vs Lighthouse throttle mismatch    | Custom DevTools profiles matching Lighthouse numbers; record actual values | Medium if a stock preset is used instead               |
-| Profiler overhead                           | Profiler only on `dist-profile`; never during primary samples              | Profiler timings still inflated vs production renderer |
-| CPU thermal throttling                      | Plugged in; rest between sessions                                          | Medium on laptops                                      |
-| Background OS / browser processes           | Minimize; record anomalies                                                 | Medium                                                 |
-| Order effects                               | Latin square S1–S4                                                         | Low                                                    |
-| Different LCP elements on Mobile vs Desktop | Record LCP element per Lighthouse sample; compare within profile only      | Medium                                                 |
-| Limited diagnostic sample size              | Performance n=3, Profiler n=3; do not weigh them as primary n=10           | Medium                                                 |
-| Prerequisite regression                     | Smoke checks + independent preflight after build changes                   | Low after preflight                                    |
-| Exploratory results contamination           | Do not merge `measurements.md` values into formal tables                   | Low if protocol followed                               |
-| Router intent preload                       | Experiment route not in the production sidebar                             | Low                                                    |
+| Threat                                      | Mitigation                                                                 | Residual risk                                      |
+| ------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------- |
+| Artificial latency vs real backend latency  | Fixed `sleep` only; no Supabase on the experiment route                    | Findings may not transfer to production DB latency |
+| Local `vite preview` vs deployed Netlify    | Document environment; optional deploy-preview appendix                     | Cold-start and edge differences                    |
+| Browser HTTP cache                          | Disable cache, Incognito, Lighthouse Clear storage                         | Low                                                |
+| TanStack Query cache                        | New navigation per sample; avoid repeat within 60 s                        | Medium if protocol violated                        |
+| Server process kept warm                    | Intentional; do not restart preview between samples                        | Low for these stateless mocks                      |
+| Streaming SSR observability                 | Per-query Network RPC rows may be N/A; record User Timing                  | Medium                                             |
+| Lighthouse simulation                       | Fixed M/D presets; never combine with DevTools throttle                    | Scaling imprecision vs real devices                |
+| DevTools vs Lighthouse throttle mismatch    | Custom DevTools profiles matching Lighthouse numbers; record actual values | Medium if a stock preset is used instead           |
+| CPU thermal throttling                      | Plugged in; rest between sessions                                          | Medium on laptops                                  |
+| Background OS / browser processes           | Minimize; record anomalies                                                 | Medium                                             |
+| Order effects                               | Latin square S1–S4                                                         | Low                                                |
+| Different LCP elements on Mobile vs Desktop | Record LCP element per Lighthouse sample; compare within profile only      | Medium                                             |
+| Limited diagnostic sample size              | Performance n=3; do not weigh those traces as primary n=10                 | Medium                                             |
+| Prerequisite regression                     | Smoke checks + independent preflight after build changes                   | Low after preflight                                |
+| Exploratory results contamination           | Do not merge `measurements.md` values into formal tables                   | Low if protocol followed                           |
+| Router intent preload                       | Experiment route not in the production sidebar                             | Low                                                |
 
 ---
 
 ## 16. Rules for interpreting results
 
 1. **Compare variants only within the same device profile** (M vs M, D vs D). Do not compare Mobile medians to Desktop medians directly.
-2. **Primary claims** use Lighthouse + Network medians (including Network-sample milestone times). Performance and Profiler support explanation only.
+2. **Primary claims** use Lighthouse + Network medians (including Network-sample milestone times). Performance traces support explanation only.
 3. **INP is not reported** (load-only; no interaction script). **TTI is informational only** if present in Lighthouse JSON.
 4. If Network shows zero Server Function RPCs, state that dehydration/streaming succeeded — this is evidence for H4, not missing data.
 5. If V3 and V2 medians are close and their IQRs overlap, treat V3 as not improving over V2 for that metric. That is a descriptive judgment, not a statistical significance test.
@@ -713,7 +660,7 @@ Record full commit SHA and `package-lock.json` hash in metadata. All formal runs
 | Item                | State                                                                            |
 | ------------------- | -------------------------------------------------------------------------------- |
 | Protocol document   | Ready for independent preflight; formal benchmark not started                    |
-| Prerequisites P1–P9 | Implemented; independent preflight review is next                                |
+| Prerequisites P1–P8 | Implemented; independent preflight review is next                                |
 | Formal measurements | Not started                                                                      |
 | Results             | Use [`experiment-001-results-template.md`](./experiment-001-results-template.md) |
 

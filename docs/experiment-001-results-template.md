@@ -6,7 +6,7 @@ Blank workbook for formal Experiment 1 measurements.
 
 1. Complete metadata before any samples.
 2. Pass the preflight checklist in [`experiment-001-measurement-protocol.md`](./experiment-001-measurement-protocol.md) Section 9.
-3. Enter one row per **valid tool sample**. Lighthouse, Network, Performance, and React Profiler rows with similar numbers are **not** the same page load.
+3. Enter one row per **valid tool sample**. Lighthouse, Network, and Performance rows with similar numbers are **not** the same page load.
 4. Summarize medians only after all valid samples for a variant/profile/tool are complete.
 5. Leave result cells blank or write `N/A` with reason — do not invent values.
 6. Do not copy exploratory values from [`measurements.md`](./measurements.md) or from [`experiments.md`](./experiments.md) into this template.
@@ -17,12 +17,12 @@ Blank workbook for formal Experiment 1 measurements.
 
 ## 0. Measurement identity
 
-| Concept                | Meaning                                                                  |
-| ---------------------- | ------------------------------------------------------------------------ |
-| Formal measurement run | One cold navigation of one variant under one device profile              |
-| Tool evidence          | Lighthouse, Network, Performance, or React Profiler observation of a run |
+| Concept                | Meaning                                                     |
+| ---------------------- | ----------------------------------------------------------- |
+| Formal measurement run | One cold navigation of one variant under one device profile |
+| Tool evidence          | Lighthouse, Network, or Performance observation of a run    |
 
-**Sample counts (per variant per profile):** Lighthouse n=10; Network n=10; Performance n=3; React Profiler n=3.
+**Sample counts (per variant per profile):** Lighthouse n=10; Network n=10; Performance n=3.
 
 Do not treat `M-LH-V1-01` and `M-NW-V1-01` as the same page load. Analyze each tool under its own protocol.
 
@@ -30,38 +30,35 @@ Do not treat `M-LH-V1-01` and `M-NW-V1-01` as the same page load. Analyze each t
 
 **TTI:** informational only if present in Lighthouse JSON (`audits.interactive` or equivalent). Do not enter TTI in median or pairwise tables.
 
-**Primary vs diagnostic:** Lighthouse and Network are primary. Performance and React Profiler are diagnostic.
+**Primary vs diagnostic:** Lighthouse and Network are primary. Performance is diagnostic.
 
 ---
 
 ## 1. Session metadata
 
-| Field                                            | Value                                                 |
-| ------------------------------------------------ | ----------------------------------------------------- |
-| Experimenter                                     |                                                       |
-| Date started                                     |                                                       |
-| Date completed                                   |                                                       |
-| Git commit SHA                                   |                                                       |
-| package-lock.json SHA-256                        |                                                       |
-| Branch                                           |                                                       |
-| Node.js version                                  |                                                       |
-| npm version                                      |                                                       |
-| Chrome version                                   |                                                       |
-| OS + version                                     |                                                       |
-| Machine model                                    |                                                       |
-| CPU model                                        |                                                       |
-| RAM (GB)                                         |                                                       |
-| Display resolution + scaling                     |                                                       |
-| Server command (session type P)                  | `npm run preview -- --port 3000 --strictPort`         |
-| Build command (session type P)                   | `npm run build`                                       |
-| Profiling server (session type R)                | `npm run preview:profile -- --port 3000 --strictPort` |
-| Profiling build used for Profiler only? (Y/N)    |                                                       |
-| Profiling build notes                            |                                                       |
-| DevTools custom network profile M (exact values) |                                                       |
-| DevTools custom network profile D (exact values) |                                                       |
-| Prerequisites P1–P9 complete? (Y/N)              |                                                       |
-| Protocol version                                 | experiment-001-measurement-protocol.md                |
-| Artifact root path                               | `docs/measurements/experiment-001/`                   |
+| Field                                            | Value                                         |
+| ------------------------------------------------ | --------------------------------------------- |
+| Experimenter                                     |                                               |
+| Date started                                     |                                               |
+| Date completed                                   |                                               |
+| Git commit SHA                                   |                                               |
+| package-lock.json SHA-256                        |                                               |
+| Branch                                           |                                               |
+| Node.js version                                  |                                               |
+| npm version                                      |                                               |
+| Chrome version                                   |                                               |
+| OS + version                                     |                                               |
+| Machine model                                    |                                               |
+| CPU model                                        |                                               |
+| RAM (GB)                                         |                                               |
+| Display resolution + scaling                     |                                               |
+| Server command (session type P)                  | `npm run preview -- --port 3000 --strictPort` |
+| Build command (session type P)                   | `npm run build`                               |
+| DevTools custom network profile M (exact values) |                                               |
+| DevTools custom network profile D (exact values) |                                               |
+| Prerequisites P1–P8 complete? (Y/N)              |                                               |
+| Protocol version                                 | experiment-001-measurement-protocol.md        |
+| Artifact root path                               | `docs/measurements/experiment-001/`           |
 
 ---
 
@@ -75,7 +72,6 @@ Do not treat `M-LH-V1-01` and `M-NW-V1-01` as the same page load. Analyze each t
 | Throttling preset/custom profile recorded                       | ☐         | ☐         |
 | Viewport matches profile                                        | ☐         | ☐         |
 | Production build (not `dev`) for Lighthouse/Network/Performance | ☐         | ☐         |
-| Profiling build only for React Profiler                         | ☐         | ☐         |
 | Devtools stripped in production build                           | ☐         | ☐         |
 | Preview process kept warm (not restarted per sample)            | ☐         | ☐         |
 | Latin square session ID (S1–S4)                                 | ☐         | ☐         |
@@ -455,83 +451,7 @@ Independent traces. Do not treat these FCP/LCP values as the primary Lighthouse 
 
 ---
 
-## 8. Raw samples — React DevTools Profiler (diagnostic)
-
-Use session type R (`build:profile` / `preview:profile`) only. Do not copy Lighthouse or Network values from this build into Sections 5–6.
-
-### 8.1 Profile M (Mobile)
-
-#### V1 (expected n = 3)
-
-| Run        | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ---------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| M-RP-V1-01 | V1      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V1-02 | V1      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V1-03 | V1      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-#### V2 (expected n = 3)
-
-| Run        | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ---------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| M-RP-V2-01 | V2      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V2-02 | V2      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V2-03 | V2      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-#### V3 (expected n = 3)
-
-| Run        | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ---------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| M-RP-V3-01 | V3      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V3-02 | V3      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V3-03 | V3      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-#### V3B (expected n = 3)
-
-| Run         | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ----------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| M-RP-V3B-01 | V3B     |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V3B-02 | V3B     |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| M-RP-V3B-03 | V3B     |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-### 8.2 Profile D (Desktop)
-
-#### V1 (expected n = 3)
-
-| Run        | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ---------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| D-RP-V1-01 | V1      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V1-02 | V1      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V1-03 | V1      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-#### V2 (expected n = 3)
-
-| Run        | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ---------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| D-RP-V2-01 | V2      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V2-02 | V2      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V2-03 | V2      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-#### V3 (expected n = 3)
-
-| Run        | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ---------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| D-RP-V3-01 | V3      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V3-02 | V3      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V3-03 | V3      |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-#### V3B (expected n = 3)
-
-| Run         | Variant | Commit count | Max commit (ms) | Top component | Top duration (ms) | Summary widget (ms) | Expense chart (ms) | Transactions (ms) | Budgets (ms) | actualDuration (root) | baseDuration (root) | Duplicate renders? | Export path | Valid? |
-| ----------- | ------- | -----------: | --------------: | ------------- | ----------------: | ------------------: | -----------------: | ----------------: | -----------: | --------------------: | ------------------: | ------------------ | ----------- | ------ |
-| D-RP-V3B-01 | V3B     |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V3B-02 | V3B     |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-| D-RP-V3B-03 | V3B     |              |                 |               |                   |                     |                    |                   |              |                       |                     |                    |             |        |
-
-**actualDuration / baseDuration:** export from Profiler JSON if the UI does not display them. Write `N/A — standard production build` if the profiling build was not used.
-
----
-
-## 9. Excluded samples log
+## 8. Excluded samples log
 
 | Run ID | Tool | Profile | Variant | Reason excluded | Replaced by |
 | ------ | ---- | ------- | ------- | --------------- | ----------- |
@@ -539,11 +459,11 @@ Use session type R (`build:profile` / `preview:profile`) only. Do not copy Light
 
 ---
 
-## 10. Summary tables — Profile M (Mobile)
+## 9. Summary tables — Profile M (Mobile)
 
 Fill after the expected valid samples exist. **Median** is the primary thesis value. Dispersion: Q1, Q3, IQR (plus min, max, sample SD in the appendix). Mean is optional and must not replace the median. Do not report p-values.
 
-### 10.1 Lighthouse medians (expected n = 10)
+### 9.1 Lighthouse medians (expected n = 10)
 
 | Variant |   n | Score median | FCP median | LCP median | CLS median | SI median | TBT median |
 | ------- | --: | -----------: | ---------: | ---------: | ---------: | --------: | ---------: |
@@ -552,7 +472,7 @@ Fill after the expected valid samples exist. **Median** is the primary thesis va
 | V3      |     |              |            |            |            |           |            |
 | V3B     |     |              |            |            |            |           |            |
 
-### 10.2 Milestone medians (ms) — Network-sample User Timing (expected n = 10)
+### 9.2 Milestone medians (ms) — Network-sample User Timing (expected n = 10)
 
 | Variant |   n | B median | C median | D median | E median | F median |
 | ------- | --: | -------: | -------: | -------: | -------: | -------: |
@@ -561,7 +481,7 @@ Fill after the expected valid samples exist. **Median** is the primary thesis va
 | V3      |     |          |          |          |          |          |
 | V3B     |     |          |          |          |          |          |
 
-### 10.3 Dispersion (optional appendix) — example for milestone F
+### 9.3 Dispersion (optional appendix) — example for milestone F
 
 Repeat this table for each primary metric reported in the thesis (at least FCP, LCP, CLS, Score, and milestones B–F).
 
@@ -572,20 +492,11 @@ Repeat this table for each primary metric reported in the thesis (at least FCP, 
 | V3      |      |      |       |       |       |             |
 | V3B     |      |      |       |       |       |             |
 
-### 10.4 Profiler medians (diagnostic, expected n = 3)
-
-| Variant |   n | Commits median | Max commit median | Top component (mode) |
-| ------- | --: | -------------: | ----------------: | -------------------- |
-| V1      |     |                |                   |                      |
-| V2      |     |                |                   |                      |
-| V3      |     |                |                   |                      |
-| V3B     |     |                |                   |                      |
-
 ---
 
-## 11. Summary tables — Profile D (Desktop)
+## 10. Summary tables — Profile D (Desktop)
 
-### 11.1 Lighthouse medians (expected n = 10)
+### 10.1 Lighthouse medians (expected n = 10)
 
 | Variant |   n | Score median | FCP median | LCP median | CLS median | SI median | TBT median |
 | ------- | --: | -----------: | ---------: | ---------: | ---------: | --------: | ---------: |
@@ -594,7 +505,7 @@ Repeat this table for each primary metric reported in the thesis (at least FCP, 
 | V3      |     |              |            |            |            |           |            |
 | V3B     |     |              |            |            |            |           |            |
 
-### 11.2 Milestone medians (ms) (expected n = 10)
+### 10.2 Milestone medians (ms) (expected n = 10)
 
 | Variant |   n | B median | C median | D median | E median | F median |
 | ------- | --: | -------: | -------: | -------: | -------: | -------: |
@@ -603,7 +514,7 @@ Repeat this table for each primary metric reported in the thesis (at least FCP, 
 | V3      |     |          |          |          |          |          |
 | V3B     |     |          |          |          |          |          |
 
-### 11.3 Dispersion (optional appendix) — milestone F
+### 10.3 Dispersion (optional appendix) — milestone F
 
 | Variant | F Q1 | F Q3 | F IQR | F min | F max | F sample SD |
 | ------- | ---: | ---: | ----: | ----: | ----: | ----------: |
@@ -612,18 +523,9 @@ Repeat this table for each primary metric reported in the thesis (at least FCP, 
 | V3      |      |      |       |       |       |             |
 | V3B     |      |      |       |       |       |             |
 
-### 11.4 Profiler medians (diagnostic, expected n = 3)
-
-| Variant |   n | Commits median | Max commit median | Top component (mode) |
-| ------- | --: | -------------: | ----------------: | -------------------- |
-| V1      |     |                |                   |                      |
-| V2      |     |                |                   |                      |
-| V3      |     |                |                   |                      |
-| V3B     |     |                |                   |                      |
-
 ---
 
-## 12. Pairwise comparison — V3B vs V3 (numeric table only)
+## 11. Pairwise comparison — V3B vs V3 (numeric table only)
 
 Formulas (leave cells blank until medians exist):
 
@@ -633,7 +535,7 @@ Formulas (leave cells blank until medians exist):
 
 Do not interpret these numbers as statistical significance. Hypothesis evaluation is Section 13.
 
-### 12.1 Profile M
+### 11.1 Profile M
 
 | Metric      | V3B median | V3 median | Δ median | Relative change (%) |
 | ----------- | ---------: | --------: | -------: | ------------------: |
@@ -645,7 +547,7 @@ Do not interpret these numbers as statistical significance. Hypothesis evaluatio
 | LCP         |            |           |          |                     |
 | FCP         |            |           |          |                     |
 
-### 12.2 Profile D
+### 11.2 Profile D
 
 | Metric      | V3B median | V3 median | Δ median | Relative change (%) |
 | ----------- | ---------: | --------: | -------: | ------------------: |
@@ -659,41 +561,41 @@ Do not interpret these numbers as statistical significance. Hypothesis evaluatio
 
 ---
 
-## 13. Hypothesis evaluation
+## 12. Hypothesis evaluation
 
 | ID  | Hypothesis                                 | Result (supported / refuted / inconclusive) | Evidence (table §) |
 | --- | ------------------------------------------ | ------------------------------------------- | ------------------ |
 | H1  | Critical summary blocks SSR appropriately  |                                             |                    |
 | H2  | Non-critical widgets do not block SSR      |                                             |                    |
-| H3  | V3B faster total completion than V3        |                                             | §12                |
+| H3  | V3B faster total completion than V3        |                                             | §11                |
 | H4  | No duplicate Server Functions on cold load |                                             | §6 SF RPC          |
-| H5  | V1 vs V2 critical vs complete trade-off    |                                             | §10–11             |
+| H5  | V1 vs V2 critical vs complete trade-off    |                                             | §9–10              |
 
 ---
 
-## 14. Conclusions (draft for thesis)
+## 13. Conclusions (draft for thesis)
 
 Fill only after formal samples exist. Do not paste exploratory timings here as if they were measured in this workbook.
 
-### 14.1 Profile M (Mobile)
+### 13.1 Profile M (Mobile)
 
 **Primary findings (Lighthouse + Network milestones):**
 
-**Diagnostic notes (Performance + Profiler):**
+**Diagnostic notes (Performance):**
 
-### 14.2 Profile D (Desktop)
+### 13.2 Profile D (Desktop)
 
 **Primary findings:**
 
 **Diagnostic notes:**
 
-### 14.3 Limitations encountered
+### 13.3 Limitations encountered
 
 | Limitation | Impact on results |
 | ---------- | ----------------- |
 |            |                   |
 
-### 14.4 Relation to exploratory `measurements.md`
+### 13.4 Relation to exploratory `measurements.md`
 
 Compare after formal medians exist. The left column is historical exploratory claims, not values from this workbook.
 
@@ -706,7 +608,7 @@ Compare after formal medians exist. The left column is historical exploratory cl
 
 ---
 
-## 15. Sign-off
+## 14. Sign-off
 
 | Role        | Name | Date |
 | ----------- | ---- | ---- |

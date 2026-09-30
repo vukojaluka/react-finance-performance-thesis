@@ -61,15 +61,14 @@ Lighthouse `fetchTime` values span `2026-09-24T06:12:05Z` … `2026-09-24T06:15:
 
 Protocol requirements (unchanged):
 
-| Tool           | Tier       | Expected per variant × profile |
-| -------------- | ---------- | -----------------------------: |
-| Lighthouse     | Primary    |                             10 |
-| Network        | Primary    |                             10 |
-| Performance    | Diagnostic |                              3 |
-| React Profiler | Diagnostic |                              3 |
+| Tool        | Tier       | Expected per variant × profile |
+| ----------- | ---------- | -----------------------------: |
+| Lighthouse  | Primary    |                             10 |
+| Network     | Primary    |                             10 |
+| Performance | Diagnostic |                              3 |
 
 **Expected primary total:** 4 variants × 2 profiles × (10 + 10) = **160**.  
-**Expected diagnostic total:** 4 × 2 × (3 + 3) = **48**.
+**Expected diagnostic total:** 4 × 2 × 3 = **24** Performance traces.
 
 ### Counting rules used in this audit
 
@@ -110,14 +109,6 @@ The n=3 Lighthouse and Network (M/D) samples are **artifact-backed** and interna
 | Desktop       | V2      |           Performance |               0 |                 0 |                   3 | 3                   |                             |
 | Desktop       | V3      |           Performance |               0 |                 0 |                   3 | 3                   |                             |
 | Desktop       | V3B     |           Performance |               0 |                 0 |                   3 | 3                   |                             |
-| Mobile        | V1      |        React Profiler |               0 |                 0 |                   3 | 3                   | No profiler JSON            |
-| Mobile        | V2      |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
-| Mobile        | V3      |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
-| Mobile        | V3B     |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
-| Desktop       | V1      |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
-| Desktop       | V2      |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
-| Desktop       | V3      |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
-| Desktop       | V3B     |        React Profiler |               0 |                 0 |                   3 | 3                   |                             |
 | _Unthrottled_ | V1–V3B  | Network (profile `U`) |        12 extra |               n/a | 0 (not in protocol) | n/a                 | See §C/F                    |
 
 **Totals**
@@ -128,9 +119,8 @@ The n=3 Lighthouse and Network (M/D) samples are **artifact-backed** and interna
 | Protocol-complete primary on current branch        |                                                                                             0 |
 | Extra unthrottled Network JSON                     |                                                                                            12 |
 | Performance traces                                 |                                                                                             0 |
-| React Profiler exports                             |                                                                                             0 |
 | Primary still required for protocol n=10           | 112 (56 Lighthouse + 56 Network) if the n=3 set is retained; **160** if that set is discarded |
-| Diagnostic still required                          |                                                             48 (24 Performance + 24 Profiler) |
+| Diagnostic still required                          |                                                                         24 Performance traces |
 
 ---
 
@@ -149,7 +139,7 @@ The n=3 Lighthouse and Network (M/D) samples are **artifact-backed** and interna
 | `docs/experiments.md`                         | Present; exploratory history only                             |
 | `docs/measurements.md`                        | Present; exploratory `~3.5s` / `~4.5s` table — **not** formal |
 | `docs/optimization.md`                        | Present; Measurements = `TODO`                                |
-| `*.har`, Performance traces, Profiler JSON    | None in the repository                                        |
+| `*.har`, Performance traces                   | None in the repository                                        |
 
 ### C.2 Results branch (`origin/cursor/experiment-001-optimization-results-c674` @ `0e1accd`)
 
@@ -350,10 +340,6 @@ Viewport 1350×940, no CPU/network throttle. Milestone **F** only (completion). 
 
 **No artifacts.** Scripting / rendering / painting / long-task summaries from a Performance-panel trace: **N/A**.
 
-### D.8 React DevTools Profiler
-
-**No artifacts.** Commit count, commit durations, `actualDuration`, `baseDuration`, widget ranked times: **N/A**. The results-branch `optimization.md` states Profiler was not part of that session.
-
 ---
 
 ## E. Missing measurements
@@ -394,10 +380,6 @@ If the n=3 set is discarded: **80** new Network samples.
 
 - All 8 variant×profile cells: **0 found, 3 required** → **24 traces required**.
 
-### React Profiler (diagnostic)
-
-- All 8 cells: **0 found, 3 required** → **24 exports required** on `build:profile` / `preview:profile`.
-
 ### Other protocol items not found
 
 - Latin-square session log (S1–S4) for a n=10 campaign.
@@ -421,7 +403,7 @@ No raw Lighthouse or M/D Network JSON failed basic identity checks (URL, variant
 | M/D Network SF count = 0                 | Not an error                                       | Consistent with SSR Query dehydration; record as N/A for per-query RPC rows                                                                        |
 | `summary.json` `lcpElement` field        | Unusable                                           | Stores LCP _time_ display string (e.g. `3,160 ms`), not a selector. Selector taken from LHR in §D                                                  |
 | `docs/measurements.md` exploratory table | Not formal                                         | Historical `~3.5s` / `~4.5s`; protocol forbids merging into the formal workbook                                                                    |
-| Performance / Profiler                   | Missing                                            | No files to exclude                                                                                                                                |
+| Performance traces                       | Missing                                            | No files to exclude                                                                                                                                |
 
 ---
 
@@ -457,31 +439,27 @@ No Cursor headline value in the list above is `Cursor summary value — source a
    **160** primary (80 Lighthouse + 80 Network).
 
 3. **How many additional runs are required?**
-   - If the n=3 set is retained after review: **112** primary (56 Lighthouse + 56 Network) **plus** **48** diagnostic (24 Performance + 24 Profiler).
-   - If the n=3 set is rejected: **160** primary + **48** diagnostic.
+   - If the n=3 set is retained after review: **112** primary (56 Lighthouse + 56 Network) **plus** **24** Performance traces.
+   - If the n=3 set is rejected: **160** primary + **24** Performance traces.
 
 4. **Are Performance measurements available?**  
    **No.**
 
-5. **Are React Profiler measurements available?**  
-   **No.**
+5. **Can we start writing Chapter 4 with the current data?**  
+   **No.** The formal protocol dataset is incomplete; artifacts are not even on the experiment branch; Performance traces are missing; n=3 means are not a substitute for the planned n=10 medians.
 
-6. **Can we start writing Chapter 4 with the current data?**  
-   **No.** The formal protocol dataset is incomplete; artifacts are not even on the experiment branch; diagnostic tools are missing; n=3 means are not a substitute for the planned n=10 medians.
-
-7. **What exact measurements remain before the formal dataset is complete?**
+6. **What exact measurements remain before the formal dataset is complete?**
    1. Bring results-branch artifacts onto the experiment branch **or** re-collect on this machine (decision, not done in this audit).
    2. Lighthouse: 7 more valid Navigation audits per variant × Mobile/Desktop (**56**), or 80 if restarting; export JSON **and** HTML.
    3. Network: 7 more valid cold navigations per cell (**56**), or 80 if restarting; record User Timing + HAR.
    4. Performance: **3** traces per variant × profile (**24**).
-   5. React Profiler: **3** per variant × profile on the profiling build (**24**).
-   6. Fill `docs/experiment-001-results-template.md` from those artifacts only.
-   7. Only then compute thesis medians / IQR / V3B vs V3 relative change.
+   5. Fill `docs/experiment-001-results-template.md` from those artifacts only.
+   6. Only then compute thesis medians / IQR / V3B vs V3 relative change.
 
 ---
 
 ## Decision (this audit)
 
-Experiment 001 is **not complete**. A partial automated Lighthouse + Network campaign (n=3, headless) exists on another git branch and **does** support the previously quoted Speed Index and unthrottled ~3.7 s / ~4.7 s headlines. It does **not** satisfy the protocol’s n=10 primary plan or the diagnostic Performance/Profiler plan.
+Experiment 001 is **not complete**. A partial automated Lighthouse + Network campaign (n=3, headless) exists on another git branch and **does** support the previously quoted Speed Index and unthrottled ~3.7 s / ~4.7 s headlines. It does **not** satisfy the protocol’s n=10 primary plan or the diagnostic Performance plan.
 
 **Next step (no measurement in this task):** decide whether to merge/cherry-pick `0e1accd` onto `test/performance-experiment-001` so the JSON lives on the experiment branch, then run a separate preflight and the remaining protocol samples on the thesis machine.

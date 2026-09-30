@@ -40,7 +40,6 @@ Metrics to collect.
 
 - Lighthouse
 - Core Web Vitals
-- React Profiler
 - Network Waterfall
 - Bundle Size
 - User Experience
@@ -224,7 +223,7 @@ The values in this document are historical exploratory observations, not formal 
 Formal protocol (summary only — the protocol document is authoritative):
 
 - Primary evidence: Lighthouse (n=10 per variant per profile) and Network (n=10), including User Timing milestones from Network samples
-- Diagnostic evidence: Performance (n=3) and React DevTools Profiler (n=3, profiling build only)
+- Diagnostic evidence: Chrome DevTools Performance (n=3)
 - Device profiles: Lighthouse Mobile (M) and Lighthouse Desktop (D)
 - Cold client caches; warm preview process; no warm-cache cohort
 - INP is N/A (load-only); TTI is informational only
@@ -275,7 +274,7 @@ This rendering strategy was selected for the production Dashboard (`/dashboard`)
 
 ## Status
 
-Exploratory implementation completed; prerequisites P1–P9 implemented; formal measurements not started. Independent preflight is the next step before the formal benchmark.
+Exploratory implementation completed; prerequisites P1–P8 implemented; formal measurements not started. Independent preflight is the next step before the formal benchmark.
 
 ---
 

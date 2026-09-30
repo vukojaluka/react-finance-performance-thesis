@@ -20,48 +20,39 @@ Procedure: [final-measurement-checklist.md](./final-measurement-checklist.md).
 
 ## Required counts
 
-| Profile | Variant | Tool           | Required valid samples |
-| ------- | ------- | -------------- | ---------------------: |
-| Mobile  | V1      | Lighthouse     |                     10 |
-| Mobile  | V1      | Network        |                     10 |
-| Mobile  | V1      | Performance    |                      3 |
-| Mobile  | V1      | React Profiler |                      3 |
-| Mobile  | V2      | Lighthouse     |                     10 |
-| Mobile  | V2      | Network        |                     10 |
-| Mobile  | V2      | Performance    |                      3 |
-| Mobile  | V2      | React Profiler |                      3 |
-| Mobile  | V3      | Lighthouse     |                     10 |
-| Mobile  | V3      | Network        |                     10 |
-| Mobile  | V3      | Performance    |                      3 |
-| Mobile  | V3      | React Profiler |                      3 |
-| Mobile  | V3B     | Lighthouse     |                     10 |
-| Mobile  | V3B     | Network        |                     10 |
-| Mobile  | V3B     | Performance    |                      3 |
-| Mobile  | V3B     | React Profiler |                      3 |
-| Desktop | V1      | Lighthouse     |                     10 |
-| Desktop | V1      | Network        |                     10 |
-| Desktop | V1      | Performance    |                      3 |
-| Desktop | V1      | React Profiler |                      3 |
-| Desktop | V2      | Lighthouse     |                     10 |
-| Desktop | V2      | Network        |                     10 |
-| Desktop | V2      | Performance    |                      3 |
-| Desktop | V2      | React Profiler |                      3 |
-| Desktop | V3      | Lighthouse     |                     10 |
-| Desktop | V3      | Network        |                     10 |
-| Desktop | V3      | Performance    |                      3 |
-| Desktop | V3      | React Profiler |                      3 |
-| Desktop | V3B     | Lighthouse     |                     10 |
-| Desktop | V3B     | Network        |                     10 |
-| Desktop | V3B     | Performance    |                      3 |
-| Desktop | V3B     | React Profiler |                      3 |
+| Profile | Variant | Tool        | Required valid samples |
+| ------- | ------- | ----------- | ---------------------: |
+| Mobile  | V1      | Lighthouse  |                     10 |
+| Mobile  | V1      | Network     |                     10 |
+| Mobile  | V1      | Performance |                      3 |
+| Mobile  | V2      | Lighthouse  |                     10 |
+| Mobile  | V2      | Network     |                     10 |
+| Mobile  | V2      | Performance |                      3 |
+| Mobile  | V3      | Lighthouse  |                     10 |
+| Mobile  | V3      | Network     |                     10 |
+| Mobile  | V3      | Performance |                      3 |
+| Mobile  | V3B     | Lighthouse  |                     10 |
+| Mobile  | V3B     | Network     |                     10 |
+| Mobile  | V3B     | Performance |                      3 |
+| Desktop | V1      | Lighthouse  |                     10 |
+| Desktop | V1      | Network     |                     10 |
+| Desktop | V1      | Performance |                      3 |
+| Desktop | V2      | Lighthouse  |                     10 |
+| Desktop | V2      | Network     |                     10 |
+| Desktop | V2      | Performance |                      3 |
+| Desktop | V3      | Lighthouse  |                     10 |
+| Desktop | V3      | Network     |                     10 |
+| Desktop | V3      | Performance |                      3 |
+| Desktop | V3B     | Lighthouse  |                     10 |
+| Desktop | V3B     | Network     |                     10 |
+| Desktop | V3B     | Performance |                      3 |
 
 | Set                              |   Count |
 | -------------------------------- | ------: |
 | Lighthouse                       |      80 |
 | Network                          |      80 |
 | Performance                      |      24 |
-| React Profiler                   |      24 |
-| **Total required valid samples** | **208** |
+| **Total required valid samples** | **184** |
 | Collected in this tree           |       0 |
 
 Artifact path is the sample directory. Create it when the sample is valid.
@@ -106,14 +97,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | M-PF-V1-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-02/` | —             | —                | —     |
 | M-PF-V1-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/performance/M-PF-V1-03/` | —             | —                | —     |
 
-### Mobile V1 — React Profiler
-
-| Sample ID  | Status  | Artifact path                                                                | Valid/Invalid | Exclusion reason | Notes |
-| ---------- | ------- | ---------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-RP-V1-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/profiler/M-RP-V1-01/` | —             | —                | —     |
-| M-RP-V1-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/profiler/M-RP-V1-02/` | —             | —                | —     |
-| M-RP-V1-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v1/profiler/M-RP-V1-03/` | —             | —                | —     |
-
 ### Mobile V2 — Lighthouse
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
@@ -151,14 +134,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | M-PF-V2-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-01/` | —             | —                | —     |
 | M-PF-V2-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-02/` | —             | —                | —     |
 | M-PF-V2-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/performance/M-PF-V2-03/` | —             | —                | —     |
-
-### Mobile V2 — React Profiler
-
-| Sample ID  | Status  | Artifact path                                                                | Valid/Invalid | Exclusion reason | Notes |
-| ---------- | ------- | ---------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-RP-V2-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/profiler/M-RP-V2-01/` | —             | —                | —     |
-| M-RP-V2-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/profiler/M-RP-V2-02/` | —             | —                | —     |
-| M-RP-V2-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v2/profiler/M-RP-V2-03/` | —             | —                | —     |
 
 ### Mobile V3 — Lighthouse
 
@@ -198,14 +173,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | M-PF-V3-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-02/` | —             | —                | —     |
 | M-PF-V3-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/performance/M-PF-V3-03/` | —             | —                | —     |
 
-### Mobile V3 — React Profiler
-
-| Sample ID  | Status  | Artifact path                                                                | Valid/Invalid | Exclusion reason | Notes |
-| ---------- | ------- | ---------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| M-RP-V3-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/profiler/M-RP-V3-01/` | —             | —                | —     |
-| M-RP-V3-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/profiler/M-RP-V3-02/` | —             | —                | —     |
-| M-RP-V3-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3/profiler/M-RP-V3-03/` | —             | —                | —     |
-
 ### Mobile V3B — Lighthouse
 
 | Sample ID   | Status  | Artifact path                                                                    | Valid/Invalid | Exclusion reason | Notes |
@@ -243,14 +210,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | M-PF-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-01/` | —             | —                | —     |
 | M-PF-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-02/` | —             | —                | —     |
 | M-PF-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/performance/M-PF-V3B-03/` | —             | —                | —     |
-
-### Mobile V3B — React Profiler
-
-| Sample ID   | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
-| ----------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| M-RP-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/profiler/M-RP-V3B-01/` | —             | —                | —     |
-| M-RP-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/profiler/M-RP-V3B-02/` | —             | —                | —     |
-| M-RP-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-m/variant-v3b/profiler/M-RP-V3B-03/` | —             | —                | —     |
 
 ## Profile D — Desktop
 
@@ -292,14 +251,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | D-PF-V1-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-02/` | —             | —                | —     |
 | D-PF-V1-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/performance/D-PF-V1-03/` | —             | —                | —     |
 
-### Desktop V1 — React Profiler
-
-| Sample ID  | Status  | Artifact path                                                                | Valid/Invalid | Exclusion reason | Notes |
-| ---------- | ------- | ---------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-RP-V1-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/profiler/D-RP-V1-01/` | —             | —                | —     |
-| D-RP-V1-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/profiler/D-RP-V1-02/` | —             | —                | —     |
-| D-RP-V1-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v1/profiler/D-RP-V1-03/` | —             | —                | —     |
-
 ### Desktop V2 — Lighthouse
 
 | Sample ID  | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
@@ -337,14 +288,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | D-PF-V2-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-01/` | —             | —                | —     |
 | D-PF-V2-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-02/` | —             | —                | —     |
 | D-PF-V2-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-03/` | —             | —                | —     |
-
-### Desktop V2 — React Profiler
-
-| Sample ID  | Status  | Artifact path                                                                | Valid/Invalid | Exclusion reason | Notes |
-| ---------- | ------- | ---------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-RP-V2-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/profiler/D-RP-V2-01/` | —             | —                | —     |
-| D-RP-V2-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/profiler/D-RP-V2-02/` | —             | —                | —     |
-| D-RP-V2-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v2/profiler/D-RP-V2-03/` | —             | —                | —     |
 
 ### Desktop V3 — Lighthouse
 
@@ -384,14 +327,6 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | D-PF-V3-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-02/` | —             | —                | —     |
 | D-PF-V3-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/performance/D-PF-V3-03/` | —             | —                | —     |
 
-### Desktop V3 — React Profiler
-
-| Sample ID  | Status  | Artifact path                                                                | Valid/Invalid | Exclusion reason | Notes |
-| ---------- | ------- | ---------------------------------------------------------------------------- | ------------- | ---------------- | ----- |
-| D-RP-V3-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/profiler/D-RP-V3-01/` | —             | —                | —     |
-| D-RP-V3-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/profiler/D-RP-V3-02/` | —             | —                | —     |
-| D-RP-V3-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3/profiler/D-RP-V3-03/` | —             | —                | —     |
-
 ### Desktop V3B — Lighthouse
 
 | Sample ID   | Status  | Artifact path                                                                    | Valid/Invalid | Exclusion reason | Notes |
@@ -429,11 +364,3 @@ Artifact path is the sample directory. Create it when the sample is valid.
 | D-PF-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-01/` | —             | —                | —     |
 | D-PF-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-02/` | —             | —                | —     |
 | D-PF-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/performance/D-PF-V3B-03/` | —             | —                | —     |
-
-### Desktop V3B — React Profiler
-
-| Sample ID   | Status  | Artifact path                                                                  | Valid/Invalid | Exclusion reason | Notes |
-| ----------- | ------- | ------------------------------------------------------------------------------ | ------------- | ---------------- | ----- |
-| D-RP-V3B-01 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-01/` | —             | —                | —     |
-| D-RP-V3B-02 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-02/` | —             | —                | —     |
-| D-RP-V3B-03 | PENDING | `docs/measurements/experiment-001/profile-d/variant-v3b/profiler/D-RP-V3B-03/` | —             | —                | —     |

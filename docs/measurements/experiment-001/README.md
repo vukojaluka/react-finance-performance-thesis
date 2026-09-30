@@ -38,4 +38,3 @@ Tool files:
 | `lighthouse/`  | `lighthouse.json`, `lighthouse.html` |
 | `network/`     | `network.har`, `notes.md`            |
 | `performance/` | `performance.json`                   |
-| `profiler/`    | `profiler.json`                      |

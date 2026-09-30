@@ -16,7 +16,6 @@ export default [
   },
   {
     ignores: [
-      'dist-profile/**',
       'eslint.config.js',
       'prettier.config.js',
       'src/integrations/supabase/database.types.ts',

@@ -2135,10 +2135,6 @@ Application unit tests and end-to-end browser tests: Not implemented.
 
 Not implemented as an automated suite in this repository.
 
-### React Profiler
-
-Not implemented as a documented workflow in application code.
-
 ### Bundle Analyzer
 
 Not implemented.
