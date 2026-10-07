@@ -1,6 +1,6 @@
 # Experiment 001 — Final Measurement Tracker
 
-Live status board for the **final thesis measurement** campaign.
+Status board for the completed **final thesis measurement** campaign. All 184 rows are `RECORDED` and `Valid`. No row is `PENDING`.
 
 Lighthouse, Network, and Performance rows are `RECORDED` / `Valid` where the artifact file exists.
 
@@ -8,14 +8,16 @@ This tracker does not contain pilot / preliminary measurement values. That n=3 s
 
 Procedure: [final-measurement-checklist.md](./final-measurement-checklist.md).
 
-## How to update a row
+## How a row was updated
 
-1. Leave the row `PENDING` until a navigation passes the validation checklist.
-2. Save the artifact only into the path in that row.
-3. Set **Status** to `RECORDED` and **Valid/Invalid** to `Valid`.
-4. Leave **Exclusion reason** as `—` for a valid sample.
+These rules governed collection. They are not an open work list. Every row is now `RECORDED`.
+
+1. A row stayed `PENDING` until a navigation passed the validation checklist.
+2. The artifact was saved only into the path in that row.
+3. **Status** was set to `RECORDED` and **Valid/Invalid** to `Valid`.
+4. **Exclusion reason** stayed `—` for a valid sample.
 5. A valid row is never replaced and its files are never overwritten.
-6. A failed attempt does not occupy the row. Log it in the checklist exclusion log, keep this row `PENDING`, and repeat the navigation for the same sample ID.
+6. A failed attempt did not occupy the row. It was logged in the checklist exclusion log, the row stayed `PENDING`, and the navigation was repeated for the same sample ID.
 7. Do not enter metric values here. Enter those in `docs/experiment-001-results-template.md` after the artifact exists.
 
 ## Required counts

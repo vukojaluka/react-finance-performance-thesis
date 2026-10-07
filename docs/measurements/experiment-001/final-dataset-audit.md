@@ -1153,3 +1153,9 @@ The dataset is usable for thesis descriptive statistics if the warnings stay att
 - State that index 01 is a different day, port, and, for Lighthouse, host.
 - Do not rank the variants from this audit.
 
+## 16. Documentation follow-up
+
+Recorded after the checks in sections 1–15. Those sections were not recalculated.
+
+Storage examples in `docs/experiment-001-measurement-protocol.md` section 14.1, `docs/experiment-001-results-template.md`, `docs/measurements/experiment-001/README.md`, and `docs/measurements/experiment-001/final-measurement-checklist.md` now name the flat files this audit found on disk. The tracker opening now says the campaign is complete and that no row is `PENDING`. The Performance S1 versus S2–S3 capture difference is recorded in `performance-capture-method-audit.md`. Raw artifacts were not renamed or edited. Sections 1–15 remain the record of the dataset as audited.
+

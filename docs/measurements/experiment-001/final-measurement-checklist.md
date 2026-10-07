@@ -66,21 +66,21 @@ M-PF-V1-01 … M-PF-V1-03
 
 Repeat that pattern for `V2`, `V3`, and `V3B`, then the same IDs with the `D-` prefix.
 
-| Sample ID     | Directory                                                                       |
-| ------------- | ------------------------------------------------------------------------------- |
-| `M-LH-V1-01`  | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-01/`  |
-| `M-NW-V3B-10` | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-10/`   |
-| `D-PF-V2-03`  | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-03/` |
+| Sample ID     | File                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| `M-LH-V1-01`  | `docs/measurements/experiment-001/profile-m/variant-v1/lighthouse/M-LH-V1-01.json`    |
+| `M-NW-V3B-10` | `docs/measurements/experiment-001/profile-m/variant-v3b/network/M-NW-V3B-10.har`      |
+| `D-PF-V2-03`  | `docs/measurements/experiment-001/profile-d/variant-v2/performance/D-PF-V2-03.json`   |
 
-Folder names are lowercase (`profile-m`, `variant-v3b`). Sample IDs keep `V3B`.
+Folder names are lowercase (`profile-m`, `variant-v3b`). Sample IDs keep `V3B`. Files are flat in the tool directory. The sample ID is the filename stem.
 
-| Tool        | Files inside the sample directory    |
-| ----------- | ------------------------------------ |
-| Lighthouse  | `lighthouse.json`, `lighthouse.html` |
-| Network     | `network.har`, `notes.md`            |
-| Performance | `performance.json`                   |
+| Tool        | Files in the tool directory                    |
+| ----------- | ---------------------------------------------- |
+| Lighthouse  | `<sample-id>.json`, `<sample-id>.html`         |
+| Network     | `<sample-id>.har`, `<sample-id>.notes.md`      |
+| Performance | `<sample-id>.json`                             |
 
-Create the sample directory only when that sample passes validation.
+Save the flat artifact only when that sample passes validation.
 
 ---
 
@@ -105,7 +105,7 @@ One cold navigation of one variant is one sample for the current tool.
 
 If a navigation fails validation, repeat that variant before moving to the next variant in the same pass. The repeat still belongs to the current sample index. Do not skip ahead, do not renumber later variants, and do not start the next pass while any variant is still missing that index.
 
-Resume later by reading the tracker. The next pass is the first index that is still `PENDING` for that profile, variant, and tool. Do not repeat a `Valid` sample.
+The campaign is complete: every tracker row is `RECORDED` / `Valid`, and no index remains `PENDING`. During collection, a later pass resumed at the first index that was still `PENDING` for that profile, variant, and tool. A `Valid` sample was not repeated.
 
 ### URLs
 
@@ -229,10 +229,10 @@ Do this block before any DevTools network or CPU throttle is enabled.
 
 #### Export
 
-From the finished report, save HTML and JSON into the sample directory:
+From the finished report, save HTML and JSON as flat files in the tool directory:
 
-- `lighthouse.html`
-- `lighthouse.json`
+- `<sample-id>.html`
+- `<sample-id>.json`
 
 #### Lighthouse validation
 
@@ -245,7 +245,7 @@ A sample is valid when:
 - Session is production preview, not `npm run dev`
 - No scroll, hover, or click on the page during the audit
 - No devtools overlay
-- Both JSON and HTML exist in the sample directory
+- Both `<sample-id>.json` and `<sample-id>.html` exist in the tool directory
 - INP is left `N/A`
 
 Milestone marks are not the validity gate for a Lighthouse sample.
@@ -286,12 +286,12 @@ for (const id of ['A', 'B', 'C', 'D', 'E', 'F']) {
 }
 ```
 
-10. Export the HAR: Network panel download control → **Save all as HAR with content**. Save as `network.har`.
-11. Write `notes.md` in the same directory.
+10. Export the HAR: Network panel download control → **Save all as HAR with content**. Save as `<sample-id>.har`.
+11. Write `<sample-id>.notes.md` in the same tool directory.
 
 One recording per variant per pass. Repeat the Latin square until each variant has 10 valid HARs on Mobile, then do the same on Desktop.
 
-#### `notes.md`
+#### `<sample-id>.notes.md`
 
 ```md
 # SAMPLE-ID
@@ -316,7 +316,7 @@ If a per-query Network row is absent, write `N/A` and the reason (for example de
 #### Network validation
 
 - Milestones A–F are present, or the sample is excluded
-- HAR is `network.har`, not a custom JSON summary
+- HAR is `<sample-id>.har`, not a custom JSON summary
 - Throttling and viewport match the custom profile table
 - Production preview
 - No page interaction during the reload
@@ -334,7 +334,7 @@ Use the same production preview and the same custom DevTools profiles as Network
 3. Set CPU and the custom network profile for the active device profile.
 4. **Record and reload**.
 5. Stop the recording after milestone F and then 2 seconds of idle.
-6. Save the trace as `performance.json` in the sample directory.
+6. Save the trace as `<sample-id>.json` in the tool directory.
 
 n=3 valid traces per variant per profile. Latin-square passes S1, S2, and S3 only.
 
@@ -356,13 +356,13 @@ Set a tracker row to `RECORDED` / `Valid` only when every item below is true.
 - [ ] Correct throttling: Lighthouse used only its simulated device preset. Network and Performance used the custom DevTools profile for that device
 - [ ] No manual interaction: no scroll, hover, or click on the page during the measured load
 - [ ] No DevTools interference: no second throttle on a Lighthouse run, no TanStack Devtools panel, no remote debugging, no extra extension
-- [ ] Required artifact exported: Lighthouse JSON and HTML, or `network.har` plus `notes.md`, or `performance.json`
+- [ ] Required artifact exported: `<sample-id>.json` and `<sample-id>.html`, or `<sample-id>.har` plus `<sample-id>.notes.md`, or Performance `<sample-id>.json`
 - [ ] Required milestones available: Network and Performance have User Timing A–F. Lighthouse does not use milestones as its validity gate
 - [ ] No invalidation reason: no error boundary, no wrong label, no warm tab inside the 60 second `staleTime`, no restarted preview in the middle of a recorded sample, no mixed build
 
 Invalid samples are excluded and repeated. A `Valid` sample is never replaced and its files are never overwritten.
 
-Log each failed attempt here. Do not store the failed export in the final sample directory.
+Log each failed attempt here. Do not store the failed export in the final tool directory.
 
 | When | Sample ID | Tool | Profile | Reason | Repeated as same ID? |
 | ---- | --------- | ---- | ------- | ------ | -------------------- |

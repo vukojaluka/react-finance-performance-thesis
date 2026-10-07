@@ -589,23 +589,20 @@ Compute these for milestones C, D, E, F and for Lighthouse LCP/FCP (and other pr
 
 ### 14.1 Artifact storage
 
-Store **per tool sample**, not a shared folder that implies one page load for all tools:
+Store **per tool sample**, not a shared folder that implies one page load for all tools. The completed campaign stores each artifact as a flat file in the tool directory. The sample ID is the filename stem.
 
 ```text
 docs/measurements/experiment-001/
   profile-m|profile-d/
     variant-v1|v2|v3|v3b/
       lighthouse/
-        M-LH-V1-01/
-          lighthouse.json
-          lighthouse.html
+        M-LH-V1-01.json
+        M-LH-V1-01.html
       network/
-        M-NW-V1-01/
-          network.har
-          notes.md              (User Timing marks, N/A reasons)
+        M-NW-V1-01.har
+        M-NW-V1-01.notes.md    (User Timing marks, N/A reasons)
       performance/
-        M-PF-V1-01/
-          performance.json
+        M-PF-V1-01.json
 ```
 
 ### 14.2 Results workbook
