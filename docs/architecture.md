@@ -711,11 +711,15 @@ Experiment 001 is available at `/experiments/experiment-001` and is not part of 
 
 Purpose
 
-Public entry page describing the product and linking to register/login.
+Public entry page describing the product and linking to register/login. Unauthenticated visitors land here; authenticated users still reach `/dashboard` via post-auth redirects and protected routes (this page does not run an auth query).
 
 Main Features
 
-- Headline and short description
+- Header with brand and calls to action
+- Headline and short value proposition
+- Feature overview (dashboard indicators and monthly trend, transactions, categories, budgets, RLS)
+- Brief note that the app is part of a master's thesis on data-loading performance
+- Footer
 - Links to `/register` and `/login`
 
 Rendering Strategy
@@ -725,7 +729,7 @@ Rendering Strategy
 
 Performance Notes
 
-No server queries.
+No server queries. No images or animation.
 
 ---
 
