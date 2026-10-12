@@ -9,7 +9,17 @@ import netlify from '@netlify/vite-plugin-tanstack-start'
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
-  plugins: [devtools(), netlify(), tailwindcss(), tanstackStart(), viteReact()],
+  plugins: [
+    devtools(),
+    netlify({
+      // Local Deno edge emulation is unused by this app and fails without a
+      // matching Deno runtime in some environments.
+      dev: { edgeFunctions: { enabled: false } },
+    }),
+    tailwindcss(),
+    tanstackStart(),
+    viteReact(),
+  ],
 })
 
 export default config
