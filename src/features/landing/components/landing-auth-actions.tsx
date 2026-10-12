@@ -62,6 +62,7 @@ export function LandingAuthActions({
     mutationFn: () => logout(),
     onSuccess: async () => {
       clearUserQueryCache(queryClient)
+      await queryClient.fetchQuery(currentUserQuery())
       await router.invalidate()
       onNavigate?.()
     },
