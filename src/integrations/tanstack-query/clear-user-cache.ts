@@ -9,12 +9,19 @@ export function clearUserQueryCache(queryClient: QueryClient) {
 }
 
 /**
- * Clears cached server state, then reloads the current user.
- * `queryClient.clear()` does not notify observers, so a follow-up
- * `fetchQuery` is required for every `useQuery` / `useSuspenseQuery`
- * consumer (header, hero, mobile menu) to refresh.
+ * Drops cached per-user data, then reloads the current user in place.
+ * `queryClient.clear()` destroys query observers, so a second
+ * `useSuspenseQuery(currentUserQuery())` on the same page (landing hero)
+ * would keep its last snapshot. Removing every key except `auth` and
+ * refetching `currentUserQuery` notifies all remaining observers.
  */
 export async function resetUserQueryCache(queryClient: QueryClient) {
-  clearUserQueryCache(queryClient)
-  await queryClient.fetchQuery(currentUserQuery())
+  void queryClient.cancelQueries()
+  queryClient.removeQueries({
+    predicate: (query) => query.queryKey[0] !== 'auth',
+  })
+  await queryClient.fetchQuery({
+    ...currentUserQuery(),
+    staleTime: 0,
+  })
 }
