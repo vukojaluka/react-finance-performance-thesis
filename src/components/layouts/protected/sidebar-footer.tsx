@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { logout } from '@/features/auth/server/logout'
-import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
+import { resetUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 
 export function ProtectedSidebarFooter() {
   const navigate = useNavigate()
@@ -18,7 +18,7 @@ export function ProtectedSidebarFooter() {
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: async () => {
-      clearUserQueryCache(queryClient)
+      await resetUserQueryCache(queryClient)
       await router.invalidate()
       await navigate({ to: '/login', search: { redirect: '/dashboard' } })
     },

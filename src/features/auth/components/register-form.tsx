@@ -14,10 +14,9 @@ import {
 } from '@/components/ui/card'
 import { FormField, getFormFieldAriaProps } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
-import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { registerSchema } from '@/features/auth/schemas/register.schema'
 import { register } from '@/features/auth/server/register'
-import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
+import { resetUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 
 export function RegisterForm() {
   const navigate = useNavigate()
@@ -46,8 +45,7 @@ export function RegisterForm() {
         const result = await registerFn({ data: value })
 
         if (result.status === 'authenticated') {
-          clearUserQueryCache(queryClient)
-          await queryClient.fetchQuery(currentUserQuery())
+          await resetUserQueryCache(queryClient)
           await router.invalidate()
           await navigate({ to: '/dashboard' })
           return

@@ -14,10 +14,9 @@ import {
 } from '@/components/ui/card'
 import { FormField, getFormFieldAriaProps } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
-import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { loginSchema } from '@/features/auth/schemas/login.schema'
 import { login } from '@/features/auth/server/login'
-import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
+import { resetUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 
 type LoginFormProps = {
   redirectTo: string
@@ -43,8 +42,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
 
       try {
         await loginFn({ data: value })
-        clearUserQueryCache(queryClient)
-        await queryClient.fetchQuery(currentUserQuery())
+        await resetUserQueryCache(queryClient)
         await router.invalidate()
         await navigate({ to: redirectTo })
       } catch (error) {

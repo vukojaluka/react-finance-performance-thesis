@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 import { logout } from '@/features/auth/server/logout'
-import { clearUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
+import { resetUserQueryCache } from '@/integrations/tanstack-query/clear-user-cache'
 import { cn } from '@/lib/utils'
 
 type LandingAuthActionsProps = {
@@ -61,7 +61,7 @@ export function LandingAuthActions({
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: async () => {
-      clearUserQueryCache(queryClient)
+      await resetUserQueryCache(queryClient)
       await router.invalidate()
       onNavigate?.()
     },

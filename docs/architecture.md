@@ -725,7 +725,8 @@ Main Features
 Rendering Strategy
 
 - Streaming SSR: `prefetchQuery(currentUserQuery())` in the route loader (not awaited)
-- Header / menu auth actions via `useSuspenseQuery` inside `Suspense`
+- Header, mobile menu, and hero auth actions via `useSuspenseQuery` inside `Suspense`
+- After login/logout, `fetchQuery(currentUserQuery())` repopulates the cache so every consumer refreshes (`queryClient.clear()` does not notify observers)
 
 Performance Notes
 
