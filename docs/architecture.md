@@ -711,21 +711,25 @@ Experiment 001 is available at `/experiments/experiment-001` and is not part of 
 
 Purpose
 
-Public entry page describing the product and linking to register/login.
+Public entry page describing the product and linking to register/login. Unauthenticated visitors land here; authenticated users still reach `/dashboard` via post-auth redirects and protected routes. The loader prefetches `currentUserQuery` without awaiting (same streaming style as dashboard widgets). Header auth buttons render in a `Suspense` boundary with `useSuspenseQuery`.
 
 Main Features
 
-- Headline and short description
+- Header with brand and auth-aware calls to action (desktop buttons; mobile Sheet menu)
+- Headline and short value proposition
+- Feature overview (dashboard indicators and monthly trend, transactions, categories, budgets, RLS)
+- Brief note that the app is part of a master's thesis on data-loading performance
+- Footer
 - Links to `/register` and `/login`
 
 Rendering Strategy
 
-- Static SSR of the landing component
-- No data loader
+- Streaming SSR: `prefetchQuery(currentUserQuery())` in the route loader (not awaited)
+- Header / menu auth actions via `useSuspenseQuery` inside `Suspense`
 
 Performance Notes
 
-No server queries.
+Auth is prefetched, not blocking. The rest of the landing page streams while the header buttons show a sized skeleton. No images or animation.
 
 ---
 
