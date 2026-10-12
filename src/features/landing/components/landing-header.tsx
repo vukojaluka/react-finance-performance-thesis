@@ -1,8 +1,10 @@
+import { Suspense, useState } from 'react'
 import { Link } from '@tanstack/react-router'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { MenuIcon, XIcon } from 'lucide-react'
-import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Sheet,
   SheetClose,
@@ -12,8 +14,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { LandingAuthActions } from '@/features/landing/components/landing-auth-actions'
-import { useLandingCurrentUser } from '@/features/landing/hooks/use-landing-current-user'
+import {
+  LandingAuthActions,
+  LandingAuthActionsFallback,
+} from '@/features/landing/components/landing-auth-actions'
+import { currentUserQuery } from '@/features/auth/queries/current-user.query'
 
 function BrandMark() {
   return (
@@ -29,13 +34,18 @@ function BrandMark() {
   )
 }
 
+function LandingSheetDescription() {
+  const { data } = useSuspenseQuery(currentUserQuery())
+
+  return (
+    <SheetDescription>
+      {data.isLoggedIn ? 'Nadzorna ploča i odjava' : 'Prijava i registracija'}
+    </SheetDescription>
+  )
+}
+
 export function LandingHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const { data } = useLandingCurrentUser()
-  const isLoggedIn = data?.isLoggedIn === true
-  const navLabel = isLoggedIn
-    ? 'Nadzorna ploča i odjava'
-    : 'Prijava i registracija'
 
   function closeMenu() {
     setMenuOpen(false)
@@ -47,10 +57,12 @@ export function LandingHeader() {
         <BrandMark />
 
         <nav
-          aria-label={navLabel}
+          aria-label="Korisnički izbornik"
           className="hidden items-center gap-2 md:flex"
         >
-          <LandingAuthActions size="sm" />
+          <Suspense fallback={<LandingAuthActionsFallback size="sm" />}>
+            <LandingAuthActions size="sm" />
+          </Suspense>
         </nav>
 
         <div className="md:hidden">
@@ -89,13 +101,17 @@ export function LandingHeader() {
               </SheetClose>
               <SheetHeader>
                 <SheetTitle>Izbornik</SheetTitle>
-                <SheetDescription>{navLabel}</SheetDescription>
+                <Suspense fallback={<Skeleton className="h-4 w-40" />}>
+                  <LandingSheetDescription />
+                </Suspense>
               </SheetHeader>
               <nav
-                aria-label={navLabel}
+                aria-label="Korisnički izbornik"
                 className="flex flex-col gap-2 px-8 pb-8"
               >
-                <LandingAuthActions fullWidth onNavigate={closeMenu} />
+                <Suspense fallback={<LandingAuthActionsFallback fullWidth />}>
+                  <LandingAuthActions fullWidth onNavigate={closeMenu} />
+                </Suspense>
               </nav>
             </SheetContent>
           </Sheet>

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import {
   CreditCard,
@@ -14,10 +15,17 @@ import {
   CardDescription,
   CardHeader,
 } from '@/components/ui/card'
-import { LandingAuthActions } from '@/features/landing/components/landing-auth-actions'
+import { currentUserQuery } from '@/features/auth/queries/current-user.query'
+import {
+  LandingAuthActions,
+  LandingAuthActionsFallback,
+} from '@/features/landing/components/landing-auth-actions'
 import { LandingHeader } from '@/features/landing/components/landing-header'
 
 export const Route = createFileRoute('/_public/')({
+  loader: ({ context }) => {
+    void context.queryClient.prefetchQuery(currentUserQuery())
+  },
   component: LandingPage,
   head: () => ({
     meta: [
@@ -86,11 +94,13 @@ function LandingPage() {
             novac.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <LandingAuthActions
-              size="default"
-              labels="hero"
-              showLogout={false}
-            />
+            <Suspense fallback={<LandingAuthActionsFallback size="default" />}>
+              <LandingAuthActions
+                size="default"
+                labels="hero"
+                showLogout={false}
+              />
+            </Suspense>
           </div>
         </section>
 
