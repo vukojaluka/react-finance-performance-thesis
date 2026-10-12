@@ -63,15 +63,15 @@ MyFinance is a Croatian-language (`lang="hr"`) TanStack Start application. Money
 
 ### Core Modules
 
-| Module         | Status                                                                                                |
-| -------------- | ----------------------------------------------------------------------------------------------------- |
-| Authentication | Implemented                                                                                           |
-| Dashboard      | Implemented                                                                                           |
-| Transactions   | Implemented (full CRUD)                                                                               |
-| Categories     | Implemented (full CRUD)                                                                               |
-| Budgets        | Implemented (full CRUD)                                                                               |
-| Analytics      | Not implemented.                                                                                      |
-| Settings       | Not implemented.                                                                                      |
+| Module | Status |
+| ------ | ------ |
+| Authentication | Implemented |
+| Dashboard | Implemented |
+| Transactions | Implemented (full CRUD) |
+| Categories | Implemented (full CRUD) |
+| Budgets | Implemented (full CRUD) |
+| Analytics | Not implemented. |
+| Settings | Not implemented. |
 | Experiment 001 | Implemented as an isolated route at `/experiments/experiment-001`; not part of the product navigation |
 
 ### User Journey
@@ -106,35 +106,35 @@ Unauthenticated access to `_protected` routes redirects to `/login` with `redire
 
 ## 4. Functional Requirements
 
-| ID    | Requirement                                                              | Priority | Status           |
-| ----- | ------------------------------------------------------------------------ | -------- | ---------------- |
-| FR-01 | Register, log in, and log out with Supabase Auth                         | Must     | Implemented      |
-| FR-02 | Protect application routes with `beforeLoad`                             | Must     | Implemented      |
-| FR-03 | Dashboard summary, trend, recent transactions, and current-month budgets | Must     | Implemented      |
-| FR-04 | Transactions list with search, filters, sort, pagination                 | Must     | Implemented      |
-| FR-05 | Create, edit, and delete transactions                                    | Must     | Implemented      |
-| FR-06 | Categories list with search and pagination                               | Must     | Implemented      |
-| FR-07 | Create, edit, and delete categories                                      | Must     | Implemented      |
-| FR-08 | Budgets period view with overall and per-category progress               | Must     | Implemented      |
-| FR-09 | Create, edit, and delete budgets                                         | Must     | Implemented      |
-| FR-10 | Isolate user data with RLS and server-derived identity                   | Must     | Implemented      |
-| FR-11 | Analytics views                                                          | Could    | Not implemented. |
-| FR-12 | Settings / profile management                                            | Could    | Not implemented. |
+| ID | Requirement | Priority | Status |
+| --- | ----------- | -------- | ------ |
+| FR-01 | Register, log in, and log out with Supabase Auth | Must | Implemented |
+| FR-02 | Protect application routes with `beforeLoad` | Must | Implemented |
+| FR-03 | Dashboard summary, trend, recent transactions, and current-month budgets | Must | Implemented |
+| FR-04 | Transactions list with search, filters, sort, pagination | Must | Implemented |
+| FR-05 | Create, edit, and delete transactions | Must | Implemented |
+| FR-06 | Categories list with search and pagination | Must | Implemented |
+| FR-07 | Create, edit, and delete categories | Must | Implemented |
+| FR-08 | Budgets period view with overall and per-category progress | Must | Implemented |
+| FR-09 | Create, edit, and delete budgets | Must | Implemented |
+| FR-10 | Isolate user data with RLS and server-derived identity | Must | Implemented |
+| FR-11 | Analytics views | Could | Not implemented. |
+| FR-12 | Settings / profile management | Could | Not implemented. |
 
 ---
 
 ## 5. Non-functional Requirements
 
-| ID     | Requirement   | Description                                                                                                                      |
-| ------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| NFR-01 | SSR           | TanStack Start server-renders routes; Query Cache is dehydrated/hydrated via `@tanstack/react-router-ssr-query`.                 |
-| NFR-02 | Authn/Authz   | Session from Supabase cookies; route guards for UX; `requireAuthMiddleware` for protected Server Functions; RLS at the database. |
-| NFR-03 | Isolation     | Users cannot read or write another user's rows. Enforced by RLS and `user_id` filters in Server Functions.                       |
-| NFR-04 | Validation    | Zod on search params, forms, and Server Function inputs.                                                                         |
-| NFR-05 | URL state     | List filters and budget period live in the URL.                                                                                  |
-| NFR-06 | Cache safety  | Login, register (authenticated path), and logout call `clearUserQueryCache()` so cached data does not leak across accounts.      |
-| NFR-07 | Localization  | UI copy is Croatian; root document uses `lang="hr"`.                                                                             |
-| NFR-08 | Accessibility | Form fields use shared ARIA helpers; icon-only row actions and progress bars expose labels where implemented.                    |
+| ID | Requirement | Description |
+| --- | ----------- | ----------- |
+| NFR-01 | SSR | TanStack Start server-renders routes; Query Cache is dehydrated/hydrated via `@tanstack/react-router-ssr-query`. |
+| NFR-02 | Authn/Authz | Session from Supabase cookies; route guards for UX; `requireAuthMiddleware` for protected Server Functions; RLS at the database. |
+| NFR-03 | Isolation | Users cannot read or write another user's rows. Enforced by RLS and `user_id` filters in Server Functions. |
+| NFR-04 | Validation | Zod on search params, forms, and Server Function inputs. |
+| NFR-05 | URL state | List filters and budget period live in the URL. |
+| NFR-06 | Cache safety | Login, register (authenticated path), and logout call `clearUserQueryCache()` so cached data does not leak across accounts. |
+| NFR-07 | Localization | UI copy is Croatian; root document uses `lang="hr"`. |
+| NFR-08 | Accessibility | Form fields use shared ARIA helpers; icon-only row actions and progress bars expose labels where implemented. |
 
 ---
 
@@ -1681,11 +1681,11 @@ This strategy originates from Experiment 001. It is not applied to every page.
 
 ### Page-type rendering (do not conflate)
 
-| Page type           | Loader                                                | Component consumption                                                                  |
-| ------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Dashboard           | Prefetch non-critical, await summary                  | Summary: `useQuery`. Widgets: `Suspense` + `useSuspenseQuery` + widget `CatchBoundary` |
-| Filter-driven lists | Await list (and options where needed); maybe redirect | `useQuery` + `keepPreviousData`; inline error UI                                       |
-| CRUD forms          | Await detail and/or `categoryOptionsQuery`            | Form hooks; `useQuery` for options                                                     |
+| Page type | Loader | Component consumption |
+| --------- | ------ | --------------------- |
+| Dashboard | Prefetch non-critical, await summary | Summary: `useQuery`. Widgets: `Suspense` + `useSuspenseQuery` + widget `CatchBoundary` |
+| Filter-driven lists | Await list (and options where needed); maybe redirect | `useQuery` + `keepPreviousData`; inline error UI |
+| CRUD forms | Await detail and/or `categoryOptionsQuery` | Form hooks; `useQuery` for options |
 
 ---
 
@@ -1920,14 +1920,14 @@ Experiment 001 also used a 60s `staleTime` during measurements. That experimenta
 
 Entity mutations invalidate prefixes that actually depend on the write.
 
-| Mutation                                | Invalidates                                                          |
-| --------------------------------------- | -------------------------------------------------------------------- |
-| Transaction create/update/delete        | `['transactions']`, `['dashboard']`, `['budgets']`                   |
-| Category create                         | `['categories']`                                                     |
-| Category update                         | `['categories']`, `['transactions']`, `['dashboard']`, `['budgets']` |
-| Category delete                         | `['categories']` (plus detail `removeQueries`)                       |
-| Budget create/update/delete             | `['budgets']`, `['dashboard']`                                       |
-| Login / authenticated register / logout | `queryClient.clear()` via `clearUserQueryCache()`                    |
+| Mutation | Invalidates |
+| -------- | ----------- |
+| Transaction create/update/delete | `['transactions']`, `['dashboard']`, `['budgets']` |
+| Category create | `['categories']` |
+| Category update | `['categories']`, `['transactions']`, `['dashboard']`, `['budgets']` |
+| Category delete | `['categories']` (plus detail `removeQueries`) |
+| Budget create/update/delete | `['budgets']`, `['dashboard']` |
+| Login / authenticated register / logout | `queryClient.clear()` via `clearUserQueryCache()` |
 
 ---
 
@@ -2163,19 +2163,19 @@ Experiment methodology and Experiment 001 measurements belong in `docs/experimen
 
 ## 20. Decision Log
 
-| Date | Decision                                                      | Reason                                                         |
-| ---- | ------------------------------------------------------------- | -------------------------------------------------------------- |
-| 2026 | TanStack Start + file routes + Server Functions               | SSR React app without a separate REST API                      |
-| 2026 | Supabase Auth + cookie server client                          | Session source of truth; no custom JWT layer                   |
-| 2026 | `requireAuthMiddleware` on protected Server Functions         | One `getUser()` per call; handlers receive `user` + `supabase` |
-| 2026 | PostgreSQL RLS on all app tables                              | Database authorization boundary independent of the router      |
-| 2026 | TanStack Query `queryOptions` factories                       | Shared cache between loaders and components                    |
-| 2026 | Dashboard critical/non-critical loader split                  | Experiment 001; progressive widgets                            |
-| 2026 | URL search params for lists and budget period                 | Shareable, history-friendly state                              |
-| 2026 | Split `getCategories` / `getCategoryOptions`                  | Paginated management vs full options for forms                 |
-| 2026 | `clearUserQueryCache` on login/register/logout                | Prevent cross-account Query Cache leaks                        |
-| 2026 | Expense-only budget spending                                  | Income must not consume category budgets                       |
-| 2026 | `ON DELETE NO ACTION` from categories to transactions/budgets | Block in-use category delete; map `23503`                      |
+| Date | Decision | Reason |
+| --- | --- | --- |
+| 2026 | TanStack Start + file routes + Server Functions | SSR React app without a separate REST API |
+| 2026 | Supabase Auth + cookie server client | Session source of truth; no custom JWT layer |
+| 2026 | `requireAuthMiddleware` on protected Server Functions | One `getUser()` per call; handlers receive `user` + `supabase` |
+| 2026 | PostgreSQL RLS on all app tables | Database authorization boundary independent of the router |
+| 2026 | TanStack Query `queryOptions` factories | Shared cache between loaders and components |
+| 2026 | Dashboard critical/non-critical loader split | Experiment 001; progressive widgets |
+| 2026 | URL search params for lists and budget period | Shareable, history-friendly state |
+| 2026 | Split `getCategories` / `getCategoryOptions` | Paginated management vs full options for forms |
+| 2026 | `clearUserQueryCache` on login/register/logout | Prevent cross-account Query Cache leaks |
+| 2026 | Expense-only budget spending | Income must not consume category budgets |
+| 2026 | `ON DELETE NO ACTION` from categories to transactions/budgets | Block in-use category delete; map `23503` |
 
 ## 21. Project Roadmap
 
