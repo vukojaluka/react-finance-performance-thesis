@@ -711,11 +711,11 @@ Experiment 001 is available at `/experiments/experiment-001` and is not part of 
 
 Purpose
 
-Public entry page describing the product and linking to register/login. Unauthenticated visitors land here; authenticated users still reach `/dashboard` via post-auth redirects and protected routes (this page does not run an auth query).
+Public entry page describing the product and linking to register/login. Unauthenticated visitors land here; authenticated users still reach `/dashboard` via post-auth redirects and protected routes. The route loader does not await auth: the header reads `currentUserQuery` on the client and swaps Prijava/Registracija for Nadzorna ploča/Odjava.
 
 Main Features
 
-- Header with brand and calls to action
+- Header with brand and auth-aware calls to action (desktop buttons; mobile Sheet menu)
 - Headline and short value proposition
 - Feature overview (dashboard indicators and monthly trend, transactions, categories, budgets, RLS)
 - Brief note that the app is part of a master's thesis on data-loading performance
@@ -729,7 +729,7 @@ Rendering Strategy
 
 Performance Notes
 
-No server queries. No images or animation.
+No blocking loader queries. Auth for the header is fetched on the client after hydrate. No images or animation.
 
 ---
 

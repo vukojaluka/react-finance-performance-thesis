@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import {
   CreditCard,
   LayoutDashboard,
@@ -8,13 +8,14 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
 } from '@/components/ui/card'
+import { LandingAuthActions } from '@/features/landing/components/landing-auth-actions'
+import { LandingHeader } from '@/features/landing/components/landing-header'
 
 export const Route = createFileRoute('/_public/')({
   component: LandingPage,
@@ -69,52 +70,10 @@ const features: ReadonlyArray<{
   },
 ]
 
-function AuthButtons({ size = 'default' }: { size?: 'default' | 'sm' }) {
-  return (
-    <>
-      <Button nativeButton={false} size={size} render={<Link to="/register" />}>
-        Registrirajte se
-      </Button>
-      <Button
-        nativeButton={false}
-        size={size}
-        variant="outline"
-        render={<Link to="/login" search={{ redirect: '/dashboard' }} />}
-      >
-        Prijavite se
-      </Button>
-    </>
-  )
-}
-
-function BrandMark() {
-  return (
-    <Link
-      to="/"
-      className="inline-flex items-center gap-2 text-foreground no-underline outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
-    >
-      <span className="flex size-8 items-center justify-center bg-primary text-xs font-semibold text-primary-foreground">
-        MF
-      </span>
-      <span className="font-bold">MyFinance</span>
-    </Link>
-  )
-}
-
 function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <header className="border-b border-border">
-        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-          <BrandMark />
-          <nav
-            aria-label="Prijava i registracija"
-            className="flex flex-wrap items-center gap-2"
-          >
-            <AuthButtons size="sm" />
-          </nav>
-        </div>
-      </header>
+      <LandingHeader />
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
         <section className="px-4 py-16 sm:py-20">
@@ -127,7 +86,11 @@ function LandingPage() {
             novac.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <AuthButtons />
+            <LandingAuthActions
+              size="default"
+              labels="hero"
+              showLogout={false}
+            />
           </div>
         </section>
 
