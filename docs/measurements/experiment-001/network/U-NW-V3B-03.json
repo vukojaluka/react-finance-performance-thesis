@@ -1,0 +1,25 @@
+{
+  "id": "U-NW-V3B-03",
+  "profile": "U",
+  "note": "Unthrottled cold navigation — measures artificial delay progressive reveal",
+  "variant": "V3B",
+  "milestones": {
+    "A": 3644,
+    "B": 3644,
+    "C": 3682,
+    "D": 3644,
+    "E": 3644,
+    "F": 3682
+  },
+  "requestCount": 52,
+  "serverFunctionRequestCount": 1,
+  "serverFunctionUrls": [
+    "http://127.0.0.1:3000/assets/createServerFn-8y_MtXT9.js"
+  ],
+  "requestTypes": {
+    "document": 1,
+    "stylesheet": 1,
+    "script": 49,
+    "font": 1
+  }
+}

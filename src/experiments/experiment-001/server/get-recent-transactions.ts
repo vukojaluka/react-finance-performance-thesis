@@ -54,41 +54,6 @@ export const getRecentTransactions = createServerFn({ method: 'GET' }).handler(
         type: 'expense',
         date: '2026-08-04',
       },
-      {
-        id: '6',
-        title: 'Freelance',
-        amount: 350,
-        type: 'income',
-        date: '2026-08-04',
-      },
-      {
-        id: '7',
-        title: 'Utilities',
-        amount: 96.2,
-        type: 'expense',
-        date: '2026-08-05',
-      },
-      {
-        id: '8',
-        title: 'Dinner',
-        amount: 62.4,
-        type: 'expense',
-        date: '2026-08-05',
-      },
-      {
-        id: '9',
-        title: 'Gym',
-        amount: 40,
-        type: 'expense',
-        date: '2026-08-06',
-      },
-      {
-        id: '10',
-        title: 'Books',
-        amount: 28.9,
-        type: 'expense',
-        date: '2026-08-06',
-      },
     ]
   },
 )

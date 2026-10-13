@@ -1,0 +1,26 @@
+{
+  "id": "D-NW-V3B-03",
+  "profile": "D",
+  "variant": "V3B",
+  "wallMs": 4415,
+  "requestCount": 52,
+  "staticAssetCount": 51,
+  "serverFunctionRequestCount": 0,
+  "serverFunctionUrls": [],
+  "milestones": {
+    "A": 4072,
+    "B": 4072,
+    "C": 4110,
+    "D": 4072,
+    "E": 4072,
+    "F": 4110
+  },
+  "navigation": {
+    "responseStart": 3505.899999999907,
+    "responseEnd": 3524.5,
+    "domContentLoaded": 3616.0999999998603,
+    "loadEventEnd": 4041.5999999998603
+  },
+  "displayedVariant": "v3b",
+  "complete": "true"
+}

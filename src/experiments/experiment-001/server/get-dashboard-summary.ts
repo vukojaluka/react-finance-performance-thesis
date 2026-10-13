@@ -8,6 +8,7 @@ export type DashboardSummary = {
   income: number
   expenses: number
   balance: number
+  currentMonthBalance: number
 }
 
 export const getDashboardSummary = createServerFn({ method: 'GET' }).handler(
@@ -20,6 +21,7 @@ export const getDashboardSummary = createServerFn({ method: 'GET' }).handler(
       income: 4200,
       expenses: 1600,
       balance: 2600,
+      currentMonthBalance: 1250,
     }
   },
 )

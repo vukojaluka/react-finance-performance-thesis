@@ -1,0 +1,26 @@
+{
+  "id": "D-NW-V2-01",
+  "profile": "D",
+  "variant": "V2",
+  "wallMs": 5411,
+  "requestCount": 52,
+  "staticAssetCount": 51,
+  "serverFunctionRequestCount": 0,
+  "serverFunctionUrls": [],
+  "milestones": {
+    "A": 5067,
+    "B": 5067,
+    "C": 5107,
+    "D": 5067,
+    "E": 5067,
+    "F": 5107
+  },
+  "navigation": {
+    "responseStart": 4510.5,
+    "responseEnd": 4529.399999999907,
+    "domContentLoaded": 4622.79999999993,
+    "loadEventEnd": 5037.099999999977
+  },
+  "displayedVariant": "v2",
+  "complete": "true"
+}

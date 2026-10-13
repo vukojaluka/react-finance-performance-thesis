@@ -1,6 +1,7 @@
 node_modules
 .DS_Store
 dist
+dist-profile
 dist-ssr
 *.local
 .env
@@ -14,3 +15,5 @@ todos.json
 
 # Local Netlify folder
 .netlify
+docs/measurements/experiment-001/lighthouse/*.html
+docs/measurements/experiment-001/raw/measure.log
