@@ -44,16 +44,20 @@ npm run check
 
 ## Deploy to Vercel
 
-This project uses [Nitro](https://nitro.build/) with TanStack Start for Vercel deployment.
+This project uses [Nitro](https://nitro.build/) with TanStack Start for Vercel deployment. See [Vercel’s TanStack Start guide](https://vercel.com/docs/frameworks/full-stack/tanstack-start).
+
+[`vercel.json`](vercel.json) sets `"framework": "tanstack-start"` so Vercel detects the stack explicitly (same as the TanStack CLI).
 
 1. Push this repo to GitHub
-2. Import the repo at https://vercel.com/new
-3. Use **Framework Preset: Other** (do not set an output directory; Nitro writes `.vercel/output` on Vercel)
+2. Import the repo at https://vercel.com/new, or run `npx vercel` from the project root
+3. Leave the output directory unset; Nitro writes `.vercel/output` on Vercel during `npm run build`
 4. Set **Install Command** to `npm install` and **Build Command** to `npm run build`
 5. Add environment variables for Production and Preview:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+   - `VITE_SUPABASE_URL` — public Supabase project URL (embedded in the browser bundle)
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` — Supabase anon/publishable key (public by design; RLS protects data)
 6. Deploy
+
+Do **not** use a `VITE_` prefix for secrets (for example `SUPABASE_SERVICE_ROLE_KEY`). Only variables referenced from client code via `import.meta.env` need `VITE_`. This app’s server-only scripts already use non-`VITE_` names for privileged keys.
 
 After the first deploy, add your Vercel production URL and `*.vercel.app` preview URLs to your Supabase project's Auth site URL and redirect allow list if you use email confirmation or OAuth.
 
