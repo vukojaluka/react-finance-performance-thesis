@@ -42,17 +42,20 @@ npm run check
 ```
 
 
-## Deploy to Netlify
+## Deploy to Vercel
 
-This project ships with `netlify.toml` configured for a Netlify site:
+This project uses [Nitro](https://nitro.build/) with TanStack Start for Vercel deployment.
 
 1. Push this repo to GitHub
-2. Visit https://app.netlify.com/start and import the repo
-3. Netlify auto-detects the build (`vite build` → `dist/client`)
-4. Open **Site settings → Environment variables** and add anything from `.env.example` that needs a real value in production
-5. Trigger the first deploy
+2. Import the repo at https://vercel.com/new
+3. Use **Framework Preset: Other** (do not set an output directory; Nitro writes `.vercel/output` on Vercel)
+4. Set **Install Command** to `npm install` and **Build Command** to `npm run build`
+5. Add environment variables for Production and Preview:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+6. Deploy
 
-Server functions and API routes run on Netlify Functions. For lower-latency request handling, see Netlify Edge Functions: https://docs.netlify.com/edge-functions/overview.
+After the first deploy, add your Vercel production URL and `*.vercel.app` preview URLs to your Supabase project's Auth site URL and redirect allow list if you use email confirmation or OAuth.
 
 
 
