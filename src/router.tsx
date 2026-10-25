@@ -3,6 +3,7 @@ import { routeTree } from './routeTree.gen'
 
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { getContext } from './integrations/tanstack-query/root-provider'
+import { stringifySearch } from './lib/stringify-search'
 
 export function getRouter() {
   const context = getContext()
@@ -13,6 +14,7 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
+    stringifySearch,
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient })
