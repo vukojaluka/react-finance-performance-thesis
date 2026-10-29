@@ -147,7 +147,7 @@ function LandingPage() {
           className="border-t border-border px-4 py-16"
         >
           <h2 id="rad-naslov" className="text-2xl font-semibold tracking-tight">
-            Magistarski rad
+            Diplomski rad
           </h2>
           <p className="mt-3 max-w-3xl text-muted-foreground">
             Aplikacija je nastala u sklopu magistarskog rada „Analiza
